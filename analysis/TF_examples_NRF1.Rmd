@@ -8,12 +8,11 @@ output:
     toc: true
 ---
 
-```{r}
+```{r warning=F, message=F}
 library(tidyverse)
 library(ggplot2)
 library(reshape2)
 library(GenomicRanges)
-# library(viridis)
 
 source("/project/spott/kevinluo/Fiber_seq/code/plot_region_functions.R")
 source("/project/spott/kevinluo/Fiber_seq/code/fiber_footprint_caller.R")
@@ -185,6 +184,68 @@ all.equal(fire_res$fdr_fire, fdr_fire)
 #   gg$fire_reads +
 #   gg$fiberHMM +
 #   plot_layout(ncol = 1, guides = 'collect', heights = c(4,8,2,8,8))
+
+
+cowplot::plot_grid(
+  gg$pileup,
+  gg$dimelo_reads,
+  gg$fire_fdr,
+  gg$fire_reads,
+  gg$fiberHMM,
+  ncol = 1,
+  rel_heights = c(4,8,2,8,8),
+  align = "v",
+  axis = "b"
+)
+
+
+```
+
+
+
+# Region chr19:1940100-1942100
+
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/process_fiberseq_data.R")
+source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/plots.R")
+
+result_dir = paste0("/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1_18508_chr19_1942k/parsed/")
+
+region <- get_region(result_dir)
+subtitle = paste0(region$chr,':', region$start,'-', region$end)
+
+
+region_motif_sites <- motif_sites %>% 
+  filter(chr == region$chr, start >= region$start, end <= region$end, chip_label == 1)
+
+focal_motif_sites <- region_motif_sites
+print(focal_motif_sites)
+
+highlight_window = data.frame(start = region_motif_sites$start, 
+                              end = region_motif_sites$end)
+
+
+res <- plot_region_reads(result_dir, 
+                         filter_fire_reads = FALSE,
+                         cover_region_only = FALSE,
+                         cluster_reads = TRUE,
+                         select_A_only = TRUE,
+                         split_haplotype = FALSE,
+                         highlight_window = highlight_window,
+                         color_highlight_window = "pink",
+                         plot_name = plot_name,
+                         subtitle = subtitle)
+
+region <- res$region
+window_size <- res$window_size
+rids_df <- res$rids_df
+pileup <- res$pileup
+reads <- res$reads
+fire <- res$fire
+fdr_fire <- res$fdr_fire
+fiberHMM_fps <- res$fiberHMM_fps
+gg <- res$gg
 
 
 cowplot::plot_grid(

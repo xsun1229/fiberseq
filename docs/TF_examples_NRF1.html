@@ -440,10 +440,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -536,15 +536,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreee0acdf17c5832fab4d7281ae77607d2cbb52f90dtargetblanke0acdf1a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree083f41c9bb62da0ac953c25e5cf34dfc1cd2dfb2targetblank083f41ca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/xsun1229/fiberseq/tree/e0acdf17c5832fab4d7281ae77607d2cbb52f90d" target="_blank">e0acdf1</a>
+<a href="https://github.com/xsun1229/fiberseq/tree/083f41c9bb62da0ac953c25e5cf34dfc1cd2dfb2" target="_blank">083f41c</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreee0acdf17c5832fab4d7281ae77607d2cbb52f90dtargetblanke0acdf1a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree083f41c9bb62da0ac953c25e5cf34dfc1cd2dfb2targetblank083f41ca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -554,7 +554,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/xsun1229/fiberseq/tree/e0acdf17c5832fab4d7281ae77607d2cbb52f90d" target="_blank">e0acdf1</a>.
+<a href="https://github.com/xsun1229/fiberseq/tree/083f41c9bb62da0ac953c25e5cf34dfc1cd2dfb2" target="_blank">083f41c</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -568,8 +568,8 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-Untracked files:
-    Untracked:  analysis/TF_examples_NRF1.Rmd
+Unstaged changes:
+    Modified:   analysis/TF_examples_NRF1.Rmd
 
 </code></pre>
 <p>
@@ -584,72 +584,82 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/TF_examples_NRF1.Rmd</code>) and
+HTML (<code>docs/TF_examples_NRF1.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/083f41c9bb62da0ac953c25e5cf34dfc1cd2dfb2/analysis/TF_examples_NRF1.Rmd" target="_blank">083f41c</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-08-31
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/083f41c9bb62da0ac953c25e5cf34dfc1cd2dfb2/docs/TF_examples_NRF1.html" target="_blank">083f41c</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-08-31
+</td>
+<td>
+update
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
 </div>
-<pre class="r"><code>library(tidyverse)</code></pre>
-<pre><code>-- Attaching packages --------------------------------------- tidyverse 1.3.1 --</code></pre>
-<pre><code>v ggplot2 3.5.1     v purrr   1.0.2
-v tibble  3.2.1     v dplyr   1.1.4
-v tidyr   1.3.0     v stringr 1.5.1
-v readr   2.1.2     v forcats 0.5.1</code></pre>
-<pre><code>-- Conflicts ------------------------------------------ tidyverse_conflicts() --
-x dplyr::filter() masks stats::filter()
-x dplyr::lag()    masks stats::lag()</code></pre>
-<pre class="r"><code>library(ggplot2)
-library(reshape2)</code></pre>
-<pre><code>
-Attaching package: &#39;reshape2&#39;</code></pre>
-<pre><code>The following object is masked from &#39;package:tidyr&#39;:
-
-    smiths</code></pre>
-<pre class="r"><code>library(GenomicRanges)</code></pre>
-<pre><code>Loading required package: stats4</code></pre>
-<pre><code>Loading required package: BiocGenerics</code></pre>
-<pre><code>
-Attaching package: &#39;BiocGenerics&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:dplyr&#39;:
-
-    combine, intersect, setdiff, union</code></pre>
-<pre><code>The following objects are masked from &#39;package:stats&#39;:
-
-    IQR, mad, sd, var, xtabs</code></pre>
-<pre><code>The following objects are masked from &#39;package:base&#39;:
-
-    Filter, Find, Map, Position, Reduce, anyDuplicated, append,
-    as.data.frame, basename, cbind, colnames, dirname, do.call,
-    duplicated, eval, evalq, get, grep, grepl, intersect, is.unsorted,
-    lapply, mapply, match, mget, order, paste, pmax, pmax.int, pmin,
-    pmin.int, rank, rbind, rownames, sapply, setdiff, sort, table,
-    tapply, union, unique, unsplit, which.max, which.min</code></pre>
-<pre><code>Loading required package: S4Vectors</code></pre>
-<pre><code>
-Attaching package: &#39;S4Vectors&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:dplyr&#39;:
-
-    first, rename</code></pre>
-<pre><code>The following object is masked from &#39;package:tidyr&#39;:
-
-    expand</code></pre>
-<pre><code>The following objects are masked from &#39;package:base&#39;:
-
-    I, expand.grid, unname</code></pre>
-<pre><code>Loading required package: IRanges</code></pre>
-<pre><code>
-Attaching package: &#39;IRanges&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:dplyr&#39;:
-
-    collapse, desc, slice</code></pre>
-<pre><code>The following object is masked from &#39;package:purrr&#39;:
-
-    reduce</code></pre>
-<pre><code>Loading required package: GenomeInfoDb</code></pre>
-<pre class="r"><code># library(viridis)
+<pre class="r"><code>library(tidyverse)
+library(ggplot2)
+library(reshape2)
+library(GenomicRanges)
 
 source(&quot;/project/spott/kevinluo/Fiber_seq/code/plot_region_functions.R&quot;)
 source(&quot;/project/spott/kevinluo/Fiber_seq/code/fiber_footprint_caller.R&quot;)
@@ -741,6 +751,43 @@ cowplot::plot_grid(
   axis = &quot;b&quot;
 )</code></pre>
 <p><img src="figure/TF_examples_NRF1.Rmd/unnamed-chunk-2-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/083f41c9bb62da0ac953c25e5cf34dfc1cd2dfb2/docs/figure/TF_examples_NRF1.Rmd/unnamed-chunk-2-1.png" target="_blank">083f41c</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-08-31
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="region-chr1728951100-28952100" class="section level1">
 <h1>Region chr17:28951100-28952100</h1>
@@ -845,6 +892,102 @@ cowplot::plot_grid(
   axis = &quot;b&quot;
 )</code></pre>
 <p><img src="figure/TF_examples_NRF1.Rmd/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/083f41c9bb62da0ac953c25e5cf34dfc1cd2dfb2/docs/figure/TF_examples_NRF1.Rmd/unnamed-chunk-3-1.png" target="_blank">083f41c</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-08-31
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div id="region-chr191940100-1942100" class="section level1">
+<h1>Region chr19:1940100-1942100</h1>
+<pre class="r"><code>source(&quot;/project/spott/kevinluo/Fiber_seq/fiberhub/code/process_fiberseq_data.R&quot;)
+source(&quot;/project/spott/kevinluo/Fiber_seq/fiberhub/code/plots.R&quot;)
+
+result_dir = paste0(&quot;/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1_18508_chr19_1942k/parsed/&quot;)
+
+region &lt;- get_region(result_dir)
+subtitle = paste0(region$chr,&#39;:&#39;, region$start,&#39;-&#39;, region$end)
+
+
+region_motif_sites &lt;- motif_sites %&gt;% 
+  filter(chr == region$chr, start &gt;= region$start, end &lt;= region$end, chip_label == 1)
+
+focal_motif_sites &lt;- region_motif_sites
+print(focal_motif_sites)</code></pre>
+<pre><code>    chr   start     end      name pwm.score strand p.value     chip chip_label
+1 chr19 1941027 1941238 site28111   16.1636      + 2.1e-06 80.71734          1</code></pre>
+<pre class="r"><code>highlight_window = data.frame(start = region_motif_sites$start, 
+                              end = region_motif_sites$end)
+
+
+res &lt;- plot_region_reads(result_dir, 
+                         filter_fire_reads = FALSE,
+                         cover_region_only = FALSE,
+                         cluster_reads = TRUE,
+                         select_A_only = TRUE,
+                         split_haplotype = FALSE,
+                         highlight_window = highlight_window,
+                         color_highlight_window = &quot;pink&quot;,
+                         plot_name = plot_name,
+                         subtitle = subtitle)</code></pre>
+<pre><code>Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+25 reads.</code></pre>
+<pre class="r"><code>region &lt;- res$region
+window_size &lt;- res$window_size
+rids_df &lt;- res$rids_df
+pileup &lt;- res$pileup
+reads &lt;- res$reads
+fire &lt;- res$fire
+fdr_fire &lt;- res$fdr_fire
+fiberHMM_fps &lt;- res$fiberHMM_fps
+gg &lt;- res$gg
+
+
+cowplot::plot_grid(
+  gg$pileup,
+  gg$dimelo_reads,
+  gg$fire_fdr,
+  gg$fire_reads,
+  gg$fiberHMM,
+  ncol = 1,
+  rel_heights = c(4,8,2,8,8),
+  align = &quot;v&quot;,
+  axis = &quot;b&quot;
+)</code></pre>
+<p><img src="figure/TF_examples_NRF1.Rmd/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -877,30 +1020,31 @@ other attached packages:
 [16] tidyverse_1.3.1     
 
 loaded via a namespace (and not attached):
- [1] httr_1.4.3             sass_0.4.1             jsonlite_1.8.0        
- [4] modelr_0.1.8           bslib_0.3.1            assertthat_0.2.1      
- [7] highr_0.9              GenomeInfoDbData_1.2.8 cellranger_1.1.0      
-[10] yaml_2.3.5             pillar_1.9.0           backports_1.4.1       
-[13] glue_1.6.2             digest_0.6.29          promises_1.2.0.1      
-[16] XVector_0.36.0         rvest_1.0.2            colorspace_2.0-3      
-[19] cowplot_1.1.1          htmltools_0.5.2        httpuv_1.6.5          
-[22] plyr_1.8.7             pkgconfig_2.0.3        broom_0.8.0           
-[25] haven_2.5.0            zlibbioc_1.42.0        scales_1.3.0          
-[28] later_1.3.0            tzdb_0.4.0             git2r_0.30.1          
-[31] farver_2.1.0           generics_0.1.2         ellipsis_0.3.2        
-[34] withr_2.5.0            cli_3.6.1              magrittr_2.0.3        
-[37] crayon_1.5.1           readxl_1.4.0           evaluate_0.15         
-[40] fs_1.5.2               fansi_1.0.3            xml2_1.3.3            
-[43] data.table_1.14.2      tools_4.2.0            hms_1.1.1             
-[46] lifecycle_1.0.4        munsell_0.5.0          reprex_2.0.1          
-[49] compiler_4.2.0         jquerylib_0.1.4        rlang_1.1.2           
-[52] grid_4.2.0             RCurl_1.98-1.7         rstudioapi_0.13       
-[55] labeling_0.4.2         bitops_1.0-7           rmarkdown_2.25        
-[58] gtable_0.3.0           DBI_1.2.2              R6_2.5.1              
-[61] lubridate_1.8.0        knitr_1.39             fastmap_1.1.0         
-[64] utf8_1.2.2             workflowr_1.7.0        rprojroot_2.0.3       
-[67] stringi_1.7.6          Rcpp_1.0.12            vctrs_0.6.5           
-[70] dbplyr_2.1.1           tidyselect_1.2.0       xfun_0.41             </code></pre>
+ [1] bitops_1.0-7           fs_1.5.2               lubridate_1.8.0       
+ [4] httr_1.4.3             rprojroot_2.0.3        tools_4.2.0           
+ [7] backports_1.4.1        bslib_0.3.1            utf8_1.2.2            
+[10] R6_2.5.1               DBI_1.2.2              colorspace_2.0-3      
+[13] withr_2.5.0            tidyselect_1.2.0       compiler_4.2.0        
+[16] git2r_0.30.1           cli_3.6.1              rvest_1.0.2           
+[19] xml2_1.3.3             labeling_0.4.2         sass_0.4.1            
+[22] scales_1.3.0           digest_0.6.29          rmarkdown_2.25        
+[25] XVector_0.36.0         pkgconfig_2.0.3        htmltools_0.5.2       
+[28] dbplyr_2.1.1           fastmap_1.1.0          highr_0.9             
+[31] rlang_1.1.2            readxl_1.4.0           rstudioapi_0.13       
+[34] jquerylib_0.1.4        generics_0.1.2         farver_2.1.0          
+[37] jsonlite_1.8.0         RCurl_1.98-1.7         magrittr_2.0.3        
+[40] GenomeInfoDbData_1.2.8 Rcpp_1.0.12            munsell_0.5.0         
+[43] fansi_1.0.3            lifecycle_1.0.4        stringi_1.7.6         
+[46] whisker_0.4            yaml_2.3.5             zlibbioc_1.42.0       
+[49] plyr_1.8.7             grid_4.2.0             promises_1.2.0.1      
+[52] crayon_1.5.1           haven_2.5.0            cowplot_1.1.1         
+[55] hms_1.1.1              knitr_1.39             pillar_1.9.0          
+[58] reprex_2.0.1           glue_1.6.2             evaluate_0.15         
+[61] data.table_1.14.2      modelr_0.1.8           vctrs_0.6.5           
+[64] tzdb_0.4.0             httpuv_1.6.5           cellranger_1.1.0      
+[67] gtable_0.3.0           assertthat_0.2.1       xfun_0.41             
+[70] broom_0.8.0            later_1.3.0            workflowr_1.7.0       
+[73] ellipsis_0.3.2        </code></pre>
 </div>
 </div>
 
