@@ -1,0 +1,203 @@
+---
+title: "TF_examples_NRF1"
+author: "XSun"
+date: "2025-08-31"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(reshape2)
+library(GenomicRanges)
+# library(viridis)
+
+source("/project/spott/kevinluo/Fiber_seq/code/plot_region_functions.R")
+source("/project/spott/kevinluo/Fiber_seq/code/fiber_footprint_caller.R")
+
+theme_set(theme_bw())
+bp = c('A' = 'blue', 'CG' = 'orange') ## Color scheme for the plots.
+
+```
+
+# Region chr4:76949100-76950100
+
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+fiberHMM_res <- data.table::fread("/project/spott/kevinluo/Fiber_seq/results/FiberHMM/LCL_18508/LCL_18508_chr4_multiprocess//LCL_18508_high_fp.bed")
+colnames(fiberHMM_res) <- c("chr", "start", "end", "RID", "thickStart", "thickEnd", "rgb", "blockCount", "blockStarts", "blockSizes")
+
+motif_sites <- readRDS('/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs/NRF1.GM12878.sites.chip.labels.rds')
+
+out_dir="/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results"
+plot_name = "NRF1_18508_chr4_76949k"
+sample_dir = paste0(out_dir, "/", plot_name)
+cat("result dir:",sample_dir,"\n")
+
+region <- get_region(sample_dir)
+subtitle = paste0(region$chr,':', region$start,'-', region$end)
+
+
+# motif_sites$start <- motif_sites$start+100
+# motif_sites$end <- motif_sites$end-100
+
+region_motif_sites <- motif_sites %>% 
+  filter(chr == region$chr, start >= region$start, end <= region$end, chip_label == 1)
+
+focal_motif_sites <- region_motif_sites
+print(focal_motif_sites)
+
+highlight_window = data.frame(start = region_motif_sites$start, 
+                              end = region_motif_sites$end)
+
+res <- get_region_reads_plot(sample_dir, 
+                             fiberHMM_res = fiberHMM_res,
+                             split_haplotype = FALSE,
+                             cluster_reads = TRUE,
+                             select_A_only = FALSE,
+                             highlight_window = highlight_window,
+                             color_highlight_window = "pink",
+                             alpha_highlight = 0.5,
+                             plot_name = plot_name,
+                             subtitle = subtitle)
+
+region <- res$region
+window_size <- res$window_size
+rids_df <- res$rids_df
+pileup <- res$pileup
+reads <- res$reads
+fire <- res$fire
+fdr_fire <- res$fdr_fire
+fiberHMM_fps <- res$fiberHMM_fps
+gg <- res$gg
+
+
+dimelo_output_dir <- paste0(sample_dir, "/parsed")
+dimelo_reads <- extract_dimelo_reads(dimelo_output_dir, select_A_only = FALSE, cluster_reads = TRUE, group_start_end = FALSE)
+all.equal(dimelo_reads[,1:23], reads[,1:23])
+
+dimelo_output_dir <- paste0(sample_dir, "/parsed")
+dimelo_pileup <- extract_dimelo_pileup(dimelo_output_dir, select_A_only = FALSE)
+all.equal(dimelo_pileup, pileup)
+
+dimelo_output_dir <- paste0(sample_dir, "/parsed")
+fire_res <- extract_fire_result(dimelo_output_dir)
+all.equal(fire_res$fire, fire)
+all.equal(fire_res$fdr_fire, fdr_fire)
+
+
+# gg$pileup +
+#   (gg$dimelo_reads + theme(legend.position = 'right')) +
+#   gg$fire_fdr +
+#   gg$fire_reads +
+#   gg$fiberHMM +
+#   plot_layout(ncol = 1, guides = 'collect', heights = c(4,8,2,8,8))
+
+
+cowplot::plot_grid(
+  gg$pileup,
+  gg$dimelo_reads,
+  gg$fire_fdr,
+  gg$fire_reads,
+  gg$fiberHMM,
+  ncol = 1,
+  rel_heights = c(4,8,2,8,8),
+  align = "v",
+  axis = "b"
+)
+
+
+```
+
+
+# Region chr17:28951100-28952100
+
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+fiberHMM_res <- data.table::fread("/project/spott/kevinluo/Fiber_seq/results/FiberHMM/LCL_18508/LCL_18508_chr17_multiprocess/LCL_18508_high_fp.bed")
+colnames(fiberHMM_res) <- c("chr", "start", "end", "RID", "thickStart", "thickEnd", "rgb", "blockCount", "blockStarts", "blockSizes")
+
+motif_sites <- readRDS('/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs/NRF1.GM12878.sites.chip.labels.rds')
+
+out_dir="/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results"
+plot_name = "NRF1_18508_chr17_28951k"
+sample_dir = paste0(out_dir, "/", plot_name)
+cat("result dir:",sample_dir,"\n")
+
+region <- get_region(sample_dir)
+subtitle = paste0(region$chr,':', region$start,'-', region$end)
+
+
+# motif_sites$start <- motif_sites$start+100
+# motif_sites$end <- motif_sites$end-100
+
+region_motif_sites <- motif_sites %>% 
+  filter(chr == region$chr, start >= region$start, end <= region$end, chip_label == 1)
+
+focal_motif_sites <- region_motif_sites
+print(focal_motif_sites)
+
+highlight_window = data.frame(start = region_motif_sites$start, 
+                              end = region_motif_sites$end)
+
+res <- get_region_reads_plot(sample_dir, 
+                             fiberHMM_res = fiberHMM_res,
+                             split_haplotype = FALSE,
+                             cluster_reads = TRUE,
+                             select_A_only = FALSE,
+                             highlight_window = highlight_window,
+                             color_highlight_window = "pink",
+                             alpha_highlight = 0.5,
+                             plot_name = plot_name,
+                             subtitle = subtitle)
+
+region <- res$region
+window_size <- res$window_size
+rids_df <- res$rids_df
+pileup <- res$pileup
+reads <- res$reads
+fire <- res$fire
+fdr_fire <- res$fdr_fire
+fiberHMM_fps <- res$fiberHMM_fps
+gg <- res$gg
+
+
+dimelo_output_dir <- paste0(sample_dir, "/parsed")
+dimelo_reads <- extract_dimelo_reads(dimelo_output_dir, select_A_only = FALSE, cluster_reads = TRUE, group_start_end = FALSE)
+all.equal(dimelo_reads[,1:23], reads[,1:23])
+
+dimelo_output_dir <- paste0(sample_dir, "/parsed")
+dimelo_pileup <- extract_dimelo_pileup(dimelo_output_dir, select_A_only = FALSE)
+all.equal(dimelo_pileup, pileup)
+
+dimelo_output_dir <- paste0(sample_dir, "/parsed")
+fire_res <- extract_fire_result(dimelo_output_dir)
+all.equal(fire_res$fire, fire)
+all.equal(fire_res$fdr_fire, fdr_fire)
+
+
+# gg$pileup +
+#   (gg$dimelo_reads + theme(legend.position = 'right')) +
+#   gg$fire_fdr +
+#   gg$fire_reads +
+#   gg$fiberHMM +
+#   plot_layout(ncol = 1, guides = 'collect', heights = c(4,8,2,8,8))
+
+
+cowplot::plot_grid(
+  gg$pileup,
+  gg$dimelo_reads,
+  gg$fire_fdr,
+  gg$fire_reads,
+  gg$fiberHMM,
+  ncol = 1,
+  rel_heights = c(4,8,2,8,8),
+  align = "v",
+  axis = "b"
+)
+
+
+```
