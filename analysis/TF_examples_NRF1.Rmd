@@ -215,6 +215,7 @@ result_dir = paste0("/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1
 region <- get_region(result_dir)
 subtitle = paste0(region$chr,':', region$start,'-', region$end)
 
+plot_name = "NRF1_18508_chr19_1942k"
 
 region_motif_sites <- motif_sites %>% 
   filter(chr == region$chr, start >= region$start, end <= region$end, chip_label == 1)
