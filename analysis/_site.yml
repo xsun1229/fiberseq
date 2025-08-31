@@ -12,7 +12,7 @@ navbar:
   right:
   - icon: fab fa-github
     text: Source code
-    href: https://github.com/myname/fiberseq
+    href: https://github.com/xsun1229/fiberseq
 output:
   workflowr::wflow_html:
     toc: yes
