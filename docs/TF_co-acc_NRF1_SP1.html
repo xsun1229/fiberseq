@@ -1,0 +1,2734 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="XSun" />
+
+<meta name="date" content="2025-08-31" />
+
+<title>TF Co-accessibility for NRF1 &amp; SP1</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.22/datatables.js"></script>
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">fiberseq</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/xsun1229/fiberseq">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">TF Co-accessibility for NRF1 &amp; SP1</h1>
+<h4 class="author">XSun</h4>
+<h4 class="date">2025-08-31</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-09-01
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>fiberseq/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250831code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250831)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250831code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250831)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreefe5eaa4f90b5de0f4e0de4202369673f6453bf0btargetblankfe5eaa4a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/xsun1229/fiberseq/tree/fe5eaa4f90b5de0f4e0de4202369673f6453bf0b" target="_blank">fe5eaa4</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreefe5eaa4f90b5de0f4e0de4202369673f6453bf0btargetblankfe5eaa4a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/xsun1229/fiberseq/tree/fe5eaa4f90b5de0f4e0de4202369673f6453bf0b" target="_blank">fe5eaa4</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Untracked files:
+    Untracked:  analysis/TF_co-acc_NRF1_SP1.Rmd
+
+Unstaged changes:
+    Modified:   analysis/index.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>library(data.table)
+library(reshape2)
+library(GenomicRanges)
+library(ggplot2)
+library(tidyverse)
+
+source(&quot;/project/spott/kevinluo/Fiber_seq/fiberhub/code/process_fiberseq_data.R&quot;)
+source(&quot;/project/spott/kevinluo/Fiber_seq/fiberhub/code/plots.R&quot;)
+
+TF1 &lt;- &quot;NRF1&quot;
+TF2 &lt;- &quot;SP1&quot;</code></pre>
+<div id="extract-the-regions-containing-both-tf-motif-sites"
+class="section level1">
+<h1>Extract the regions containing both TF motif sites</h1>
+<p>We first extracted the regions containing both TFs. We only select
+the regions where the 2 TFs are separated by less than
+<code>200bp</code> but greater than <code>50bp</code>.</p>
+<pre class="r"><code>motif_sites_motif1 &lt;- readRDS(paste0(&#39;/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs/&#39;,TF1,&#39;.GM12878.sites.chip.labels.rds&#39;))
+motif_sites_motif1_chip1 &lt;- motif_sites_motif1[motif_sites_motif1$chip_label == 1,]
+
+motif_sites_motif2 &lt;- readRDS(paste0(&#39;/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs/&#39;,TF2,&#39;.GM12878.sites.chip.labels.rds&#39;))
+motif_sites_motif2_chip1 &lt;- motif_sites_motif1[motif_sites_motif2$chip_label == 1,]
+
+motif1 &lt;- motif_sites_motif1_chip1
+motif1 &lt;- motif1[!is.na(motif1$start),]
+motif2 &lt;- motif_sites_motif2_chip1
+motif2 &lt;- motif2[!is.na(motif2$start),]
+
+## Convert to GRanges
+gr_motif1 &lt;- GRanges(seqnames = motif1$chr,
+                 ranges   = IRanges(start = motif1$start+100, end = motif1$end-100),
+                 site     = motif1$name)
+
+gr_motif2 &lt;- GRanges(seqnames = motif2$chr,
+                 ranges   = IRanges(start = motif2$start+100, end = motif2$end-100),
+                 site     = motif2$name)
+
+## Define distance cutoff
+dist_cutoff_large &lt;- 200
+dist_cutoff_small &lt;- 50
+
+## Find nearest motif2 site for each motif1 site
+nearest_hits &lt;- distanceToNearest(gr_motif1, gr_motif2)
+
+## Filter by distance threshold
+close_pairs &lt;- nearest_hits[mcols(nearest_hits)$distance &lt;= dist_cutoff_large &amp; mcols(nearest_hits)$distance &gt;= dist_cutoff_small]
+
+## Extract regions
+motif1_close &lt;- gr_motif1[queryHits(close_pairs)]
+motif2_close &lt;- gr_motif2[subjectHits(close_pairs)]
+
+## Make a data.frame
+df_close &lt;- data.frame(
+  chr = as.character(seqnames(motif1_close)),
+  motif1_start = start(motif1_close),
+  motif1_end   = end(motif1_close),
+  motif1_site  = motif1_close$site,
+  motif2_start  = start(motif2_close),
+  motif2_end    = end(motif2_close),
+  motif2_site   = motif2_close$site,
+  distance   = mcols(close_pairs)$distance
+)
+
+DT::datatable(df_close,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Motif sites selected&#39;),options = list(pageLength = 5) )</code></pre>
+<div id="htmlwidget-55d484e2ce688c3024c2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Motif sites selected<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68"],["chr1","chr1","chr1","chr2","chr3","chr4","chr4","chr4","chr4","chr4","chr4","chr5","chr7","chr7","chr7","chr8","chr8","chr8","chr8","chr8","chr8","chr9","chr9","chr9","chr9","chr10","chr10","chr11","chr12","chr12","chr12","chr12","chr13","chr13","chr14","chr15","chr15","chr15","chr15","chr16","chr16","chr16","chr17","chr17","chr19","chr19","chr19","chr19","chr19","chr19","chr19","chr19","chr19","chr19","chr19","chr19","chr19","chr19","chr19","chr20","chr20","chr20","chr20","chr21","chr21","chr22","chr22","chr22"],[1308519,1308520,234479110,213151684,31532305,1248717,1248718,1248779,1248780,128288216,128288217,171387600,100429698,112391830,112391934,42391690,42391691,108248849,144428635,144428640,144428641,6758068,6758069,77177509,122159829,104122018,104122019,65570030,120116857,120116858,123533763,123533764,76991992,76992033,22589374,63600915,63600989,63600990,65530394,50065908,67481299,67481300,49362376,49362377,4400621,4400622,10928619,10928620,10960853,10960854,16628475,55600212,56120867,56120868,56120896,56120897,56120976,56120977,56404077,62796386,62796387,64079855,64079856,33324872,33324873,24011237,24011238,27919446],[1308530,1308531,234479121,213151695,31532316,1248728,1248729,1248790,1248791,128288227,128288228,171387611,100429709,112391841,112391945,42391701,42391702,108248860,144428646,144428651,144428652,6758079,6758080,77177520,122159840,104122029,104122030,65570041,120116868,120116869,123533774,123533775,76992003,76992044,22589385,63600926,63601000,63601001,65530405,50065919,67481310,67481311,49362387,49362388,4400632,4400633,10928630,10928631,10960864,10960865,16628486,55600223,56120878,56120879,56120907,56120908,56120987,56120988,56404088,62796397,62796398,64079866,64079867,33324883,33324884,24011248,24011249,27919457],["site126","site127","site2731","site4794","site5576","site7065","site7066","site7067","site7068","site7994","site7995","site9922","site12629","site12798","site12799","site13798","site13799","site14228","site14599","site14600","site14601","site14703","site14704","site15202","site15684","site17254","site17255","site18586","site20631","site20632","site20719","site20720","site21316","site21317","site21776","site23214","site23215","site23216","site23243","site24601","site24845","site24846","site26395","site26396","site28273","site28274","site28580","site28581","site28592","site28593","site28779","site29970","site30004","site30005","site30006","site30007","site30008","site30009","site30028","site31107","site31108","site31189","site31190","site31605","site31606","site32252","site32253","site32307"],[1308583,1308583,234478936,213151856,31532093,1248895,1248895,1248895,1248895,128288130,128288130,171387724,100429785,112391726,112391726,42391823,42391823,108248779,144428568,144428568,144428568,6757950,6757950,77177431,122159766,104121886,104121886,65570096,120116920,120116920,123533635,123533635,76992144,76992144,22589281,63600780,63600780,63600780,65530467,50065983,67481197,67481197,49362265,49362265,4400525,4400525,10928736,10928736,10961031,10961031,16628351,55600139,56121042,56121042,56121042,56121042,56121042,56121042,56404015,62796454,62796454,64079961,64079961,33325008,33325008,24011170,24011170,27919257],[1308594,1308594,234478947,213151867,31532104,1248906,1248906,1248906,1248906,128288141,128288141,171387735,100429796,112391737,112391737,42391834,42391834,108248790,144428579,144428579,144428579,6757961,6757961,77177442,122159777,104121897,104121897,65570107,120116931,120116931,123533646,123533646,76992155,76992155,22589292,63600791,63600791,63600791,65530478,50065994,67481208,67481208,49362276,49362276,4400536,4400536,10928747,10928747,10961042,10961042,16628362,55600150,56121053,56121053,56121053,56121053,56121053,56121053,56404026,62796465,62796465,64079972,64079972,33325019,33325019,24011181,24011181,27919268],["site129","site129","site2730","site4797","site5574","site7070","site7070","site7070","site7070","site7993","site7993","site9923","site12630","site12796","site12796","site13802","site13802","site14227","site14598","site14598","site14598","site14702","site14702","site15201","site15680","site17251","site17251","site18587","site20634","site20634","site20718","site20718","site21319","site21319","site21774","site23213","site23213","site23213","site23244","site24603","site24844","site24844","site26393","site26393","site28272","site28272","site28582","site28582","site28596","site28596","site28777","site29969","site30011","site30011","site30011","site30011","site30011","site30011","site30025","site31109","site31109","site31191","site31191","site31608","site31608","site32249","site32249","site32306"],[52,51,162,160,200,166,165,104,103,74,75,112,75,92,196,121,120,58,55,60,61,106,107,66,51,120,121,54,51,50,116,117,140,99,81,123,197,198,61,63,90,91,99,100,84,85,105,104,166,165,112,61,163,162,134,133,54,53,50,56,55,94,93,124,123,55,56,177]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>chr<\/th>\n      <th>motif1_start<\/th>\n      <th>motif1_end<\/th>\n      <th>motif1_site<\/th>\n      <th>motif2_start<\/th>\n      <th>motif2_end<\/th>\n      <th>motif2_site<\/th>\n      <th>distance<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[2,3,5,6,8]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>df_summary &lt;- df_close %&gt;%
+  group_by(chr, motif2_site, motif2_start, motif2_end) %&gt;%
+  summarise(
+    min_motif1_start = min(motif1_start),
+    max_motif1_end   = max(motif1_end),
+    .groups = &quot;drop&quot;
+  )
+
+df_final &lt;- df_summary %&gt;%
+  transmute(
+    chr,
+    start = pmin(motif2_start, min_motif1_start) - 500,
+    end   = pmax(motif2_end,   max_motif1_end)   + 500
+  )
+
+df_final &lt;- df_final %&gt;%
+  mutate(chr_num = as.numeric(gsub(&quot;chr&quot;, &quot;&quot;, chr))) %&gt;%
+  arrange(chr_num, start) %&gt;%
+  select(-chr_num)
+
+DT::datatable(df_final,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Regions selected for plotting &#39;),options = list(pageLength = 5) )</code></pre>
+<div id="htmlwidget-0c375f72d786c94bb27a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0c375f72d786c94bb27a">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Regions selected for plotting <\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38"],["chr1","chr1","chr2","chr3","chr4","chr4","chr5","chr7","chr7","chr8","chr8","chr8","chr9","chr9","chr9","chr10","chr11","chr12","chr12","chr13","chr14","chr15","chr15","chr16","chr16","chr17","chr19","chr19","chr19","chr19","chr19","chr19","chr19","chr20","chr20","chr21","chr22","chr22"],[1308019,234478436,213151184,31531593,1248217,128287630,171387100,100429198,112391226,42391190,108248279,144428068,6757450,77176931,122159266,104121386,65569530,120116357,123533135,76991492,22588781,63600280,65529894,50065408,67480697,49361765,4400025,10928119,10960353,16627851,55599639,56120367,56403515,62795886,64079355,33324372,24010670,27918757],[1309094,234479621,213152367,31532816,1249406,128288728,171388235,100430296,112392445,42392334,108249360,144429152,6758580,77178020,122160340,104122530,65570607,120117431,123534275,76992655,22589885,63601501,65530978,50066494,67481811,49362888,4401133,10929247,10961542,16628986,55600723,56121553,56404588,62796965,64080472,33325519,24011749,27919957]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>chr<\/th>\n      <th>start<\/th>\n      <th>end<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"columnDefs":[{"className":"dt-right","targets":[2,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="visualization" class="section level1">
+<h1>Visualization</h1>
+<pre class="r"><code>out_dir=&quot;/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results&quot;
+sample_name=&quot;LCL_18508&quot;
+
+df_close_nodup &lt;- df_close[!duplicated(df_close$motif2_site),]
+
+#for (i in 1:3){
+for (i in 1:nrow(df_final)){
+  
+  test_range_str &lt;- paste0(df_final$chr[i],&quot;:&quot;,df_final$start[i],&quot;-&quot;,df_final$end[i])
+  plot_name=paste0(TF1,&quot;_&quot;,TF2,&quot;_&quot;,sample_name, &quot;_&quot;, test_range_str)
+  result_dir = paste0(out_dir, &quot;/&quot;, plot_name, &quot;/parsed&quot;)
+  
+  region &lt;- get_region(result_dir)
+  subtitle &lt;- sprintf(&quot;%s:%s-%s&quot;, region$chr, region$start, region$end)
+  
+  
+  df_close_region &lt;- df_close[df_close$motif2_site == df_close_nodup$motif2_site[i],]
+  min_start_motif1 &lt;- min(df_close_region$motif1_start)
+  max_end_motif1   &lt;- max(df_close_region$motif1_end)
+  
+  highlight_windows.df &lt;- data.frame(start = c(min_start_motif1 - 7,df_close_nodup$motif2_start[i] -7 ), 
+                              end = c(max_end_motif1 + 7 ,df_close_nodup$motif2_end[i] +7))
+  
+  plot_name=paste0(TF1,&quot;_&quot;,TF2,&quot;_&quot;,sample_name, &quot;_&quot;, test_range_str)
+  result_dir = paste0(out_dir, &quot;/&quot;, plot_name, &quot;/parsed&quot;)
+
+  
+  res &lt;- plot_region_reads(result_dir, 
+                         filter_fire_reads = FALSE,
+                         cover_region_only = FALSE,
+                         cluster_reads = TRUE,
+                         select_A_only = TRUE,
+                         split_haplotype = FALSE,
+                         highlight_window = highlight_windows.df,
+                         color_highlight_window = &quot;#ade6b3&quot;,
+                         plot_name = plot_name,
+                         subtitle = subtitle)
+
+  region &lt;- res$region
+  window_size &lt;- res$window_size
+  rids_df &lt;- res$rids_df
+  pileup &lt;- res$pileup
+  reads &lt;- res$reads
+  fire &lt;- res$fire
+  fdr_fire &lt;- res$fdr_fire
+  fiberHMM_fps &lt;- res$fiberHMM_fps
+  gg &lt;- res$gg
+  
+  
+  print(cowplot::plot_grid(
+    gg$pileup,
+    gg$dimelo_reads,
+    gg$fire_fdr,
+    gg$fire_reads,
+    gg$fiberHMM,
+    ncol = 1,
+    rel_heights = c(4,8,2,8,8),
+    align = &quot;v&quot;,
+    axis = &quot;b&quot;
+  ))
+
+  
+  fps &lt;- res$fiberHMM_fps_infire
+  fps_rid &lt;- fps$RID
+  
+  #fps_highlight_motif1 &lt;- fps[fps$start &gt; highlight_windows.df$start[1] &amp; fps$end &lt; highlight_windows.df$end[1], ]
+  fps_highlight_motif1 &lt;- fps[fps$start &lt;= highlight_windows.df$end[1] &amp; fps$end &gt;= highlight_windows.df$start[1], ]
+  fps_tf_motif1 &lt;- fps_highlight_motif1[fps_highlight_motif1$class == &quot;&lt; 40bp&quot;,]
+  rid_motif1 &lt;-   as.character(res$rids_df$RID[res$rids_df$start &lt;= max_end_motif1 &amp; res$rids_df$end &gt;= min_start_motif1])
+  
+  
+  #fps_highlight_motif2 &lt;- fps[fps$start &gt; highlight_windows.df$start[2] &amp; fps$end &lt; highlight_windows.df$end[2], ]
+  fps_highlight_motif2 &lt;- fps[fps$start &lt;= highlight_windows.df$end[2] &amp; fps$end &gt;= highlight_windows.df$start[2], ]
+  fps_tf_motif2 &lt;- fps_highlight_motif2[fps_highlight_motif2$class == &quot;&lt; 40bp&quot;,]
+  rid_motif2 &lt;-   as.character(res$rids_df$RID[res$rids_df$start &lt;= df_close_nodup$motif2_end[i] &amp; res$rids_df$end &gt;= df_close_nodup$motif2_start[i]])
+  
+  RIDs_overlap_both_regions &lt;- intersect(rid_motif1, rid_motif2)
+  
+  RIDs_access.df &lt;- data.frame(RID = RIDs_overlap_both_regions, 
+                               TF1 = FALSE,
+                               TF2 = FALSE)
+  
+  RIDs_access.df$TF1[RIDs_access.df$RID %in% unique(fps_tf_motif1$RID)] &lt;- TRUE
+  RIDs_access.df$TF2[RIDs_access.df$RID %in% unique(fps_tf_motif2$RID)] &lt;- TRUE
+  
+  
+  print(RIDs_access.df)
+  
+  if(!(sum(RIDs_access.df$TF1) &gt; 0 &amp; sum(RIDs_access.df$TF2) &gt; 0)) next 
+  
+  cat(&quot;Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...\n&quot;)
+  print(contingency_table &lt;- table(RIDs_access.df[,c(&quot;TF1&quot;, &quot;TF2&quot;)]))
+  
+  print(fisher_res &lt;- fisher.test(contingency_table))
+  
+}</code></pre>
+<pre><code>Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+41 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230430_142929/172556592/ccs FALSE FALSE
+2  m64403e_230430_142929/156829378/ccs FALSE FALSE
+3   m64403e_230429_051256/71501084/ccs FALSE FALSE
+4   m64403e_230501_235831/68354547/ccs  TRUE FALSE
+5  m64403e_230429_051256/106956772/ccs  TRUE FALSE
+6  m64403e_230501_235831/173738074/ccs  TRUE FALSE
+7   m64403e_230429_051256/98960736/ccs FALSE FALSE
+8    m64403e_230430_142929/6424484/ccs FALSE FALSE
+9  m64403e_230429_051256/104661771/ccs FALSE FALSE
+10 m64403e_230430_142929/151847620/ccs FALSE FALSE
+11  m64403e_230430_142929/25821695/ccs FALSE FALSE
+12  m64403e_230501_235831/19071687/ccs FALSE FALSE
+13  m64403e_230501_235831/44237256/ccs FALSE FALSE
+14  m64403e_230501_235831/69077564/ccs FALSE FALSE
+15  m64403e_230429_051256/43648503/ccs FALSE FALSE
+16  m64403e_230429_051256/11732274/ccs FALSE FALSE
+17  m64403e_220914_215953/93849306/ccs FALSE FALSE
+18  m64403e_230429_051256/38273848/ccs FALSE FALSE
+19 m64403e_230430_142929/146604668/ccs FALSE  TRUE
+20  m64403e_230429_051256/70583053/ccs FALSE FALSE
+21  m64403e_230430_142929/49481351/ccs FALSE FALSE
+22  m64403e_230501_235831/58394882/ccs FALSE FALSE
+23 m64403e_230429_051256/145621146/ccs FALSE FALSE
+24  m64403e_230429_051256/47384831/ccs FALSE FALSE
+25 m64403e_230501_235831/123666894/ccs  TRUE FALSE
+26  m64403e_230429_051256/46073460/ccs FALSE FALSE
+27 m64403e_230430_142929/175114592/ccs FALSE FALSE
+28  m64403e_220916_085351/54395577/ccs FALSE FALSE
+29  m64403e_220916_085351/21627070/ccs FALSE FALSE
+30  m64403e_230430_142929/21233753/ccs  TRUE FALSE
+31 m64403e_230430_142929/145229820/ccs  TRUE FALSE
+32  m64403e_230430_142929/25037207/ccs FALSE FALSE
+33 m64403e_230430_142929/146866804/ccs  TRUE FALSE
+34  m64403e_230430_142929/28050135/ccs FALSE FALSE
+35 m64403e_230501_235831/145687958/ccs FALSE FALSE
+36 m64403e_230501_235831/156763700/ccs FALSE FALSE
+37  m64403e_230429_051256/96340569/ccs FALSE FALSE
+38 m64403e_230501_235831/155452919/ccs FALSE FALSE
+39  m64403e_230430_142929/78646068/ccs  TRUE FALSE
+40   m64403e_230501_235831/7473254/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    31    1
+  TRUE      8    0
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+   0.0000 155.6231
+sample estimates:
+odds ratio 
+         0 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+30 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-2.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_220914_215953/170067004/ccs FALSE FALSE
+2   m64403e_220916_085351/38273572/ccs FALSE FALSE
+3   m64403e_220914_215953/42599254/ccs FALSE FALSE
+4  m64403e_230501_235831/164169034/ccs FALSE FALSE
+5   m64403e_230501_235831/72288102/ccs FALSE  TRUE
+6   m64403e_230501_235831/22219558/ccs FALSE FALSE
+7   m64403e_230430_142929/50005906/ccs FALSE FALSE
+8    m64403e_230430_142929/7668483/ccs FALSE FALSE
+9   m64403e_220914_215953/14551427/ccs FALSE FALSE
+10 m64403e_230429_051256/179701316/ccs FALSE FALSE
+11 m64403e_220914_215953/133694908/ccs FALSE FALSE
+12  m64403e_230429_051256/15532612/ccs FALSE FALSE
+13  m64403e_220916_085351/56691090/ccs FALSE FALSE
+14   m64403e_230430_142929/2295999/ccs FALSE FALSE
+15  m64403e_230501_235831/43779212/ccs FALSE FALSE
+16  m64403e_230501_235831/13304940/ccs FALSE FALSE
+17  m64403e_230429_051256/32768587/ccs FALSE FALSE
+18 m64403e_230501_235831/102041751/ccs FALSE FALSE
+19  m64403e_230429_051256/29690570/ccs FALSE FALSE
+20  m64403e_230430_142929/39453290/ccs FALSE FALSE
+21 m64403e_230429_051256/153160430/ccs FALSE FALSE
+22  m64403e_220916_085351/91685587/ccs FALSE FALSE
+23  m64403e_230429_051256/96208038/ccs FALSE FALSE
+24 m64403e_220916_085351/168035282/ccs FALSE FALSE
+25 m64403e_220914_215953/151586951/ccs FALSE FALSE
+26 m64403e_230429_051256/137036892/ccs FALSE FALSE
+27  m64403e_230430_142929/24183009/ccs FALSE FALSE
+28  m64403e_230430_142929/24904487/ccs FALSE FALSE
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+31 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-3.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230429_051256/119799947/ccs FALSE FALSE
+2   m64403e_230429_051256/72353486/ccs FALSE FALSE
+3  m64403e_230429_051256/170526929/ccs  TRUE FALSE
+4   m64403e_230429_051256/95748540/ccs FALSE FALSE
+5  m64403e_230429_051256/149489004/ccs FALSE FALSE
+6   m64403e_230429_051256/48825285/ccs FALSE  TRUE
+7  m64403e_230430_142929/177211375/ccs FALSE FALSE
+8   m64403e_230501_235831/21103118/ccs FALSE FALSE
+9  m64403e_230429_051256/114231082/ccs FALSE FALSE
+10  m64403e_230430_142929/33686529/ccs FALSE FALSE
+11 m64403e_230501_235831/128516775/ccs FALSE FALSE
+12  m64403e_230429_051256/15468585/ccs FALSE FALSE
+13  m64403e_230429_051256/79956579/ccs FALSE FALSE
+14  m64403e_220916_085351/10224867/ccs FALSE FALSE
+15 m64403e_230501_235831/112855835/ccs FALSE FALSE
+16 m64403e_230501_235831/101057812/ccs FALSE FALSE
+17   m64403e_220914_215953/3213699/ccs FALSE FALSE
+18 m64403e_220916_085351/118360259/ccs FALSE FALSE
+19 m64403e_220914_215953/174917227/ccs FALSE FALSE
+20   m64403e_230430_142929/8783166/ccs FALSE FALSE
+21   m64403e_220914_215953/3014751/ccs FALSE FALSE
+22  m64403e_230501_235831/78316667/ccs FALSE FALSE
+23 m64403e_220914_215953/167642527/ccs FALSE FALSE
+24 m64403e_230429_051256/162137622/ccs FALSE FALSE
+25 m64403e_230430_142929/178652219/ccs FALSE FALSE
+26 m64403e_220916_085351/171771475/ccs FALSE FALSE
+27 m64403e_230429_051256/134219295/ccs FALSE FALSE
+28  m64403e_230430_142929/31129989/ccs FALSE FALSE
+29  m64403e_230430_142929/50857365/ccs FALSE FALSE
+30  m64403e_230429_051256/43125583/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    28    1
+  TRUE      1    0
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+    0.000 1111.377
+sample estimates:
+odds ratio 
+         0 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+31 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-4.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1     m64403e_230429_051256/590623/ccs FALSE FALSE
+2    m64403e_230501_235831/3670660/ccs FALSE FALSE
+3  m64403e_230429_051256/121833482/ccs FALSE  TRUE
+4   m64403e_220914_215953/79954181/ccs FALSE FALSE
+5  m64403e_230429_051256/106760771/ccs FALSE  TRUE
+6   m64403e_230430_142929/87359663/ccs FALSE FALSE
+7  m64403e_230430_142929/154927887/ccs FALSE FALSE
+8  m64403e_220916_085351/118555006/ccs FALSE FALSE
+9  m64403e_230501_235831/176425420/ccs FALSE FALSE
+10  m64403e_220916_085351/49416757/ccs FALSE  TRUE
+11  m64403e_230430_142929/49415869/ccs FALSE  TRUE
+12  m64403e_220914_215953/32442511/ccs FALSE  TRUE
+13 m64403e_230501_235831/164037345/ccs FALSE  TRUE
+14  m64403e_230501_235831/93061423/ccs FALSE FALSE
+15 m64403e_230429_051256/111413243/ccs FALSE FALSE
+16  m64403e_220914_215953/85131349/ccs FALSE FALSE
+17  m64403e_230430_142929/69272301/ccs FALSE  TRUE
+18  m64403e_230501_235831/58131261/ccs FALSE FALSE
+19  m64403e_230429_051256/23004376/ccs FALSE FALSE
+20 m64403e_230429_051256/147784723/ccs FALSE FALSE
+21  m64403e_230429_051256/22350206/ccs FALSE  TRUE
+22 m64403e_220916_085351/138151399/ccs FALSE  TRUE
+23 m64403e_230429_051256/139722960/ccs  TRUE  TRUE
+24  m64403e_230430_142929/43975605/ccs FALSE  TRUE
+25  m64403e_230501_235831/74187172/ccs  TRUE  TRUE
+26 m64403e_230429_051256/139461169/ccs FALSE  TRUE
+27 m64403e_230429_051256/128582118/ccs FALSE  TRUE
+28 m64403e_230429_051256/110691725/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    14   12
+  TRUE      0    2
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 0.4815
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.1901047       Inf
+sample estimates:
+odds ratio 
+       Inf 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+32 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-5.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230429_051256/63898231/ccs  TRUE FALSE
+2   m64403e_230429_051256/17499078/ccs FALSE FALSE
+3  m64403e_230430_142929/154469249/ccs  TRUE FALSE
+4   m64403e_220914_215953/70847225/ccs FALSE FALSE
+5  m64403e_230429_051256/111281247/ccs  TRUE FALSE
+6  m64403e_230430_142929/121047587/ccs FALSE FALSE
+7  m64403e_230430_142929/138937718/ccs  TRUE FALSE
+8  m64403e_220914_215953/159712930/ccs  TRUE FALSE
+9   m64403e_230501_235831/47513664/ccs  TRUE FALSE
+10  m64403e_230430_142929/84345223/ccs  TRUE FALSE
+11 m64403e_230429_051256/123734759/ccs FALSE FALSE
+12  m64403e_230501_235831/35457290/ccs  TRUE FALSE
+13 m64403e_220914_215953/116787818/ccs FALSE FALSE
+14  m64403e_230430_142929/12255334/ccs  TRUE FALSE
+15  m64403e_230430_142929/36898989/ccs FALSE FALSE
+16  m64403e_220916_085351/17959688/ccs  TRUE FALSE
+17  m64403e_230501_235831/47122766/ccs  TRUE FALSE
+18 m64403e_220916_085351/112986914/ccs  TRUE  TRUE
+19  m64403e_230430_142929/17500547/ccs  TRUE FALSE
+20 m64403e_230501_235831/172885704/ccs FALSE FALSE
+21  m64403e_230501_235831/73140617/ccs  TRUE FALSE
+22    m64403e_230430_142929/656989/ccs FALSE FALSE
+23  m64403e_230429_051256/84869879/ccs  TRUE FALSE
+24 m64403e_230429_051256/124650423/ccs  TRUE FALSE
+25  m64403e_230501_235831/95355070/ccs FALSE FALSE
+26  m64403e_230501_235831/43844354/ccs  TRUE FALSE
+27  m64403e_220916_085351/79626506/ccs  TRUE FALSE
+28  m64403e_230430_142929/71960422/ccs  TRUE FALSE
+29  m64403e_230501_235831/35521496/ccs FALSE FALSE
+30  m64403e_230501_235831/26608345/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    11    0
+  TRUE     18    1
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.0148602       Inf
+sample estimates:
+odds ratio 
+       Inf 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+31 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-6.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_220914_215953/18350583/ccs  TRUE  TRUE
+2  m64403e_230501_235831/124585305/ccs FALSE  TRUE
+3   m64403e_230501_235831/72352424/ccs  TRUE  TRUE
+4   m64403e_230501_235831/91163097/ccs  TRUE  TRUE
+5  m64403e_230430_142929/154337995/ccs FALSE FALSE
+6  m64403e_230501_235831/154470491/ccs  TRUE  TRUE
+7   m64403e_230501_235831/18546841/ccs  TRUE  TRUE
+8    m64403e_230501_235831/4915618/ccs  TRUE FALSE
+9  m64403e_230429_051256/139462740/ccs  TRUE  TRUE
+10  m64403e_230429_051256/13435519/ccs  TRUE FALSE
+11  m64403e_230501_235831/47187439/ccs  TRUE FALSE
+12  m64403e_220914_215953/90113096/ccs FALSE  TRUE
+13  m64403e_230501_235831/32440445/ccs  TRUE  TRUE
+14  m64403e_220914_215953/59836386/ccs  TRUE FALSE
+15 m64403e_230429_051256/178848438/ccs FALSE  TRUE
+16 m64403e_220914_215953/145689317/ccs  TRUE  TRUE
+17 m64403e_230501_235831/112526434/ccs  TRUE  TRUE
+18 m64403e_230430_142929/163251072/ccs  TRUE  TRUE
+19 m64403e_230430_142929/154600351/ccs  TRUE  TRUE
+20  m64403e_220916_085351/94240829/ccs  TRUE  TRUE
+21 m64403e_230501_235831/125174194/ccs  TRUE FALSE
+22  m64403e_230429_051256/15993203/ccs  TRUE FALSE
+23  m64403e_230430_142929/11143689/ccs FALSE  TRUE
+24 m64403e_220914_215953/118489922/ccs  TRUE  TRUE
+25 m64403e_230501_235831/174196845/ccs  TRUE FALSE
+26  m64403e_230430_142929/53805155/ccs  TRUE  TRUE
+27 m64403e_220914_215953/167119191/ccs FALSE  TRUE
+28  m64403e_220914_215953/83296262/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE     2    5
+  TRUE      7   14
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.0618476 6.6934454
+sample estimates:
+odds ratio 
+ 0.8062693 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+32 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-7.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_220916_085351/144508553/ccs  TRUE  TRUE
+2   m64403e_220916_085351/48563942/ccs  TRUE  TRUE
+3  m64403e_230430_142929/127468587/ccs FALSE FALSE
+4   m64403e_230430_142929/38470695/ccs FALSE FALSE
+5   m64403e_230429_051256/61933473/ccs FALSE FALSE
+6  m64403e_230501_235831/173606657/ccs  TRUE FALSE
+7   m64403e_230430_142929/12387865/ccs FALSE  TRUE
+8   m64403e_220916_085351/17958098/ccs FALSE  TRUE
+9   m64403e_220916_085351/75432814/ccs FALSE FALSE
+10  m64403e_230429_051256/73859428/ccs FALSE FALSE
+11  m64403e_230430_142929/49547248/ccs FALSE  TRUE
+12  m64403e_230429_051256/18678011/ccs FALSE  TRUE
+13  m64403e_230430_142929/91160608/ccs  TRUE  TRUE
+14 m64403e_230429_051256/108791117/ccs FALSE FALSE
+15  m64403e_230429_051256/88606552/ccs  TRUE FALSE
+16 m64403e_230501_235831/177996275/ccs  TRUE  TRUE
+17  m64403e_230501_235831/72026391/ccs  TRUE FALSE
+18  m64403e_220916_085351/10881490/ccs FALSE  TRUE
+19  m64403e_230430_142929/16843714/ccs  TRUE  TRUE
+20  m64403e_230501_235831/39520969/ccs FALSE  TRUE
+21 m64403e_220916_085351/102892789/ccs  TRUE  TRUE
+22 m64403e_230501_235831/160368311/ccs FALSE FALSE
+23 m64403e_220916_085351/172427595/ccs  TRUE  TRUE
+24 m64403e_230429_051256/163580233/ccs  TRUE  TRUE
+25  m64403e_230430_142929/34735682/ccs FALSE  TRUE
+26  m64403e_230501_235831/86311408/ccs FALSE FALSE
+27 m64403e_230429_051256/126485512/ccs FALSE FALSE
+28  m64403e_230501_235831/70583838/ccs FALSE  TRUE
+29  m64403e_230430_142929/62456086/ccs FALSE  TRUE
+30 m64403e_230501_235831/143065457/ccs FALSE  TRUE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE     9   10
+  TRUE      3    8
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 0.4425
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.3908593 17.9557134
+sample estimates:
+odds ratio 
+  2.331428 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+30 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-8.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230501_235831/28642064/ccs FALSE FALSE
+2  m64403e_230429_051256/140050771/ccs FALSE FALSE
+3  m64403e_230430_142929/110037606/ccs FALSE FALSE
+4  m64403e_230429_051256/134284013/ccs FALSE FALSE
+5  m64403e_230429_051256/126420739/ccs FALSE FALSE
+6  m64403e_230501_235831/115147257/ccs FALSE FALSE
+7   m64403e_230429_051256/94962104/ccs  TRUE FALSE
+8   m64403e_230429_051256/76481947/ccs FALSE FALSE
+9  m64403e_230430_142929/110888287/ccs FALSE  TRUE
+10  m64403e_230501_235831/57213440/ccs FALSE FALSE
+11  m64403e_220914_215953/67307524/ccs FALSE FALSE
+12  m64403e_230429_051256/57213216/ccs  TRUE  TRUE
+13  m64403e_230429_051256/90311437/ccs FALSE FALSE
+14 m64403e_230430_142929/175900346/ccs FALSE FALSE
+15  m64403e_230429_051256/74516663/ccs FALSE  TRUE
+16  m64403e_220914_215953/34670292/ccs FALSE  TRUE
+17 m64403e_230430_142929/107874582/ccs FALSE FALSE
+18  m64403e_230430_142929/40436940/ccs FALSE  TRUE
+19 m64403e_230430_142929/168102247/ccs FALSE FALSE
+20   m64403e_230501_235831/3932180/ccs FALSE FALSE
+21  m64403e_230429_051256/24643547/ccs FALSE FALSE
+22  m64403e_230501_235831/48366380/ccs FALSE FALSE
+23 m64403e_230430_142929/125502144/ccs FALSE FALSE
+24  m64403e_220916_085351/78709075/ccs FALSE FALSE
+25 m64403e_230501_235831/122291947/ccs FALSE FALSE
+26 m64403e_230430_142929/154077360/ccs FALSE  TRUE
+27 m64403e_220914_215953/130876777/ccs FALSE  TRUE
+28 m64403e_230430_142929/158795300/ccs FALSE FALSE
+29  m64403e_230501_235831/74450817/ccs FALSE FALSE
+30 m64403e_230430_142929/113968052/ccs FALSE  TRUE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    21    7
+  TRUE      1    1
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 0.469
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+   0.03347547 245.90394776
+sample estimates:
+odds ratio 
+  2.872491 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+39 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-9.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230430_142929/58000584/ccs FALSE FALSE
+2  m64403e_230501_235831/164823051/ccs FALSE FALSE
+3  m64403e_220916_085351/100073502/ccs FALSE  TRUE
+4   m64403e_230429_051256/80021520/ccs FALSE FALSE
+5   m64403e_220914_215953/42599119/ccs  TRUE FALSE
+6   m64403e_230429_051256/43844808/ccs FALSE FALSE
+7  m64403e_220916_085351/162466078/ccs FALSE  TRUE
+8  m64403e_220916_085351/155779845/ccs FALSE FALSE
+9   m64403e_230501_235831/78711384/ccs FALSE FALSE
+10  m64403e_230501_235831/46860513/ccs FALSE FALSE
+11  m64403e_220916_085351/46467248/ccs  TRUE FALSE
+12 m64403e_230501_235831/117440726/ccs FALSE FALSE
+13  m64403e_230430_142929/96011023/ccs FALSE FALSE
+14  m64403e_230501_235831/90899400/ccs FALSE FALSE
+15 m64403e_230501_235831/171706003/ccs FALSE FALSE
+16 m64403e_230429_051256/151847014/ccs FALSE FALSE
+17  m64403e_230501_235831/80544133/ccs FALSE FALSE
+18 m64403e_230430_142929/106301159/ccs FALSE FALSE
+19  m64403e_230501_235831/24773432/ccs FALSE FALSE
+20  m64403e_230430_142929/69403487/ccs FALSE FALSE
+21  m64403e_220916_085351/86902636/ccs FALSE FALSE
+22  m64403e_220916_085351/63636096/ccs FALSE FALSE
+23 m64403e_230429_051256/118163580/ccs  TRUE FALSE
+24  m64403e_230430_142929/91490039/ccs FALSE FALSE
+25 m64403e_230429_051256/124978996/ccs FALSE FALSE
+26    m64403e_230501_235831/918889/ccs FALSE FALSE
+27 m64403e_230429_051256/168034767/ccs FALSE FALSE
+28 m64403e_230429_051256/154470458/ccs FALSE FALSE
+29  m64403e_230430_142929/28838030/ccs FALSE FALSE
+30  m64403e_230429_051256/40503029/ccs FALSE FALSE
+31  m64403e_230429_051256/17696076/ccs FALSE FALSE
+32  m64403e_230429_051256/61409451/ccs FALSE FALSE
+33 m64403e_230429_051256/138675014/ccs FALSE FALSE
+34  m64403e_230501_235831/80348957/ccs FALSE FALSE
+35 m64403e_230430_142929/144901353/ccs  TRUE FALSE
+36  m64403e_230430_142929/85657962/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    30    2
+  TRUE      4    0
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.00000 47.08704
+sample estimates:
+odds ratio 
+         0 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+34 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-10.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230429_051256/161285927/ccs  TRUE FALSE
+2   m64403e_230501_235831/25954410/ccs  TRUE FALSE
+3  m64403e_230430_142929/123666977/ccs FALSE FALSE
+4   m64403e_230430_142929/70189273/ccs  TRUE FALSE
+5   m64403e_220916_085351/83297649/ccs FALSE FALSE
+6  m64403e_220916_085351/116852244/ccs  TRUE FALSE
+7   m64403e_230429_051256/92012649/ccs  TRUE FALSE
+8   m64403e_230430_142929/88869033/ccs  TRUE FALSE
+9  m64403e_230429_051256/164759884/ccs FALSE FALSE
+10  m64403e_230429_051256/88343148/ccs  TRUE FALSE
+11  m64403e_230430_142929/42994402/ccs  TRUE FALSE
+12 m64403e_230429_051256/108003859/ccs FALSE FALSE
+13 m64403e_230429_051256/103615190/ccs  TRUE FALSE
+14  m64403e_230501_235831/94765750/ccs FALSE FALSE
+15  m64403e_220916_085351/76875625/ccs FALSE FALSE
+16  m64403e_230429_051256/95946246/ccs FALSE FALSE
+17 m64403e_230430_142929/177407299/ccs FALSE  TRUE
+18 m64403e_230501_235831/169279714/ccs FALSE FALSE
+19 m64403e_230429_051256/173212976/ccs FALSE FALSE
+20 m64403e_230430_142929/138806265/ccs FALSE FALSE
+21 m64403e_230501_235831/108594264/ccs FALSE FALSE
+22   m64403e_230429_051256/4982043/ccs FALSE FALSE
+23 m64403e_220916_085351/108005632/ccs FALSE FALSE
+24 m64403e_230429_051256/124256674/ccs  TRUE FALSE
+25  m64403e_230429_051256/48431631/ccs  TRUE FALSE
+26  m64403e_230430_142929/54331054/ccs  TRUE FALSE
+27 m64403e_230501_235831/143525925/ccs  TRUE FALSE
+28 m64403e_220914_215953/120260678/ccs  TRUE FALSE
+29  m64403e_230429_051256/10881852/ccs  TRUE FALSE
+30  m64403e_230429_051256/73269507/ccs  TRUE FALSE
+31  m64403e_230501_235831/62193840/ccs  TRUE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    13    1
+  TRUE     17    0
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 0.4516
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.00000 32.11795
+sample estimates:
+odds ratio 
+         0 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+33 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-11.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230430_142929/83362439/ccs FALSE FALSE
+2   m64403e_220916_085351/60556181/ccs FALSE FALSE
+3  m64403e_230429_051256/100075897/ccs FALSE FALSE
+4  m64403e_230430_142929/135399890/ccs FALSE  TRUE
+5  m64403e_230430_142929/112264286/ccs  TRUE  TRUE
+6  m64403e_230501_235831/141821225/ccs  TRUE  TRUE
+7   m64403e_230430_142929/73992886/ccs  TRUE  TRUE
+8   m64403e_230501_235831/12847194/ccs FALSE  TRUE
+9   m64403e_230429_051256/72876676/ccs  TRUE  TRUE
+10  m64403e_220916_085351/40043731/ccs FALSE FALSE
+11 m64403e_230429_051256/121767118/ccs  TRUE FALSE
+12 m64403e_230430_142929/146541198/ccs FALSE  TRUE
+13  m64403e_230430_142929/31982522/ccs FALSE  TRUE
+14  m64403e_230430_142929/51708294/ccs  TRUE FALSE
+15 m64403e_230429_051256/100469556/ccs  TRUE FALSE
+16  m64403e_230501_235831/71303174/ccs FALSE FALSE
+17  m64403e_230501_235831/57083008/ccs  TRUE FALSE
+18  m64403e_230430_142929/52496725/ccs FALSE FALSE
+19 m64403e_230501_235831/179964582/ccs FALSE  TRUE
+20  m64403e_230501_235831/81396921/ccs  TRUE FALSE
+21 m64403e_230429_051256/174327899/ccs  TRUE  TRUE
+22 m64403e_230429_051256/152568407/ccs  TRUE FALSE
+23  m64403e_230501_235831/87557003/ccs FALSE  TRUE
+24  m64403e_230430_142929/32967173/ccs FALSE FALSE
+25   m64403e_230501_235831/3211763/ccs  TRUE FALSE
+26  m64403e_230430_142929/60425809/ccs  TRUE  TRUE
+27 m64403e_230429_051256/164693680/ccs FALSE FALSE
+28 m64403e_230429_051256/177276558/ccs  TRUE FALSE
+29 m64403e_230501_235831/117638159/ccs  TRUE FALSE
+30  m64403e_230501_235831/61538623/ccs  TRUE  TRUE
+31  m64403e_230429_051256/79628199/ccs FALSE  TRUE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE     8    7
+  TRUE      9    7
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.1731173 4.5575374
+sample estimates:
+odds ratio 
+ 0.8922766 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+21 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-12.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230430_142929/140509598/ccs FALSE FALSE
+2   m64403e_230501_235831/68159318/ccs FALSE  TRUE
+3   m64403e_230429_051256/83756128/ccs FALSE FALSE
+4   m64403e_230430_142929/98503134/ccs FALSE FALSE
+5   m64403e_220916_085351/31328758/ccs FALSE FALSE
+6   m64403e_230429_051256/83232106/ccs FALSE FALSE
+7   m64403e_230429_051256/91555749/ccs FALSE FALSE
+8   m64403e_230501_235831/53086984/ccs FALSE FALSE
+9   m64403e_230429_051256/65668838/ccs FALSE  TRUE
+10  m64403e_230429_051256/25627209/ccs FALSE FALSE
+11  m64403e_230430_142929/59965810/ccs FALSE FALSE
+12  m64403e_230429_051256/60819605/ccs FALSE FALSE
+13 m64403e_230501_235831/119603283/ccs FALSE  TRUE
+14 m64403e_230501_235831/130615126/ccs FALSE FALSE
+15  m64403e_230429_051256/37880402/ccs FALSE FALSE
+16  m64403e_230501_235831/36308859/ccs FALSE FALSE
+17 m64403e_230430_142929/136839815/ccs FALSE FALSE
+18  m64403e_230429_051256/73072886/ccs FALSE FALSE
+19 m64403e_220914_215953/140838293/ccs FALSE FALSE
+20  m64403e_230501_235831/72681289/ccs FALSE FALSE
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+29 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-13.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230430_142929/43385221/ccs  TRUE  TRUE
+2   m64403e_230429_051256/41618271/ccs  TRUE  TRUE
+3   m64403e_230501_235831/59769053/ccs FALSE FALSE
+4  m64403e_230501_235831/172098118/ccs  TRUE FALSE
+5   m64403e_230429_051256/82182710/ccs  TRUE  TRUE
+6   m64403e_230501_235831/60164105/ccs FALSE FALSE
+7   m64403e_230501_235831/43516214/ccs  TRUE FALSE
+8   m64403e_230430_142929/78252195/ccs FALSE  TRUE
+9   m64403e_230430_142929/50529949/ccs FALSE FALSE
+10  m64403e_230430_142929/76811073/ccs  TRUE FALSE
+11  m64403e_220916_085351/91029655/ccs FALSE  TRUE
+12  m64403e_230501_235831/38341314/ccs  TRUE FALSE
+13  m64403e_230501_235831/68944035/ccs FALSE FALSE
+14  m64403e_230501_235831/44763538/ccs  TRUE  TRUE
+15  m64403e_230430_142929/60229619/ccs  TRUE FALSE
+16   m64403e_220916_085351/6489764/ccs  TRUE FALSE
+17  m64403e_230501_235831/34605629/ccs FALSE FALSE
+18 m64403e_230429_051256/148376178/ccs  TRUE FALSE
+19  m64403e_230430_142929/78774845/ccs FALSE  TRUE
+20  m64403e_220914_215953/48432533/ccs FALSE FALSE
+21 m64403e_220916_085351/120193468/ccs  TRUE  TRUE
+22  m64403e_230429_051256/93520489/ccs FALSE FALSE
+23 m64403e_230429_051256/158271317/ccs FALSE FALSE
+24 m64403e_230429_051256/175442726/ccs FALSE FALSE
+25 m64403e_230430_142929/156239397/ccs  TRUE  TRUE
+26  m64403e_220916_085351/43975156/ccs  TRUE  TRUE
+27 m64403e_230429_051256/127075727/ccs FALSE FALSE
+28  m64403e_220914_215953/14680892/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    11    3
+  TRUE      7    7
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 0.2365
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.5563296 28.3544749
+sample estimates:
+odds ratio 
+   3.49268 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+26 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-14.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230430_142929/134874855/ccs FALSE FALSE
+2   m64403e_230429_051256/61210890/ccs  TRUE FALSE
+3  m64403e_230501_235831/120127872/ccs  TRUE FALSE
+4  m64403e_230429_051256/104465034/ccs  TRUE FALSE
+5  m64403e_230430_142929/109380937/ccs FALSE FALSE
+6   m64403e_230430_142929/61670748/ccs FALSE FALSE
+7   m64403e_230501_235831/28968805/ccs FALSE FALSE
+8   m64403e_230429_051256/85394870/ccs  TRUE FALSE
+9   m64403e_220916_085351/74319572/ccs FALSE FALSE
+10 m64403e_230501_235831/137235028/ccs FALSE FALSE
+11 m64403e_220914_215953/140182714/ccs FALSE FALSE
+12 m64403e_230430_142929/131335412/ccs FALSE FALSE
+13  m64403e_230501_235831/39912568/ccs FALSE FALSE
+14 m64403e_230430_142929/175048431/ccs FALSE FALSE
+15 m64403e_220916_085351/147588133/ccs FALSE FALSE
+16  m64403e_220914_215953/20056333/ccs FALSE FALSE
+17 m64403e_230501_235831/150601998/ccs  TRUE FALSE
+18  m64403e_220914_215953/49808495/ccs FALSE FALSE
+19 m64403e_230429_051256/103483522/ccs FALSE FALSE
+20 m64403e_230429_051256/172098907/ccs  TRUE FALSE
+21  m64403e_220916_085351/12583758/ccs  TRUE FALSE
+22  m64403e_220916_085351/79560804/ccs FALSE FALSE
+23  m64403e_220914_215953/37226292/ccs FALSE FALSE
+24  m64403e_230429_051256/76744365/ccs FALSE FALSE
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+30 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-15.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230501_235831/122423974/ccs  TRUE  TRUE
+2   m64403e_230430_142929/32443061/ccs FALSE FALSE
+3  m64403e_230430_142929/114887129/ccs FALSE FALSE
+4   m64403e_220914_215953/78382262/ccs FALSE  TRUE
+5   m64403e_230429_051256/85656360/ccs FALSE  TRUE
+6  m64403e_230429_051256/113509627/ccs FALSE  TRUE
+7  m64403e_230429_051256/101582035/ccs FALSE FALSE
+8    m64403e_230429_051256/9177651/ccs  TRUE FALSE
+9  m64403e_230430_142929/112787551/ccs  TRUE  TRUE
+10  m64403e_230429_051256/11602783/ccs FALSE  TRUE
+11  m64403e_220914_215953/14091520/ccs FALSE  TRUE
+12 m64403e_220916_085351/147390566/ccs  TRUE  TRUE
+13 m64403e_230501_235831/122946079/ccs FALSE  TRUE
+14 m64403e_230501_235831/168953386/ccs FALSE  TRUE
+15 m64403e_230430_142929/143067065/ccs FALSE  TRUE
+16 m64403e_230429_051256/135071405/ccs FALSE  TRUE
+17 m64403e_230429_051256/123994116/ccs FALSE  TRUE
+18  m64403e_230430_142929/93194037/ccs FALSE  TRUE
+19  m64403e_230430_142929/98370198/ccs FALSE  TRUE
+20 m64403e_230430_142929/152634042/ccs FALSE  TRUE
+21 m64403e_230501_235831/175639162/ccs FALSE FALSE
+22 m64403e_230430_142929/150996448/ccs FALSE FALSE
+23 m64403e_230430_142929/146279259/ccs FALSE  TRUE
+24 m64403e_230429_051256/120326793/ccs FALSE  TRUE
+25  m64403e_230430_142929/47449608/ccs FALSE  TRUE
+26 m64403e_220916_085351/122422471/ccs FALSE  TRUE
+27  m64403e_230430_142929/93783484/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE     6   17
+  TRUE      1    3
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.06772333 64.70828647
+sample estimates:
+odds ratio 
+  1.056609 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+28 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-16.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230429_051256/144312310/ccs FALSE FALSE
+2   m64403e_230501_235831/64618876/ccs FALSE FALSE
+3  m64403e_230430_142929/175309787/ccs FALSE FALSE
+4   m64403e_230430_142929/57019154/ccs  TRUE FALSE
+5  m64403e_230430_142929/110561802/ccs  TRUE FALSE
+6   m64403e_230430_142929/42205585/ccs FALSE FALSE
+7  m64403e_230501_235831/118425329/ccs FALSE FALSE
+8  m64403e_230501_235831/124651630/ccs FALSE FALSE
+9  m64403e_230501_235831/118754048/ccs FALSE FALSE
+10 m64403e_230430_142929/135399995/ccs FALSE FALSE
+11  m64403e_230429_051256/22809222/ccs FALSE FALSE
+12  m64403e_230429_051256/23266047/ccs FALSE FALSE
+13 m64403e_230430_142929/153159473/ccs FALSE FALSE
+14  m64403e_230429_051256/79628533/ccs FALSE FALSE
+15 m64403e_230430_142929/148701198/ccs FALSE FALSE
+16 m64403e_230429_051256/143655228/ccs FALSE FALSE
+17  m64403e_230501_235831/58000355/ccs FALSE FALSE
+18  m64403e_230430_142929/76284609/ccs FALSE FALSE
+19 m64403e_230501_235831/137168243/ccs FALSE FALSE
+20 m64403e_230429_051256/163906391/ccs FALSE FALSE
+21  m64403e_230430_142929/43255582/ccs  TRUE FALSE
+22 m64403e_230501_235831/111674603/ccs FALSE FALSE
+23  m64403e_230429_051256/80022285/ccs FALSE FALSE
+24 m64403e_220916_085351/134939460/ccs FALSE  TRUE
+25  m64403e_230501_235831/27853180/ccs FALSE FALSE
+26  m64403e_230429_051256/82381377/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    22    1
+  TRUE      3    0
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+   0.0000 297.6142
+sample estimates:
+odds ratio 
+         0 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+43 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-17.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_220916_085351/167315832/ccs FALSE  TRUE
+2   m64403e_230429_051256/77859623/ccs  TRUE FALSE
+3  m64403e_230430_142929/115803543/ccs FALSE FALSE
+4  m64403e_230429_051256/124191802/ccs  TRUE FALSE
+5  m64403e_230501_235831/117245346/ccs FALSE  TRUE
+6   m64403e_230501_235831/51186231/ccs FALSE FALSE
+7   m64403e_220914_215953/73992812/ccs FALSE FALSE
+8   m64403e_230430_142929/59901354/ccs  TRUE FALSE
+9  m64403e_230501_235831/144967073/ccs  TRUE FALSE
+10 m64403e_220916_085351/133890673/ccs FALSE FALSE
+11  m64403e_230501_235831/82706451/ccs  TRUE FALSE
+12 m64403e_220916_085351/141230358/ccs FALSE FALSE
+13 m64403e_230501_235831/163448580/ccs FALSE FALSE
+14 m64403e_230501_235831/158663708/ccs  TRUE FALSE
+15 m64403e_230430_142929/172492622/ccs FALSE  TRUE
+16 m64403e_220916_085351/151585124/ccs  TRUE FALSE
+17  m64403e_230430_142929/66128006/ccs  TRUE  TRUE
+18  m64403e_230501_235831/81987012/ccs  TRUE FALSE
+19  m64403e_230430_142929/73009774/ccs FALSE FALSE
+20 m64403e_230430_142929/172164021/ccs FALSE FALSE
+21  m64403e_230430_142929/88409486/ccs FALSE FALSE
+22  m64403e_230430_142929/77203047/ccs FALSE  TRUE
+23  m64403e_230501_235831/17171177/ccs FALSE FALSE
+24 m64403e_230430_142929/156502649/ccs FALSE FALSE
+25 m64403e_230501_235831/139070147/ccs  TRUE FALSE
+26 m64403e_230430_142929/131926871/ccs  TRUE FALSE
+27  m64403e_220914_215953/90638235/ccs  TRUE FALSE
+28  m64403e_230429_051256/60228296/ccs  TRUE  TRUE
+29 m64403e_220916_085351/133367873/ccs FALSE  TRUE
+30  m64403e_230430_142929/42009667/ccs FALSE FALSE
+31  m64403e_230429_051256/56429259/ccs  TRUE FALSE
+32 m64403e_230429_051256/166725359/ccs  TRUE FALSE
+33 m64403e_230429_051256/107087643/ccs FALSE FALSE
+34 m64403e_230430_142929/119603259/ccs  TRUE FALSE
+35  m64403e_220914_215953/28902768/ccs FALSE FALSE
+36    m64403e_230429_051256/459442/ccs FALSE FALSE
+37  m64403e_230429_051256/18153713/ccs FALSE FALSE
+38  m64403e_230430_142929/60163637/ccs  TRUE FALSE
+39 m64403e_220914_215953/169476659/ccs FALSE FALSE
+40 m64403e_230501_235831/144901555/ccs FALSE FALSE
+41  m64403e_230429_051256/83823345/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    19    5
+  TRUE     15    2
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 0.6786
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.04325061 3.71114811
+sample estimates:
+odds ratio 
+ 0.5147433 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+20 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-18.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230501_235831/170788254/ccs  TRUE FALSE
+2   m64403e_220914_215953/44959049/ccs FALSE FALSE
+3  m64403e_230429_051256/135924226/ccs FALSE FALSE
+4   m64403e_230501_235831/44172934/ccs FALSE FALSE
+5   m64403e_230430_142929/79824955/ccs  TRUE FALSE
+6   m64403e_230430_142929/37160521/ccs FALSE FALSE
+7   m64403e_230430_142929/33491563/ccs FALSE  TRUE
+8  m64403e_230429_051256/111412198/ccs FALSE FALSE
+9  m64403e_220914_215953/141690563/ccs FALSE FALSE
+10  m64403e_230501_235831/17566252/ccs FALSE FALSE
+11    m64403e_230429_051256/263444/ccs  TRUE  TRUE
+12 m64403e_230430_142929/137888318/ccs  TRUE FALSE
+13   m64403e_230429_051256/7211207/ccs FALSE FALSE
+14  m64403e_230430_142929/11602765/ccs FALSE FALSE
+15  m64403e_220916_085351/15991525/ccs FALSE FALSE
+16  m64403e_230501_235831/62456008/ccs FALSE FALSE
+17   m64403e_230501_235831/1313437/ccs FALSE FALSE
+18   m64403e_230430_142929/2032457/ccs  TRUE FALSE
+19  m64403e_230501_235831/68288558/ccs  TRUE FALSE
+20 m64403e_230501_235831/121570484/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    13    1
+  TRUE      5    1
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 0.5211
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+   0.02764121 219.03192655
+sample estimates:
+odds ratio 
+  2.463069 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+34 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-19.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230430_142929/82314224/ccs FALSE FALSE
+2   m64403e_230501_235831/96665681/ccs FALSE FALSE
+3  m64403e_230501_235831/117245656/ccs FALSE FALSE
+4   m64403e_220914_215953/55706097/ccs FALSE FALSE
+5  m64403e_230429_051256/160303028/ccs FALSE FALSE
+6  m64403e_230501_235831/104269776/ccs FALSE FALSE
+7  m64403e_230430_142929/178980359/ccs FALSE FALSE
+8   m64403e_220914_215953/70321172/ccs FALSE FALSE
+9  m64403e_230430_142929/180225795/ccs FALSE FALSE
+10   m64403e_230429_051256/1313375/ccs FALSE FALSE
+11 m64403e_230430_142929/118030646/ccs FALSE FALSE
+12 m64403e_230429_051256/128385619/ccs FALSE FALSE
+13  m64403e_220916_085351/64358537/ccs FALSE FALSE
+14 m64403e_220916_085351/114363117/ccs FALSE FALSE
+15 m64403e_230430_142929/155387683/ccs FALSE FALSE
+16  m64403e_230501_235831/82576604/ccs FALSE FALSE
+17 m64403e_230430_142929/112133516/ccs FALSE FALSE
+18  m64403e_230501_235831/86311313/ccs FALSE FALSE
+19  m64403e_230430_142929/94109774/ccs FALSE FALSE
+20 m64403e_220914_215953/122161684/ccs FALSE FALSE
+21  m64403e_230429_051256/91030566/ccs FALSE FALSE
+22   m64403e_230430_142929/4262196/ccs FALSE FALSE
+23 m64403e_230430_142929/109774942/ccs FALSE FALSE
+24 m64403e_230430_142929/173279048/ccs FALSE FALSE
+25  m64403e_220916_085351/39389502/ccs FALSE FALSE
+26 m64403e_230501_235831/145098610/ccs FALSE FALSE
+27  m64403e_230430_142929/99026398/ccs FALSE FALSE
+28 m64403e_220914_215953/127798095/ccs FALSE FALSE
+29 m64403e_230429_051256/108070078/ccs FALSE FALSE
+30  m64403e_220916_085351/23070002/ccs FALSE FALSE
+31  m64403e_230430_142929/40699592/ccs FALSE FALSE
+32  m64403e_230430_142929/25953714/ccs FALSE FALSE
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+33 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-20.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230430_142929/128386150/ccs FALSE FALSE
+2   m64403e_230501_235831/27265173/ccs FALSE FALSE
+3   m64403e_230501_235831/40763605/ccs FALSE FALSE
+4  m64403e_220914_215953/154271827/ccs FALSE FALSE
+5   m64403e_230430_142929/37554002/ccs FALSE FALSE
+6   m64403e_230501_235831/85525869/ccs  TRUE FALSE
+7   m64403e_230501_235831/59246308/ccs FALSE FALSE
+8  m64403e_230501_235831/175375977/ccs FALSE FALSE
+9    m64403e_220916_085351/1050404/ccs FALSE FALSE
+10 m64403e_230429_051256/143656215/ccs FALSE FALSE
+11 m64403e_230430_142929/152830866/ccs FALSE  TRUE
+12 m64403e_230430_142929/161350952/ccs FALSE FALSE
+13  m64403e_230429_051256/58001145/ccs FALSE FALSE
+14  m64403e_220916_085351/98437375/ccs FALSE FALSE
+15  m64403e_230429_051256/95749606/ccs FALSE FALSE
+16  m64403e_230429_051256/90243822/ccs  TRUE FALSE
+17  m64403e_230429_051256/80087273/ccs FALSE FALSE
+18  m64403e_230430_142929/85002446/ccs FALSE FALSE
+19 m64403e_230501_235831/147524063/ccs FALSE FALSE
+20 m64403e_230501_235831/178454856/ccs FALSE FALSE
+21 m64403e_230501_235831/141362486/ccs FALSE FALSE
+22  m64403e_230429_051256/45156254/ccs FALSE FALSE
+23  m64403e_230429_051256/85657070/ccs FALSE FALSE
+24  m64403e_230430_142929/72221131/ccs  TRUE FALSE
+25  m64403e_230429_051256/24250453/ccs  TRUE FALSE
+26  m64403e_230501_235831/70322187/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    21    1
+  TRUE      4    0
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+   0.0000 213.7868
+sample estimates:
+odds ratio 
+         0 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+26 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-21.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230430_142929/178455323/ccs FALSE FALSE
+2  m64403e_230429_051256/143591639/ccs FALSE  TRUE
+3   m64403e_230430_142929/87427602/ccs FALSE FALSE
+4    m64403e_230501_235831/8389462/ccs  TRUE FALSE
+5   m64403e_220916_085351/54985395/ccs  TRUE FALSE
+6  m64403e_230430_142929/156306255/ccs FALSE FALSE
+7   m64403e_230430_142929/18088345/ccs FALSE FALSE
+8   m64403e_230429_051256/97845816/ccs FALSE FALSE
+9   m64403e_230429_051256/65734956/ccs  TRUE FALSE
+10  m64403e_230429_051256/49021961/ccs  TRUE FALSE
+11 m64403e_230501_235831/102302779/ccs FALSE FALSE
+12 m64403e_220914_215953/148898577/ccs  TRUE FALSE
+13  m64403e_230430_142929/31853269/ccs  TRUE  TRUE
+14 m64403e_230501_235831/154338461/ccs FALSE FALSE
+15 m64403e_230429_051256/102564765/ccs FALSE  TRUE
+16 m64403e_230430_142929/116196778/ccs FALSE  TRUE
+17 m64403e_220916_085351/174261648/ccs  TRUE FALSE
+18   m64403e_230501_235831/5242975/ccs  TRUE FALSE
+19  m64403e_220914_215953/25758335/ccs FALSE FALSE
+20 m64403e_230501_235831/168757599/ccs  TRUE  TRUE
+21  m64403e_230429_051256/94177621/ccs  TRUE FALSE
+22 m64403e_230501_235831/105055613/ccs FALSE FALSE
+23  m64403e_230430_142929/41683260/ccs  TRUE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE     9    3
+  TRUE      9    2
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.04602836 7.50950249
+sample estimates:
+odds ratio 
+ 0.6784617 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+28 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-22.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230430_142929/105514499/ccs FALSE FALSE
+2  m64403e_230501_235831/146410174/ccs FALSE FALSE
+3  m64403e_230501_235831/131138757/ccs  TRUE FALSE
+4  m64403e_230429_051256/157090067/ccs FALSE FALSE
+5  m64403e_230430_142929/109707498/ccs FALSE FALSE
+6  m64403e_230429_051256/111149825/ccs FALSE FALSE
+7   m64403e_230429_051256/52692489/ccs FALSE FALSE
+8  m64403e_230429_051256/116197497/ccs FALSE FALSE
+9   m64403e_230429_051256/47384329/ccs FALSE FALSE
+10  m64403e_230501_235831/68683284/ccs FALSE FALSE
+11 m64403e_230430_142929/119211709/ccs FALSE FALSE
+12 m64403e_230501_235831/105908300/ccs FALSE FALSE
+13 m64403e_230429_051256/103942326/ccs FALSE  TRUE
+14  m64403e_230429_051256/38799139/ccs  TRUE FALSE
+15 m64403e_230429_051256/142477175/ccs FALSE FALSE
+16 m64403e_230501_235831/135530884/ccs FALSE FALSE
+17  m64403e_230501_235831/37553183/ccs FALSE FALSE
+18 m64403e_230501_235831/121178301/ccs FALSE FALSE
+19 m64403e_230430_142929/137298647/ccs FALSE FALSE
+20   m64403e_230430_142929/5178862/ccs FALSE FALSE
+21  m64403e_230501_235831/12780776/ccs FALSE FALSE
+22  m64403e_230430_142929/69011093/ccs FALSE  TRUE
+23  m64403e_220914_215953/15139273/ccs FALSE FALSE
+24 m64403e_230501_235831/152044242/ccs FALSE FALSE
+25 m64403e_230501_235831/107285215/ccs FALSE FALSE
+26  m64403e_230501_235831/76743770/ccs FALSE FALSE
+27  m64403e_230429_051256/77791728/ccs FALSE FALSE
+28  m64403e_230430_142929/72549948/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    24    2
+  TRUE      2    0
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.00000 89.41917
+sample estimates:
+odds ratio 
+         0 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+26 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-23.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230430_142929/133236298/ccs FALSE FALSE
+2   m64403e_230501_235831/16974990/ccs FALSE FALSE
+3   m64403e_230501_235831/87623982/ccs FALSE FALSE
+4   m64403e_230430_142929/31458035/ccs FALSE FALSE
+5  m64403e_230501_235831/161876405/ccs FALSE FALSE
+6  m64403e_230429_051256/127796106/ccs FALSE FALSE
+7  m64403e_230429_051256/121504271/ccs FALSE  TRUE
+8   m64403e_230430_142929/44893515/ccs FALSE FALSE
+9   m64403e_220914_215953/85394541/ccs FALSE FALSE
+10 m64403e_220914_215953/148244380/ccs FALSE FALSE
+11  m64403e_230430_142929/46858714/ccs FALSE FALSE
+12  m64403e_230501_235831/11862702/ccs FALSE FALSE
+13  m64403e_230430_142929/19596796/ccs FALSE FALSE
+14  m64403e_230501_235831/28576017/ccs FALSE FALSE
+15 m64403e_230430_142929/142148558/ccs FALSE FALSE
+16 m64403e_230430_142929/135595312/ccs FALSE FALSE
+17  m64403e_230429_051256/83100187/ccs FALSE FALSE
+18 m64403e_230501_235831/104073002/ccs FALSE FALSE
+19  m64403e_220916_085351/53478821/ccs FALSE FALSE
+20    m64403e_230501_235831/723117/ccs FALSE FALSE
+21  m64403e_230429_051256/61343301/ccs FALSE  TRUE
+22  m64403e_220916_085351/93192945/ccs FALSE FALSE
+23 m64403e_220914_215953/112198769/ccs FALSE FALSE
+24 m64403e_220916_085351/137759124/ccs FALSE FALSE
+25  m64403e_230501_235831/67832100/ccs FALSE FALSE
+26 m64403e_230430_142929/116655639/ccs FALSE FALSE
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+37 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-24.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230430_142929/109316056/ccs  TRUE FALSE
+2  m64403e_230430_142929/165872547/ccs FALSE FALSE
+3  m64403e_230430_142929/109183413/ccs FALSE  TRUE
+4  m64403e_230430_142929/128911505/ccs  TRUE FALSE
+5   m64403e_230430_142929/43256438/ccs FALSE  TRUE
+6  m64403e_230430_142929/152436901/ccs  TRUE FALSE
+7   m64403e_230430_142929/57149273/ccs FALSE  TRUE
+8  m64403e_230430_142929/158532887/ccs  TRUE FALSE
+9   m64403e_230501_235831/57933891/ccs  TRUE  TRUE
+10 m64403e_230429_051256/103156265/ccs  TRUE FALSE
+11  m64403e_230501_235831/69534912/ccs  TRUE  TRUE
+12  m64403e_230429_051256/99812719/ccs  TRUE  TRUE
+13  m64403e_230501_235831/28444541/ccs  TRUE  TRUE
+14  m64403e_220914_215953/41026458/ccs FALSE FALSE
+15  m64403e_230430_142929/62196548/ccs  TRUE  TRUE
+16 m64403e_230430_142929/104465365/ccs FALSE  TRUE
+17  m64403e_230429_051256/91491078/ccs FALSE FALSE
+18  m64403e_230429_051256/96339498/ccs FALSE  TRUE
+19  m64403e_230430_142929/25561387/ccs  TRUE FALSE
+20  m64403e_230429_051256/99746673/ccs  TRUE  TRUE
+21  m64403e_230429_051256/65341364/ccs  TRUE  TRUE
+22 m64403e_220916_085351/153224679/ccs FALSE FALSE
+23 m64403e_230501_235831/111214834/ccs  TRUE FALSE
+24 m64403e_230501_235831/121637040/ccs FALSE FALSE
+25  m64403e_230501_235831/17891631/ccs FALSE  TRUE
+26 m64403e_220914_215953/176949918/ccs  TRUE  TRUE
+27  m64403e_230501_235831/75434368/ccs FALSE FALSE
+28 m64403e_230501_235831/117377383/ccs FALSE FALSE
+29 m64403e_230429_051256/108921250/ccs  TRUE  TRUE
+30  m64403e_230501_235831/91818228/ccs  TRUE FALSE
+31 m64403e_230501_235831/121110919/ccs FALSE  TRUE
+32 m64403e_230501_235831/145228892/ccs  TRUE FALSE
+33  m64403e_230429_051256/40765628/ccs  TRUE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE     7    7
+  TRUE     10    9
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.1830437 4.4247043
+sample estimates:
+odds ratio 
+ 0.9028811 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+33 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-25.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230429_051256/88736581/ccs  TRUE FALSE
+2  m64403e_230429_051256/100860232/ccs FALSE FALSE
+3   m64403e_230501_235831/49546943/ccs FALSE FALSE
+4  m64403e_230501_235831/151128108/ccs FALSE FALSE
+5   m64403e_230430_142929/81201617/ccs FALSE FALSE
+6   m64403e_220914_215953/76677564/ccs FALSE FALSE
+7  m64403e_220916_085351/120981011/ccs FALSE  TRUE
+8   m64403e_230430_142929/34144530/ccs FALSE  TRUE
+9   m64403e_230429_051256/94175817/ccs FALSE FALSE
+10 m64403e_230501_235831/118491387/ccs FALSE  TRUE
+11 m64403e_230430_142929/147980625/ccs  TRUE FALSE
+12    m64403e_230501_235831/918373/ccs FALSE  TRUE
+13  m64403e_230430_142929/69928212/ccs FALSE FALSE
+14 m64403e_230430_142929/152569366/ccs FALSE  TRUE
+15 m64403e_230430_142929/128387895/ccs FALSE FALSE
+16  m64403e_230429_051256/90573622/ccs FALSE  TRUE
+17  m64403e_230501_235831/64290923/ccs FALSE FALSE
+18  m64403e_230501_235831/49875116/ccs FALSE FALSE
+19  m64403e_220916_085351/20973155/ccs FALSE  TRUE
+20 m64403e_230430_142929/159583015/ccs FALSE  TRUE
+21 m64403e_230501_235831/158532094/ccs FALSE  TRUE
+22 m64403e_230501_235831/141885461/ccs FALSE FALSE
+23   m64403e_230429_051256/4719237/ccs FALSE FALSE
+24 m64403e_230501_235831/119146121/ccs FALSE FALSE
+25  m64403e_230429_051256/51905000/ccs  TRUE  TRUE
+26 m64403e_230430_142929/160759810/ccs FALSE FALSE
+27 m64403e_220916_085351/158534246/ccs FALSE  TRUE
+28 m64403e_230501_235831/101122062/ccs FALSE FALSE
+29  m64403e_230429_051256/60819087/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    16   10
+  TRUE      2    1
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.01234863 17.44934126
+sample estimates:
+odds ratio 
+ 0.8060356 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+31 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-26.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230430_142929/31130232/ccs FALSE FALSE
+2   m64403e_230430_142929/91816531/ccs FALSE FALSE
+3  m64403e_230429_051256/112132384/ccs FALSE FALSE
+4    m64403e_230501_235831/1640002/ccs  TRUE FALSE
+5   m64403e_230429_051256/35260950/ccs FALSE FALSE
+6   m64403e_230430_142929/16451713/ccs FALSE FALSE
+7   m64403e_230430_142929/66915155/ccs FALSE FALSE
+8  m64403e_230429_051256/113771307/ccs FALSE FALSE
+9  m64403e_230429_051256/160236017/ccs FALSE FALSE
+10 m64403e_230429_051256/131859656/ccs FALSE FALSE
+11  m64403e_230429_051256/66323202/ccs  TRUE FALSE
+12  m64403e_220914_215953/28575553/ccs FALSE FALSE
+13  m64403e_230429_051256/54920658/ccs  TRUE FALSE
+14  m64403e_230429_051256/36700679/ccs FALSE  TRUE
+15  m64403e_230430_142929/89065960/ccs  TRUE FALSE
+16  m64403e_230429_051256/92604002/ccs FALSE FALSE
+17 m64403e_230430_142929/127141832/ccs  TRUE FALSE
+18 m64403e_220914_215953/129436094/ccs FALSE FALSE
+19 m64403e_220916_085351/143787700/ccs  TRUE FALSE
+20  m64403e_230501_235831/95420474/ccs  TRUE FALSE
+21 m64403e_230429_051256/179046207/ccs FALSE FALSE
+22  m64403e_230501_235831/67830914/ccs FALSE  TRUE
+23 m64403e_220916_085351/134546123/ccs FALSE FALSE
+24  m64403e_230429_051256/68160137/ccs  TRUE FALSE
+25 m64403e_230430_142929/112396151/ccs  TRUE FALSE
+26  m64403e_230429_051256/52103315/ccs FALSE FALSE
+27  m64403e_230501_235831/85131503/ccs FALSE FALSE
+28 m64403e_230501_235831/142869108/ccs FALSE FALSE
+29 m64403e_230430_142929/166267716/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    18    2
+  TRUE      9    0
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.00000 12.06536
+sample estimates:
+odds ratio 
+         0 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+26 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-27.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230429_051256/55247229/ccs  TRUE FALSE
+2   m64403e_230429_051256/26411578/ccs FALSE FALSE
+3   m64403e_230501_235831/68878507/ccs FALSE FALSE
+4   m64403e_230430_142929/39193265/ccs FALSE FALSE
+5  m64403e_230430_142929/132908406/ccs  TRUE FALSE
+6   m64403e_220914_215953/63310080/ccs  TRUE FALSE
+7    m64403e_230429_051256/2558078/ccs FALSE FALSE
+8   m64403e_230501_235831/22676490/ccs  TRUE FALSE
+9   m64403e_230501_235831/73597771/ccs FALSE  TRUE
+10  m64403e_230430_142929/17696520/ccs  TRUE FALSE
+11  m64403e_230430_142929/41681447/ccs FALSE FALSE
+12 m64403e_230429_051256/172490765/ccs  TRUE  TRUE
+13 m64403e_230501_235831/155386094/ccs FALSE FALSE
+14 m64403e_220914_215953/105120892/ccs  TRUE FALSE
+15  m64403e_230430_142929/23464779/ccs FALSE FALSE
+16  m64403e_230430_142929/91489732/ccs FALSE FALSE
+17 m64403e_230501_235831/135791590/ccs  TRUE FALSE
+18  m64403e_230501_235831/41814857/ccs  TRUE FALSE
+19  m64403e_230430_142929/99680704/ccs FALSE FALSE
+20 m64403e_220916_085351/134545703/ccs  TRUE FALSE
+21  m64403e_230430_142929/62392851/ccs  TRUE FALSE
+22  m64403e_230429_051256/60162426/ccs  TRUE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE     9    1
+  TRUE     11    1
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.009573596 71.239880135
+sample estimates:
+odds ratio 
+ 0.8257258 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+27 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-28.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230501_235831/136315980/ccs FALSE FALSE
+2   m64403e_230501_235831/48694249/ccs FALSE  TRUE
+3  m64403e_230501_235831/179046128/ccs FALSE  TRUE
+4   m64403e_230430_142929/47776979/ccs  TRUE  TRUE
+5   m64403e_220914_215953/54593670/ccs  TRUE  TRUE
+6  m64403e_230429_051256/159056271/ccs FALSE  TRUE
+7  m64403e_230501_235831/114754238/ccs FALSE  TRUE
+8  m64403e_230430_142929/143196285/ccs  TRUE  TRUE
+9  m64403e_230430_142929/148113985/ccs  TRUE FALSE
+10  m64403e_230501_235831/26477691/ccs  TRUE FALSE
+11 m64403e_230501_235831/108921938/ccs FALSE FALSE
+12  m64403e_230501_235831/74318793/ccs  TRUE FALSE
+13   m64403e_230430_142929/5636464/ccs  TRUE FALSE
+14  m64403e_220914_215953/73531416/ccs FALSE FALSE
+15 m64403e_220914_215953/171901998/ccs FALSE FALSE
+16 m64403e_220914_215953/102303506/ccs FALSE FALSE
+17  m64403e_220916_085351/62324956/ccs  TRUE FALSE
+18  m64403e_230430_142929/46203675/ccs FALSE FALSE
+19  m64403e_230430_142929/67567885/ccs FALSE FALSE
+20  m64403e_230430_142929/16320721/ccs FALSE FALSE
+21 m64403e_230430_142929/107610418/ccs  TRUE  TRUE
+22  m64403e_220914_215953/48432105/ccs FALSE FALSE
+23  m64403e_230430_142929/72614396/ccs FALSE FALSE
+24 m64403e_220916_085351/122817338/ccs  TRUE FALSE
+25 m64403e_230429_051256/117637366/ccs FALSE  TRUE
+26  m64403e_230430_142929/35259811/ccs FALSE  TRUE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    10    6
+  TRUE      6    4
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.1587713 7.3002652
+sample estimates:
+odds ratio 
+  1.106601 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+25 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-29.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230501_235831/173999559/ccs FALSE FALSE
+2  m64403e_220916_085351/124913503/ccs FALSE FALSE
+3  m64403e_220916_085351/173015825/ccs FALSE FALSE
+4   m64403e_230501_235831/92472844/ccs FALSE FALSE
+5  m64403e_230429_051256/139069790/ccs FALSE FALSE
+6  m64403e_230429_051256/138543873/ccs FALSE FALSE
+7  m64403e_230429_051256/137625965/ccs FALSE FALSE
+8   m64403e_230429_051256/25756739/ccs FALSE FALSE
+9  m64403e_220916_085351/153749472/ccs FALSE FALSE
+10  m64403e_230429_051256/96667050/ccs FALSE FALSE
+11 m64403e_230430_142929/101975081/ccs FALSE FALSE
+12  m64403e_220916_085351/88539276/ccs FALSE FALSE
+13  m64403e_230501_235831/63570376/ccs FALSE FALSE
+14  m64403e_230501_235831/68420001/ccs FALSE FALSE
+15  m64403e_230430_142929/94175592/ccs FALSE FALSE
+16  m64403e_230430_142929/49610769/ccs FALSE FALSE
+17  m64403e_230430_142929/16646290/ccs FALSE FALSE
+18  m64403e_230429_051256/59573467/ccs FALSE FALSE
+19  m64403e_230501_235831/25953477/ccs FALSE FALSE
+20  m64403e_220914_215953/41224719/ccs FALSE FALSE
+21  m64403e_230430_142929/47515198/ccs FALSE FALSE
+22  m64403e_220914_215953/95422659/ccs FALSE FALSE
+23  m64403e_230430_142929/18221406/ccs FALSE FALSE
+24 m64403e_230430_142929/104726989/ccs FALSE FALSE
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+30 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-30.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1    m64403e_220916_085351/4063904/ccs FALSE FALSE
+2   m64403e_230501_235831/90638347/ccs FALSE  TRUE
+3  m64403e_220914_215953/155387412/ccs FALSE FALSE
+4  m64403e_230429_051256/141361886/ccs FALSE FALSE
+5  m64403e_230501_235831/144115017/ccs FALSE  TRUE
+6   m64403e_230429_051256/19006072/ccs FALSE FALSE
+7   m64403e_230430_142929/72811278/ccs FALSE  TRUE
+8   m64403e_230430_142929/95356112/ccs FALSE  TRUE
+9  m64403e_230430_142929/127926706/ccs FALSE FALSE
+10  m64403e_220916_085351/53084249/ccs FALSE FALSE
+11  m64403e_230430_142929/48758869/ccs FALSE FALSE
+12 m64403e_230501_235831/106301252/ccs  TRUE FALSE
+13 m64403e_230501_235831/155061029/ccs FALSE FALSE
+14  m64403e_230430_142929/83823015/ccs FALSE FALSE
+15 m64403e_220914_215953/163383644/ccs  TRUE FALSE
+16  m64403e_230501_235831/96797229/ccs FALSE FALSE
+17 m64403e_230429_051256/138216382/ccs FALSE FALSE
+18  m64403e_230430_142929/86313767/ccs  TRUE  TRUE
+19 m64403e_230501_235831/122880291/ccs FALSE FALSE
+20  m64403e_220914_215953/44042172/ccs FALSE FALSE
+21   m64403e_230501_235831/9504968/ccs FALSE  TRUE
+22  m64403e_230501_235831/64292711/ccs FALSE FALSE
+23  m64403e_230501_235831/23265643/ccs  TRUE FALSE
+24 m64403e_230501_235831/163710666/ccs  TRUE FALSE
+25 m64403e_220916_085351/111936150/ccs FALSE FALSE
+26 m64403e_230429_051256/114622804/ccs FALSE FALSE
+27 m64403e_230429_051256/112198970/ccs  TRUE  TRUE
+28 m64403e_230430_142929/144180904/ccs FALSE  TRUE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    16    6
+  TRUE      4    2
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.09563544 12.44587051
+sample estimates:
+odds ratio 
+   1.31925 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+24 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-31.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230429_051256/159973961/ccs FALSE FALSE
+2   m64403e_230429_051256/49088526/ccs FALSE FALSE
+3   m64403e_220914_215953/87689672/ccs FALSE  TRUE
+4  m64403e_230501_235831/160237597/ccs FALSE FALSE
+5   m64403e_230429_051256/50006214/ccs FALSE FALSE
+6  m64403e_230430_142929/115803243/ccs FALSE FALSE
+7  m64403e_230429_051256/151585403/ccs FALSE FALSE
+8   m64403e_220916_085351/19530919/ccs FALSE FALSE
+9  m64403e_230501_235831/108530048/ccs FALSE FALSE
+10 m64403e_220916_085351/121506487/ccs FALSE FALSE
+11 m64403e_230501_235831/120783014/ccs FALSE FALSE
+12 m64403e_230501_235831/129566062/ccs FALSE FALSE
+13  m64403e_230429_051256/60556351/ccs FALSE FALSE
+14 m64403e_230430_142929/115411419/ccs FALSE FALSE
+15  m64403e_230429_051256/39453615/ccs FALSE FALSE
+16  m64403e_230429_051256/48628219/ccs FALSE FALSE
+17  m64403e_230430_142929/77071538/ccs FALSE FALSE
+18  m64403e_230501_235831/44433898/ccs FALSE FALSE
+19 m64403e_230501_235831/132842799/ccs FALSE FALSE
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+32 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-32.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230430_142929/13895237/ccs FALSE FALSE
+2   m64403e_230430_142929/64292385/ccs FALSE FALSE
+3    m64403e_230430_142929/4065489/ccs FALSE FALSE
+4  m64403e_230430_142929/159909177/ccs FALSE FALSE
+5   m64403e_230429_051256/93061636/ccs FALSE FALSE
+6    m64403e_230501_235831/2886140/ccs  TRUE FALSE
+7   m64403e_230430_142929/50201240/ccs FALSE FALSE
+8  m64403e_230501_235831/145884687/ccs  TRUE FALSE
+9    m64403e_220914_215953/2425178/ccs  TRUE FALSE
+10 m64403e_220916_085351/103549323/ccs  TRUE FALSE
+11  m64403e_220916_085351/35062070/ccs FALSE FALSE
+12 m64403e_230430_142929/171378152/ccs FALSE FALSE
+13  m64403e_230430_142929/13632429/ccs FALSE FALSE
+14 m64403e_230429_051256/157746358/ccs  TRUE FALSE
+15 m64403e_220914_215953/173933214/ccs FALSE FALSE
+16 m64403e_220916_085351/117506934/ccs  TRUE FALSE
+17 m64403e_230501_235831/144770716/ccs  TRUE FALSE
+18 m64403e_230430_142929/172557906/ccs FALSE FALSE
+19  m64403e_230429_051256/20972832/ccs FALSE FALSE
+20  m64403e_230501_235831/87163939/ccs FALSE FALSE
+21 m64403e_230501_235831/142540835/ccs  TRUE FALSE
+22  m64403e_230430_142929/51446014/ccs  TRUE FALSE
+23 m64403e_230501_235831/161154373/ccs FALSE FALSE
+24  m64403e_230501_235831/65931423/ccs  TRUE  TRUE
+25 m64403e_230501_235831/112657190/ccs FALSE FALSE
+26 m64403e_220916_085351/110232277/ccs FALSE FALSE
+27 m64403e_230430_142929/136054269/ccs FALSE FALSE
+28 m64403e_220914_215953/144639204/ccs FALSE FALSE
+29  m64403e_230501_235831/39914152/ccs FALSE FALSE
+30  m64403e_230501_235831/79823493/ccs FALSE FALSE
+31 m64403e_230430_142929/171967800/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    21    0
+  TRUE      9    1
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 0.3226
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.05384599        Inf
+sample estimates:
+odds ratio 
+       Inf 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+38 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-33.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_230501_235831/112789222/ccs  TRUE  TRUE
+2  m64403e_230501_235831/121045953/ccs  TRUE  TRUE
+3  m64403e_230430_142929/119538938/ccs FALSE  TRUE
+4   m64403e_230501_235831/35521646/ccs FALSE FALSE
+5   m64403e_230501_235831/88212670/ccs FALSE FALSE
+6  m64403e_230501_235831/136250665/ccs FALSE FALSE
+7    m64403e_230429_051256/6425127/ccs FALSE  TRUE
+8  m64403e_230430_142929/162006489/ccs FALSE FALSE
+9  m64403e_230430_142929/178455156/ccs FALSE  TRUE
+10  m64403e_220916_085351/50857303/ccs FALSE  TRUE
+11  m64403e_230501_235831/64094670/ccs FALSE  TRUE
+12 m64403e_230429_051256/155453741/ccs FALSE FALSE
+13   m64403e_230501_235831/1836358/ccs  TRUE  TRUE
+14 m64403e_230501_235831/112527939/ccs FALSE  TRUE
+15  m64403e_230430_142929/23660730/ccs  TRUE  TRUE
+16  m64403e_230501_235831/96403933/ccs FALSE FALSE
+17 m64403e_230430_142929/163054967/ccs FALSE FALSE
+18  m64403e_230429_051256/58460337/ccs FALSE FALSE
+19 m64403e_220914_215953/162727176/ccs FALSE FALSE
+20  m64403e_230430_142929/78578194/ccs FALSE FALSE
+21  m64403e_230501_235831/47842889/ccs FALSE FALSE
+22 m64403e_230429_051256/174391450/ccs FALSE FALSE
+23  m64403e_230501_235831/16647362/ccs FALSE FALSE
+24  m64403e_230430_142929/30934141/ccs FALSE FALSE
+25  m64403e_230429_051256/31460156/ccs FALSE FALSE
+26 m64403e_230430_142929/145818026/ccs FALSE FALSE
+27  m64403e_220916_085351/64356519/ccs FALSE FALSE
+28  m64403e_230430_142929/55903355/ccs FALSE FALSE
+29 m64403e_230430_142929/136186516/ccs  TRUE FALSE
+30  m64403e_230429_051256/89392927/ccs  TRUE FALSE
+31 m64403e_230501_235831/148439345/ccs  TRUE  TRUE
+32 m64403e_230501_235831/139919970/ccs FALSE FALSE
+33  m64403e_230429_051256/22611417/ccs FALSE FALSE
+34 m64403e_230429_051256/146082652/ccs  TRUE FALSE
+35 m64403e_230429_051256/164233754/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    21    6
+  TRUE      3    5
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 0.07674
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.8045677 46.4324258
+sample estimates:
+odds ratio 
+  5.485051 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+31 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-34.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1  m64403e_220914_215953/111412772/ccs FALSE  TRUE
+2  m64403e_230429_051256/170657166/ccs FALSE FALSE
+3    m64403e_230430_142929/1312171/ccs FALSE FALSE
+4  m64403e_230430_142929/123404912/ccs FALSE FALSE
+5   m64403e_230501_235831/14550948/ccs FALSE  TRUE
+6    m64403e_230430_142929/9307028/ccs FALSE  TRUE
+7  m64403e_230501_235831/175179997/ccs FALSE  TRUE
+8  m64403e_230430_142929/101582439/ccs  TRUE FALSE
+9  m64403e_230430_142929/148375863/ccs FALSE  TRUE
+10 m64403e_230501_235831/142541800/ccs  TRUE FALSE
+11  m64403e_230501_235831/51381320/ccs FALSE FALSE
+12 m64403e_230501_235831/177734029/ccs FALSE FALSE
+13 m64403e_230430_142929/153682009/ccs FALSE FALSE
+14  m64403e_230429_051256/62589288/ccs FALSE FALSE
+15 m64403e_230429_051256/142411613/ccs FALSE  TRUE
+16 m64403e_230429_051256/129565732/ccs FALSE FALSE
+17  m64403e_220914_215953/65996276/ccs FALSE FALSE
+18 m64403e_230501_235831/119275906/ccs FALSE FALSE
+19  m64403e_230429_051256/21103094/ccs FALSE FALSE
+20  m64403e_230501_235831/45352059/ccs  TRUE FALSE
+21   m64403e_230429_051256/6620000/ccs FALSE  TRUE
+22 m64403e_230430_142929/140575022/ccs FALSE FALSE
+23  m64403e_230429_051256/88801444/ccs FALSE  TRUE
+24 m64403e_230430_142929/134742440/ccs FALSE FALSE
+25  m64403e_230429_051256/64489735/ccs FALSE FALSE
+26   m64403e_230429_051256/9831487/ccs FALSE  TRUE
+27 m64403e_230501_235831/126355703/ccs FALSE FALSE
+28  m64403e_230429_051256/49482085/ccs FALSE  TRUE
+29  m64403e_220914_215953/85197886/ccs  TRUE  TRUE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    15   10
+  TRUE      3    1
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.008676444 7.469107912
+sample estimates:
+odds ratio 
+ 0.5111917 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+23 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-35.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_220914_215953/82446193/ccs FALSE FALSE
+2   m64403e_230430_142929/40896059/ccs FALSE FALSE
+3   m64403e_230429_051256/55707572/ccs FALSE FALSE
+4   m64403e_230430_142929/14419993/ccs FALSE FALSE
+5   m64403e_220914_215953/50333227/ccs FALSE FALSE
+6   m64403e_230429_051256/25952349/ccs FALSE FALSE
+7    m64403e_230429_051256/8521493/ccs FALSE FALSE
+8   m64403e_230429_051256/67109811/ccs FALSE FALSE
+9   m64403e_230501_235831/52101584/ccs FALSE FALSE
+10   m64403e_230501_235831/5965563/ccs FALSE  TRUE
+11  m64403e_230430_142929/71305446/ccs FALSE FALSE
+12 m64403e_230501_235831/158728579/ccs FALSE FALSE
+13 m64403e_230501_235831/132383234/ccs FALSE FALSE
+14   m64403e_230429_051256/7471466/ccs FALSE  TRUE
+15  m64403e_230429_051256/17891961/ccs FALSE FALSE
+16  m64403e_220916_085351/81266714/ccs FALSE FALSE
+17 m64403e_230430_142929/158467004/ccs FALSE FALSE
+18  m64403e_230429_051256/68683779/ccs FALSE FALSE
+19 m64403e_230429_051256/124977269/ccs FALSE FALSE
+20 m64403e_220916_085351/135463263/ccs FALSE FALSE
+21  m64403e_230430_142929/58001072/ccs FALSE  TRUE
+22 m64403e_230430_142929/171967605/ccs FALSE  TRUE
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+35 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-36.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_220916_085351/96799321/ccs  TRUE  TRUE
+2  m64403e_230429_051256/176750991/ccs  TRUE  TRUE
+3   m64403e_230429_051256/80937278/ccs  TRUE  TRUE
+4  m64403e_230429_051256/145163828/ccs FALSE  TRUE
+5   m64403e_230501_235831/46008173/ccs  TRUE  TRUE
+6  m64403e_230429_051256/158205164/ccs  TRUE FALSE
+7   m64403e_230429_051256/63178471/ccs  TRUE FALSE
+8  m64403e_230501_235831/125504159/ccs FALSE  TRUE
+9  m64403e_230501_235831/102041270/ccs  TRUE FALSE
+10 m64403e_230429_051256/139724426/ccs FALSE FALSE
+11  m64403e_230501_235831/46071966/ccs FALSE  TRUE
+12 m64403e_220914_215953/164497802/ccs FALSE FALSE
+13  m64403e_230501_235831/50332316/ccs FALSE FALSE
+14 m64403e_220914_215953/124256825/ccs FALSE  TRUE
+15  m64403e_230429_051256/72944227/ccs  TRUE  TRUE
+16  m64403e_220914_215953/52036959/ccs  TRUE  TRUE
+17  m64403e_230501_235831/29885977/ccs FALSE  TRUE
+18  m64403e_220916_085351/95486286/ccs FALSE  TRUE
+19 m64403e_230429_051256/162728368/ccs FALSE  TRUE
+20  m64403e_230430_142929/79497477/ccs FALSE FALSE
+21  m64403e_230501_235831/39782083/ccs FALSE  TRUE
+22 m64403e_230429_051256/125305345/ccs FALSE FALSE
+23  m64403e_230501_235831/62194408/ccs FALSE  TRUE
+24  m64403e_230429_051256/70386704/ccs FALSE  TRUE
+25  m64403e_230501_235831/75497579/ccs FALSE FALSE
+26 m64403e_230430_142929/158270580/ccs FALSE  TRUE
+27  m64403e_230429_051256/14879152/ccs  TRUE  TRUE
+28  m64403e_230430_142929/77596926/ccs FALSE  TRUE
+29  m64403e_230430_142929/59900961/ccs FALSE  TRUE
+30 m64403e_230429_051256/166659492/ccs FALSE FALSE
+31 m64403e_230430_142929/147130512/ccs  TRUE FALSE
+32 m64403e_230429_051256/178522053/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE     8   13
+  TRUE      4    7
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.1910659 6.6984469
+sample estimates:
+odds ratio 
+  1.074474 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+36 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-37.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230430_142929/77332618/ccs FALSE FALSE
+2  m64403e_230430_142929/157092642/ccs FALSE FALSE
+3   m64403e_220914_215953/46204414/ccs FALSE FALSE
+4   m64403e_230501_235831/24773928/ccs  TRUE FALSE
+5   m64403e_220914_215953/35324279/ccs FALSE FALSE
+6  m64403e_230429_051256/162071543/ccs FALSE FALSE
+7  m64403e_230501_235831/114951806/ccs FALSE FALSE
+8   m64403e_230429_051256/56691392/ccs FALSE FALSE
+9   m64403e_230430_142929/25496264/ccs FALSE  TRUE
+10  m64403e_230429_051256/66585845/ccs FALSE FALSE
+11 m64403e_230429_051256/100010757/ccs FALSE FALSE
+12 m64403e_230429_051256/108398351/ccs  TRUE FALSE
+13   m64403e_230501_235831/8586270/ccs FALSE FALSE
+14  m64403e_230501_235831/35980889/ccs FALSE FALSE
+15 m64403e_220914_215953/100271784/ccs FALSE FALSE
+16  m64403e_230430_142929/58918353/ccs FALSE FALSE
+17  m64403e_230501_235831/65276568/ccs FALSE FALSE
+18 m64403e_230429_051256/174524020/ccs  TRUE FALSE
+19 m64403e_220914_215953/101974225/ccs FALSE FALSE
+20 m64403e_230429_051256/127928921/ccs FALSE FALSE
+21  m64403e_230429_051256/84084455/ccs  TRUE FALSE
+22 m64403e_230429_051256/103547100/ccs FALSE FALSE
+23 m64403e_220914_215953/132057618/ccs  TRUE FALSE
+24 m64403e_230429_051256/168626015/ccs FALSE FALSE
+25 m64403e_230501_235831/121374891/ccs FALSE  TRUE
+26 m64403e_230429_051256/111806411/ccs FALSE FALSE
+27  m64403e_220914_215953/18809571/ccs FALSE FALSE
+28  m64403e_230501_235831/66651073/ccs FALSE FALSE
+29 m64403e_220914_215953/125895320/ccs FALSE FALSE
+30  m64403e_230429_051256/39783259/ccs FALSE  TRUE
+31  m64403e_230501_235831/56755981/ccs FALSE FALSE
+32 m64403e_230430_142929/171509932/ccs FALSE FALSE
+33 m64403e_230430_142929/137758634/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE    25    3
+  TRUE      5    0
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 1
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+  0.00000 15.14882
+sample estimates:
+odds ratio 
+         0 
+
+Load region from regions.processed.bed 
+Load fiberHMM_res from subset_FiberHMM.bed 
+34 reads.</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_SP1.Rmd/unnamed-chunk-3-38.png" width="960" style="display: block; margin: auto;" /></p>
+<pre><code>                                   RID   TF1   TF2
+1   m64403e_230429_051256/13829514/ccs  TRUE  TRUE
+2   m64403e_230501_235831/67569207/ccs  TRUE  TRUE
+3   m64403e_230430_142929/81725952/ccs  TRUE FALSE
+4   m64403e_230429_051256/28246244/ccs  TRUE FALSE
+5   m64403e_230429_051256/30933832/ccs  TRUE  TRUE
+6  m64403e_230501_235831/124453930/ccs FALSE FALSE
+7   m64403e_230501_235831/72813221/ccs FALSE FALSE
+8  m64403e_230501_235831/173933734/ccs  TRUE  TRUE
+9   m64403e_220914_215953/78184882/ccs  TRUE  TRUE
+10  m64403e_230429_051256/97978096/ccs  TRUE  TRUE
+11  m64403e_230429_051256/99747430/ccs  TRUE FALSE
+12  m64403e_220914_215953/81855389/ccs  TRUE FALSE
+13  m64403e_230501_235831/56885353/ccs FALSE FALSE
+14 m64403e_230430_142929/106563452/ccs FALSE FALSE
+15  m64403e_230501_235831/59900202/ccs  TRUE  TRUE
+16  m64403e_230429_051256/87360572/ccs FALSE FALSE
+17  m64403e_230501_235831/36963319/ccs  TRUE  TRUE
+18 m64403e_230501_235831/146014606/ccs  TRUE FALSE
+19  m64403e_230501_235831/75105602/ccs  TRUE  TRUE
+20 m64403e_230501_235831/171968867/ccs FALSE FALSE
+21  m64403e_230430_142929/32377611/ccs  TRUE FALSE
+22  m64403e_220914_215953/67699666/ccs  TRUE FALSE
+23 m64403e_220916_085351/151847790/ccs  TRUE FALSE
+24 m64403e_220916_085351/150209442/ccs  TRUE  TRUE
+25 m64403e_230430_142929/174653817/ccs  TRUE FALSE
+26  m64403e_230429_051256/36571997/ccs FALSE  TRUE
+27 m64403e_230501_235831/178455750/ccs FALSE FALSE
+28 m64403e_230430_142929/147981497/ccs FALSE FALSE
+29   m64403e_230429_051256/9568525/ccs  TRUE FALSE
+30   m64403e_230501_235831/6619711/ccs FALSE FALSE
+Create a 2x2 table of coaccessibility and run fisher&#39;s exact test...
+       TF2
+TF1     FALSE TRUE
+  FALSE     9    1
+  TRUE     10   10
+
+    Fisher&#39;s Exact Test for Count Data
+
+data:  contingency_table
+p-value = 0.04851
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+   0.8725463 431.9797850
+sample estimates:
+odds ratio 
+  8.419868 </code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /software/openblas-0.3.13-el7-x86_64/lib/libopenblas_haswellp-r0.3.13.so
+
+locale:
+[1] C
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] forcats_0.5.1        stringr_1.5.1        dplyr_1.1.4         
+ [4] purrr_1.0.2          readr_2.1.2          tidyr_1.3.0         
+ [7] tibble_3.2.1         tidyverse_1.3.1      ggplot2_3.5.1       
+[10] GenomicRanges_1.48.0 GenomeInfoDb_1.39.9  IRanges_2.30.0      
+[13] S4Vectors_0.34.0     BiocGenerics_0.42.0  reshape2_1.4.4      
+[16] data.table_1.14.2   
+
+loaded via a namespace (and not attached):
+ [1] httr_1.4.3             sass_0.4.1             jsonlite_1.8.0        
+ [4] modelr_0.1.8           bslib_0.3.1            assertthat_0.2.1      
+ [7] highr_0.9              GenomeInfoDbData_1.2.8 cellranger_1.1.0      
+[10] yaml_2.3.5             pillar_1.9.0           backports_1.4.1       
+[13] glue_1.6.2             digest_0.6.29          promises_1.2.0.1      
+[16] XVector_0.36.0         rvest_1.0.2            colorspace_2.0-3      
+[19] cowplot_1.1.1          htmltools_0.5.2        httpuv_1.6.5          
+[22] plyr_1.8.7             pkgconfig_2.0.3        broom_0.8.0           
+[25] haven_2.5.0            zlibbioc_1.42.0        scales_1.3.0          
+[28] later_1.3.0            tzdb_0.4.0             git2r_0.30.1          
+[31] farver_2.1.0           generics_0.1.2         ellipsis_0.3.2        
+[34] DT_0.22                withr_2.5.0            cli_3.6.1             
+[37] magrittr_2.0.3         crayon_1.5.1           readxl_1.4.0          
+[40] evaluate_0.15          fs_1.5.2               fansi_1.0.3           
+[43] xml2_1.3.3             tools_4.2.0            hms_1.1.1             
+[46] lifecycle_1.0.4        munsell_0.5.0          reprex_2.0.1          
+[49] compiler_4.2.0         jquerylib_0.1.4        rlang_1.1.2           
+[52] grid_4.2.0             RCurl_1.98-1.7         rstudioapi_0.13       
+[55] htmlwidgets_1.5.4      crosstalk_1.2.0        labeling_0.4.2        
+[58] bitops_1.0-7           rmarkdown_2.25         gtable_0.3.0          
+[61] DBI_1.2.2              R6_2.5.1               lubridate_1.8.0       
+[64] knitr_1.39             fastmap_1.1.0          utf8_1.2.2            
+[67] workflowr_1.7.0        rprojroot_2.0.3        stringi_1.7.6         
+[70] Rcpp_1.0.12            vctrs_0.6.5            dbplyr_2.1.1          
+[73] tidyselect_1.2.0       xfun_0.41             </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
