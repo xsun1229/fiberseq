@@ -25,7 +25,8 @@ TF2 <- "SP1"
 
 # Extract the regions containing both TF motif sites
 
-We first extracted the regions containing both TFs. We only select the regions where the 2 TFs are separated by less than `200bp` but greater than `50bp`.
+Regions containing both TFs were extracted, and only those in which the TFs were separated by more than `50 bp` but less than `200 bp` were retained. Each motif was then extended by 500 bp on both sides to define the final regions.
+
 
 ```{r warning=F, message=F}
 
@@ -101,7 +102,28 @@ DT::datatable(df_final,caption = htmltools::tags$caption( style = 'caption-side:
 
 ```
 
-# Visualization 
+# Visualization and co-accessibility test 
+
+For visualization, highlighted windows are the ones `±7 bp` around each motif. 
+
+To determine whether a TF has a footprint, footprint data were extracted from `res$fiberHMM_fps_infire`. 
+
+Footprints were retained if they (1) had a FiberHMM footprint size <40 bp and (2) overlapped with the highlighted motif windows. 
+
+Next, reads covering both motif regions were extracted, and the presence or absence of footprints for the two TFs was counted.
+
+Last, we did FET
+
+
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+res <- readRDS("/project/xinhe/xsun/website/fiberseq/data/example_res_from_plot_region_reads.RDS")
+
+head(res$fiberHMM_fps_infire)
+
+```
+
+
 
 
 ```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
