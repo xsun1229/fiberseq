@@ -143,6 +143,7 @@ for (i in 1:nrow(df_final)){
   region <- get_region(result_dir)
   subtitle <- sprintf("%s:%s-%s", region$chr, region$start, region$end)
   
+  print(subtitle)
   
   df_close_region <- df_close[df_close$motif2_site == df_close_nodup$motif2_site[i],]
   min_start_motif1 <- min(df_close_region$motif1_start)
@@ -214,7 +215,7 @@ for (i in 1:nrow(df_final)){
   RIDs_access.df$TF2[RIDs_access.df$RID %in% unique(fps_tf_motif2$RID)] <- TRUE
   
   
-  print(RIDs_access.df)
+  # print(RIDs_access.df)
   
   if(!(sum(RIDs_access.df$TF1) > 0 & sum(RIDs_access.df$TF2) > 0)) next 
   
