@@ -23,7 +23,9 @@ TF1 <- "NRF1"
 TF2 <- "SP1"
 ```
 
-# Extract the regions containing both TF motif sites
+# Motifs are 50-200bp apart
+
+## Extract the regions containing both TF motif sites
 
 Regions containing both TFs were extracted, and only those in which the TFs were separated by more than `50 bp` but less than `200 bp` were retained. Each motif was then extended by 500 bp on both sides to define the final regions.
 
@@ -102,7 +104,7 @@ DT::datatable(df_final,caption = htmltools::tags$caption( style = 'caption-side:
 
 ```
 
-# Visualization and co-accessibility test 
+## Visualization and co-accessibility test 
 
 For visualization, highlighted windows are the ones `±7 bp` around each motif. 
 
@@ -124,6 +126,622 @@ head(res$fiberHMM_fps_infire)
 ```
 
 
+
+
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+out_dir="/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results"
+sample_name="LCL_18508"
+
+df_close_nodup <- df_close[!duplicated(df_close$motif2_site),]
+
+#for (i in 1:3){
+for (i in 1:nrow(df_final)){
+  
+  test_range_str <- paste0(df_final$chr[i],":",df_final$start[i],"-",df_final$end[i])
+  plot_name=paste0(TF1,"_",TF2,"_",sample_name, "_", test_range_str)
+  result_dir = paste0(out_dir, "/", plot_name, "/parsed")
+  
+  region <- get_region(result_dir)
+  subtitle <- sprintf("%s:%s-%s", region$chr, region$start, region$end)
+  
+  print(subtitle)
+  
+  df_close_region <- df_close[df_close$motif2_site == df_close_nodup$motif2_site[i],]
+  min_start_motif1 <- min(df_close_region$motif1_start)
+  max_end_motif1   <- max(df_close_region$motif1_end)
+  
+  highlight_windows.df <- data.frame(start = c(min_start_motif1 - 7,df_close_nodup$motif2_start[i] -7 ), 
+                              end = c(max_end_motif1 + 7 ,df_close_nodup$motif2_end[i] +7))
+  
+  plot_name=paste0(TF1,"_",TF2,"_",sample_name, "_", test_range_str)
+  result_dir = paste0(out_dir, "/", plot_name, "/parsed")
+
+  
+  res <- plot_region_reads(result_dir, 
+                         filter_fire_reads = FALSE,
+                         cover_region_only = FALSE,
+                         cluster_reads = TRUE,
+                         select_A_only = TRUE,
+                         split_haplotype = FALSE,
+                         highlight_window = highlight_windows.df,
+                         color_highlight_window = "#ade6b3",
+                         plot_name = plot_name,
+                         subtitle = subtitle)
+
+  region <- res$region
+  window_size <- res$window_size
+  rids_df <- res$rids_df
+  pileup <- res$pileup
+  reads <- res$reads
+  fire <- res$fire
+  fdr_fire <- res$fdr_fire
+  fiberHMM_fps <- res$fiberHMM_fps
+  gg <- res$gg
+  
+  
+  print(cowplot::plot_grid(
+    gg$pileup,
+    gg$dimelo_reads,
+    gg$fire_fdr,
+    gg$fire_reads,
+    gg$fiberHMM,
+    ncol = 1,
+    rel_heights = c(4,8,2,8,8),
+    align = "v",
+    axis = "b"
+  ))
+
+  
+  fps <- res$fiberHMM_fps_infire
+  fps_rid <- fps$RID
+  
+  #fps_highlight_motif1 <- fps[fps$start > highlight_windows.df$start[1] & fps$end < highlight_windows.df$end[1], ]
+  fps_highlight_motif1 <- fps[fps$start <= highlight_windows.df$end[1] & fps$end >= highlight_windows.df$start[1], ]
+  fps_tf_motif1 <- fps_highlight_motif1[fps_highlight_motif1$class == "< 40bp",]
+  rid_motif1 <-   as.character(res$rids_df$RID[res$rids_df$start <= max_end_motif1 & res$rids_df$end >= min_start_motif1])
+  
+  
+  #fps_highlight_motif2 <- fps[fps$start > highlight_windows.df$start[2] & fps$end < highlight_windows.df$end[2], ]
+  fps_highlight_motif2 <- fps[fps$start <= highlight_windows.df$end[2] & fps$end >= highlight_windows.df$start[2], ]
+  fps_tf_motif2 <- fps_highlight_motif2[fps_highlight_motif2$class == "< 40bp",]
+  rid_motif2 <-   as.character(res$rids_df$RID[res$rids_df$start <= df_close_nodup$motif2_end[i] & res$rids_df$end >= df_close_nodup$motif2_start[i]])
+  
+  RIDs_overlap_both_regions <- intersect(rid_motif1, rid_motif2)
+  
+  RIDs_access.df <- data.frame(RID = RIDs_overlap_both_regions, 
+                               TF1 = FALSE,
+                               TF2 = FALSE)
+  
+  RIDs_access.df$TF1[RIDs_access.df$RID %in% unique(fps_tf_motif1$RID)] <- TRUE
+  RIDs_access.df$TF2[RIDs_access.df$RID %in% unique(fps_tf_motif2$RID)] <- TRUE
+  
+  
+  # print(RIDs_access.df)
+  
+  if(!(sum(RIDs_access.df$TF1) > 0 & sum(RIDs_access.df$TF2) > 0)) next 
+  
+  cat("Create a 2x2 table of coaccessibility and run fisher's exact test...\n")
+  print(contingency_table <- table(RIDs_access.df[,c("TF1", "TF2")]))
+  
+  print(fisher_res <- fisher.test(contingency_table))
+  
+}
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+# Motifs are 500-1000bp apart
+
+## Extract the regions containing both TF motif sites
+
+Regions containing both TFs were extracted, and only those in which the TFs were separated by more than `500 bp` but less than `1000 bp` were retained. Each motif was then extended by 500 bp on both sides to define the final regions.
+
+
+```{r warning=F, message=F}
+
+motif_sites_motif1 <- readRDS(paste0('/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs/',TF1,'.GM12878.sites.chip.labels.rds'))
+motif_sites_motif1_chip1 <- motif_sites_motif1[motif_sites_motif1$chip_label == 1,]
+
+motif_sites_motif2 <- readRDS(paste0('/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs/',TF2,'.GM12878.sites.chip.labels.rds'))
+motif_sites_motif2_chip1 <- motif_sites_motif1[motif_sites_motif2$chip_label == 1,]
+
+motif1 <- motif_sites_motif1_chip1
+motif1 <- motif1[!is.na(motif1$start),]
+motif2 <- motif_sites_motif2_chip1
+motif2 <- motif2[!is.na(motif2$start),]
+
+## Convert to GRanges
+gr_motif1 <- GRanges(seqnames = motif1$chr,
+                 ranges   = IRanges(start = motif1$start+100, end = motif1$end-100),
+                 site     = motif1$name)
+
+gr_motif2 <- GRanges(seqnames = motif2$chr,
+                 ranges   = IRanges(start = motif2$start+100, end = motif2$end-100),
+                 site     = motif2$name)
+
+## Define distance cutoff
+dist_cutoff_large <- 1000
+dist_cutoff_small <- 500
+
+## Find nearest motif2 site for each motif1 site
+nearest_hits <- distanceToNearest(gr_motif1, gr_motif2)
+
+## Filter by distance threshold
+close_pairs <- nearest_hits[mcols(nearest_hits)$distance <= dist_cutoff_large & mcols(nearest_hits)$distance >= dist_cutoff_small]
+
+## Extract regions
+motif1_close <- gr_motif1[queryHits(close_pairs)]
+motif2_close <- gr_motif2[subjectHits(close_pairs)]
+
+## Make a data.frame
+df_close <- data.frame(
+  chr = as.character(seqnames(motif1_close)),
+  motif1_start = start(motif1_close),
+  motif1_end   = end(motif1_close),
+  motif1_site  = motif1_close$site,
+  motif2_start  = start(motif2_close),
+  motif2_end    = end(motif2_close),
+  motif2_site   = motif2_close$site,
+  distance   = mcols(close_pairs)$distance
+)
+
+DT::datatable(df_close,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Motif sites selected'),options = list(pageLength = 5) )
+
+df_summary <- df_close %>%
+  group_by(chr, motif2_site, motif2_start, motif2_end) %>%
+  summarise(
+    min_motif1_start = min(motif1_start),
+    max_motif1_end   = max(motif1_end),
+    .groups = "drop"
+  )
+
+df_final <- df_summary %>%
+  transmute(
+    chr,
+    start = pmin(motif2_start, min_motif1_start) - 500,
+    end   = pmax(motif2_end,   max_motif1_end)   + 500
+  )
+
+df_final <- df_final %>%
+  mutate(chr_num = as.numeric(gsub("chr", "", chr))) %>%
+  arrange(chr_num, start) %>%
+  select(-chr_num)
+
+DT::datatable(df_final,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Regions selected for plotting '),options = list(pageLength = 5) )
+
+```
+
+## Visualization and co-accessibility test 
+
+For visualization, highlighted windows are the ones `±7 bp` around each motif. 
+
+To determine whether a TF has a footprint, footprint data were extracted from `res$fiberHMM_fps_infire`. 
+
+Footprints were retained if they (1) had a FiberHMM footprint size <40 bp and (2) overlapped with the highlighted motif windows. 
+
+Next, reads covering both motif regions were extracted, and the presence or absence of footprints for the two TFs was counted.
+
+Last, we did FET
+
+
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+out_dir="/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results"
+sample_name="LCL_18508"
+
+df_close_nodup <- df_close[!duplicated(df_close$motif2_site),]
+
+#for (i in 1:3){
+for (i in 1:nrow(df_final)){
+  
+  test_range_str <- paste0(df_final$chr[i],":",df_final$start[i],"-",df_final$end[i])
+  plot_name=paste0(TF1,"_",TF2,"_",sample_name, "_", test_range_str)
+  result_dir = paste0(out_dir, "/", plot_name, "/parsed")
+  
+  region <- get_region(result_dir)
+  subtitle <- sprintf("%s:%s-%s", region$chr, region$start, region$end)
+  
+  print(subtitle)
+  
+  df_close_region <- df_close[df_close$motif2_site == df_close_nodup$motif2_site[i],]
+  min_start_motif1 <- min(df_close_region$motif1_start)
+  max_end_motif1   <- max(df_close_region$motif1_end)
+  
+  highlight_windows.df <- data.frame(start = c(min_start_motif1 - 7,df_close_nodup$motif2_start[i] -7 ), 
+                              end = c(max_end_motif1 + 7 ,df_close_nodup$motif2_end[i] +7))
+  
+  plot_name=paste0(TF1,"_",TF2,"_",sample_name, "_", test_range_str)
+  result_dir = paste0(out_dir, "/", plot_name, "/parsed")
+
+  
+  res <- plot_region_reads(result_dir, 
+                         filter_fire_reads = FALSE,
+                         cover_region_only = FALSE,
+                         cluster_reads = TRUE,
+                         select_A_only = TRUE,
+                         split_haplotype = FALSE,
+                         highlight_window = highlight_windows.df,
+                         color_highlight_window = "#ade6b3",
+                         plot_name = plot_name,
+                         subtitle = subtitle)
+
+  region <- res$region
+  window_size <- res$window_size
+  rids_df <- res$rids_df
+  pileup <- res$pileup
+  reads <- res$reads
+  fire <- res$fire
+  fdr_fire <- res$fdr_fire
+  fiberHMM_fps <- res$fiberHMM_fps
+  gg <- res$gg
+  
+  
+  print(cowplot::plot_grid(
+    gg$pileup,
+    gg$dimelo_reads,
+    gg$fire_fdr,
+    gg$fire_reads,
+    gg$fiberHMM,
+    ncol = 1,
+    rel_heights = c(4,8,2,8,8),
+    align = "v",
+    axis = "b"
+  ))
+
+  
+  fps <- res$fiberHMM_fps_infire
+  fps_rid <- fps$RID
+  
+  #fps_highlight_motif1 <- fps[fps$start > highlight_windows.df$start[1] & fps$end < highlight_windows.df$end[1], ]
+  fps_highlight_motif1 <- fps[fps$start <= highlight_windows.df$end[1] & fps$end >= highlight_windows.df$start[1], ]
+  fps_tf_motif1 <- fps_highlight_motif1[fps_highlight_motif1$class == "< 40bp",]
+  rid_motif1 <-   as.character(res$rids_df$RID[res$rids_df$start <= max_end_motif1 & res$rids_df$end >= min_start_motif1])
+  
+  
+  #fps_highlight_motif2 <- fps[fps$start > highlight_windows.df$start[2] & fps$end < highlight_windows.df$end[2], ]
+  fps_highlight_motif2 <- fps[fps$start <= highlight_windows.df$end[2] & fps$end >= highlight_windows.df$start[2], ]
+  fps_tf_motif2 <- fps_highlight_motif2[fps_highlight_motif2$class == "< 40bp",]
+  rid_motif2 <-   as.character(res$rids_df$RID[res$rids_df$start <= df_close_nodup$motif2_end[i] & res$rids_df$end >= df_close_nodup$motif2_start[i]])
+  
+  RIDs_overlap_both_regions <- intersect(rid_motif1, rid_motif2)
+  
+  RIDs_access.df <- data.frame(RID = RIDs_overlap_both_regions, 
+                               TF1 = FALSE,
+                               TF2 = FALSE)
+  
+  RIDs_access.df$TF1[RIDs_access.df$RID %in% unique(fps_tf_motif1$RID)] <- TRUE
+  RIDs_access.df$TF2[RIDs_access.df$RID %in% unique(fps_tf_motif2$RID)] <- TRUE
+  
+  
+  # print(RIDs_access.df)
+  
+  if(!(sum(RIDs_access.df$TF1) > 0 & sum(RIDs_access.df$TF2) > 0)) next 
+  
+  cat("Create a 2x2 table of coaccessibility and run fisher's exact test...\n")
+  print(contingency_table <- table(RIDs_access.df[,c("TF1", "TF2")]))
+  
+  print(fisher_res <- fisher.test(contingency_table))
+  
+}
+
+
+
+
+```
+
+
+
+
+
+
+
+# Motifs are 1000-2000bp apart
+
+## Extract the regions containing both TF motif sites
+
+Regions containing both TFs were extracted, and only those in which the TFs were separated by more than `1000 bp` but less than `2000 bp` were retained. Each motif was then extended by 500 bp on both sides to define the final regions.
+
+
+```{r warning=F, message=F}
+
+motif_sites_motif1 <- readRDS(paste0('/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs/',TF1,'.GM12878.sites.chip.labels.rds'))
+motif_sites_motif1_chip1 <- motif_sites_motif1[motif_sites_motif1$chip_label == 1,]
+
+motif_sites_motif2 <- readRDS(paste0('/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs/',TF2,'.GM12878.sites.chip.labels.rds'))
+motif_sites_motif2_chip1 <- motif_sites_motif1[motif_sites_motif2$chip_label == 1,]
+
+motif1 <- motif_sites_motif1_chip1
+motif1 <- motif1[!is.na(motif1$start),]
+motif2 <- motif_sites_motif2_chip1
+motif2 <- motif2[!is.na(motif2$start),]
+
+## Convert to GRanges
+gr_motif1 <- GRanges(seqnames = motif1$chr,
+                 ranges   = IRanges(start = motif1$start+100, end = motif1$end-100),
+                 site     = motif1$name)
+
+gr_motif2 <- GRanges(seqnames = motif2$chr,
+                 ranges   = IRanges(start = motif2$start+100, end = motif2$end-100),
+                 site     = motif2$name)
+
+## Define distance cutoff
+dist_cutoff_large <- 2000
+dist_cutoff_small <- 1000
+
+## Find nearest motif2 site for each motif1 site
+nearest_hits <- distanceToNearest(gr_motif1, gr_motif2)
+
+## Filter by distance threshold
+close_pairs <- nearest_hits[mcols(nearest_hits)$distance <= dist_cutoff_large & mcols(nearest_hits)$distance >= dist_cutoff_small]
+
+## Extract regions
+motif1_close <- gr_motif1[queryHits(close_pairs)]
+motif2_close <- gr_motif2[subjectHits(close_pairs)]
+
+## Make a data.frame
+df_close <- data.frame(
+  chr = as.character(seqnames(motif1_close)),
+  motif1_start = start(motif1_close),
+  motif1_end   = end(motif1_close),
+  motif1_site  = motif1_close$site,
+  motif2_start  = start(motif2_close),
+  motif2_end    = end(motif2_close),
+  motif2_site   = motif2_close$site,
+  distance   = mcols(close_pairs)$distance
+)
+
+DT::datatable(df_close,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Motif sites selected'),options = list(pageLength = 5) )
+
+df_summary <- df_close %>%
+  group_by(chr, motif2_site, motif2_start, motif2_end) %>%
+  summarise(
+    min_motif1_start = min(motif1_start),
+    max_motif1_end   = max(motif1_end),
+    .groups = "drop"
+  )
+
+df_final <- df_summary %>%
+  transmute(
+    chr,
+    start = pmin(motif2_start, min_motif1_start) - 500,
+    end   = pmax(motif2_end,   max_motif1_end)   + 500
+  )
+
+df_final <- df_final %>%
+  mutate(chr_num = as.numeric(gsub("chr", "", chr))) %>%
+  arrange(chr_num, start) %>%
+  select(-chr_num)
+
+DT::datatable(df_final,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Regions selected for plotting '),options = list(pageLength = 5) )
+
+```
+
+## Visualization and co-accessibility test 
+
+For visualization, highlighted windows are the ones `±7 bp` around each motif. 
+
+To determine whether a TF has a footprint, footprint data were extracted from `res$fiberHMM_fps_infire`. 
+
+Footprints were retained if they (1) had a FiberHMM footprint size <40 bp and (2) overlapped with the highlighted motif windows. 
+
+Next, reads covering both motif regions were extracted, and the presence or absence of footprints for the two TFs was counted.
+
+
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+out_dir="/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results"
+sample_name="LCL_18508"
+
+df_close_nodup <- df_close[!duplicated(df_close$motif2_site),]
+
+#for (i in 1:3){
+for (i in 1:nrow(df_final)){
+  
+  test_range_str <- paste0(df_final$chr[i],":",df_final$start[i],"-",df_final$end[i])
+  plot_name=paste0(TF1,"_",TF2,"_",sample_name, "_", test_range_str)
+  result_dir = paste0(out_dir, "/", plot_name, "/parsed")
+  
+  region <- get_region(result_dir)
+  subtitle <- sprintf("%s:%s-%s", region$chr, region$start, region$end)
+  
+  print(subtitle)
+  
+  df_close_region <- df_close[df_close$motif2_site == df_close_nodup$motif2_site[i],]
+  min_start_motif1 <- min(df_close_region$motif1_start)
+  max_end_motif1   <- max(df_close_region$motif1_end)
+  
+  highlight_windows.df <- data.frame(start = c(min_start_motif1 - 7,df_close_nodup$motif2_start[i] -7 ), 
+                              end = c(max_end_motif1 + 7 ,df_close_nodup$motif2_end[i] +7))
+  
+  plot_name=paste0(TF1,"_",TF2,"_",sample_name, "_", test_range_str)
+  result_dir = paste0(out_dir, "/", plot_name, "/parsed")
+
+  
+  res <- plot_region_reads(result_dir, 
+                         filter_fire_reads = FALSE,
+                         cover_region_only = FALSE,
+                         cluster_reads = TRUE,
+                         select_A_only = TRUE,
+                         split_haplotype = FALSE,
+                         highlight_window = highlight_windows.df,
+                         color_highlight_window = "#ade6b3",
+                         plot_name = plot_name,
+                         subtitle = subtitle)
+
+  region <- res$region
+  window_size <- res$window_size
+  rids_df <- res$rids_df
+  pileup <- res$pileup
+  reads <- res$reads
+  fire <- res$fire
+  fdr_fire <- res$fdr_fire
+  fiberHMM_fps <- res$fiberHMM_fps
+  gg <- res$gg
+  
+  
+  print(cowplot::plot_grid(
+    gg$pileup,
+    gg$dimelo_reads,
+    gg$fire_fdr,
+    gg$fire_reads,
+    gg$fiberHMM,
+    ncol = 1,
+    rel_heights = c(4,8,2,8,8),
+    align = "v",
+    axis = "b"
+  ))
+
+  
+  fps <- res$fiberHMM_fps_infire
+  fps_rid <- fps$RID
+  
+  #fps_highlight_motif1 <- fps[fps$start > highlight_windows.df$start[1] & fps$end < highlight_windows.df$end[1], ]
+  fps_highlight_motif1 <- fps[fps$start <= highlight_windows.df$end[1] & fps$end >= highlight_windows.df$start[1], ]
+  fps_tf_motif1 <- fps_highlight_motif1[fps_highlight_motif1$class == "< 40bp",]
+  rid_motif1 <-   as.character(res$rids_df$RID[res$rids_df$start <= max_end_motif1 & res$rids_df$end >= min_start_motif1])
+  
+  
+  #fps_highlight_motif2 <- fps[fps$start > highlight_windows.df$start[2] & fps$end < highlight_windows.df$end[2], ]
+  fps_highlight_motif2 <- fps[fps$start <= highlight_windows.df$end[2] & fps$end >= highlight_windows.df$start[2], ]
+  fps_tf_motif2 <- fps_highlight_motif2[fps_highlight_motif2$class == "< 40bp",]
+  rid_motif2 <-   as.character(res$rids_df$RID[res$rids_df$start <= df_close_nodup$motif2_end[i] & res$rids_df$end >= df_close_nodup$motif2_start[i]])
+  
+  RIDs_overlap_both_regions <- intersect(rid_motif1, rid_motif2)
+  
+  RIDs_access.df <- data.frame(RID = RIDs_overlap_both_regions, 
+                               TF1 = FALSE,
+                               TF2 = FALSE)
+  
+  RIDs_access.df$TF1[RIDs_access.df$RID %in% unique(fps_tf_motif1$RID)] <- TRUE
+  RIDs_access.df$TF2[RIDs_access.df$RID %in% unique(fps_tf_motif2$RID)] <- TRUE
+  
+  
+  # print(RIDs_access.df)
+  
+  if(!(sum(RIDs_access.df$TF1) > 0 & sum(RIDs_access.df$TF2) > 0)) next 
+  
+  cat("Create a 2x2 table of coaccessibility and run fisher's exact test...\n")
+  print(contingency_table <- table(RIDs_access.df[,c("TF1", "TF2")]))
+  
+  print(fisher_res <- fisher.test(contingency_table))
+  
+}
+
+
+
+
+```
+
+
+
+
+
+
+
+# Motifs are 2000-5000bp apart
+
+## Extract the regions containing both TF motif sites
+
+Regions containing both TFs were extracted, and only those in which the TFs were separated by more than `2000 bp` but less than `5000 bp` were retained. Each motif was then extended by 500 bp on both sides to define the final regions.
+
+
+```{r warning=F, message=F}
+
+motif_sites_motif1 <- readRDS(paste0('/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs/',TF1,'.GM12878.sites.chip.labels.rds'))
+motif_sites_motif1_chip1 <- motif_sites_motif1[motif_sites_motif1$chip_label == 1,]
+
+motif_sites_motif2 <- readRDS(paste0('/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs/',TF2,'.GM12878.sites.chip.labels.rds'))
+motif_sites_motif2_chip1 <- motif_sites_motif1[motif_sites_motif2$chip_label == 1,]
+
+motif1 <- motif_sites_motif1_chip1
+motif1 <- motif1[!is.na(motif1$start),]
+motif2 <- motif_sites_motif2_chip1
+motif2 <- motif2[!is.na(motif2$start),]
+
+## Convert to GRanges
+gr_motif1 <- GRanges(seqnames = motif1$chr,
+                 ranges   = IRanges(start = motif1$start+100, end = motif1$end-100),
+                 site     = motif1$name)
+
+gr_motif2 <- GRanges(seqnames = motif2$chr,
+                 ranges   = IRanges(start = motif2$start+100, end = motif2$end-100),
+                 site     = motif2$name)
+
+## Define distance cutoff
+dist_cutoff_large <- 5000
+dist_cutoff_small <- 2000
+
+## Find nearest motif2 site for each motif1 site
+nearest_hits <- distanceToNearest(gr_motif1, gr_motif2)
+
+## Filter by distance threshold
+close_pairs <- nearest_hits[mcols(nearest_hits)$distance <= dist_cutoff_large & mcols(nearest_hits)$distance >= dist_cutoff_small]
+
+## Extract regions
+motif1_close <- gr_motif1[queryHits(close_pairs)]
+motif2_close <- gr_motif2[subjectHits(close_pairs)]
+
+## Make a data.frame
+df_close <- data.frame(
+  chr = as.character(seqnames(motif1_close)),
+  motif1_start = start(motif1_close),
+  motif1_end   = end(motif1_close),
+  motif1_site  = motif1_close$site,
+  motif2_start  = start(motif2_close),
+  motif2_end    = end(motif2_close),
+  motif2_site   = motif2_close$site,
+  distance   = mcols(close_pairs)$distance
+)
+
+DT::datatable(df_close,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Motif sites selected'),options = list(pageLength = 5) )
+
+df_summary <- df_close %>%
+  group_by(chr, motif2_site, motif2_start, motif2_end) %>%
+  summarise(
+    min_motif1_start = min(motif1_start),
+    max_motif1_end   = max(motif1_end),
+    .groups = "drop"
+  )
+
+df_final <- df_summary %>%
+  transmute(
+    chr,
+    start = pmin(motif2_start, min_motif1_start) - 500,
+    end   = pmax(motif2_end,   max_motif1_end)   + 500
+  )
+
+df_final <- df_final %>%
+  mutate(chr_num = as.numeric(gsub("chr", "", chr))) %>%
+  arrange(chr_num, start) %>%
+  select(-chr_num)
+
+DT::datatable(df_final,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Regions selected for plotting '),options = list(pageLength = 5) )
+
+```
+
+## Visualization and co-accessibility test 
+
+For visualization, highlighted windows are the ones `±7 bp` around each motif. 
+
+To determine whether a TF has a footprint, footprint data were extracted from `res$fiberHMM_fps_infire`. 
+
+Footprints were retained if they (1) had a FiberHMM footprint size <40 bp and (2) overlapped with the highlighted motif windows. 
+
+Next, reads covering both motif regions were extracted, and the presence or absence of footprints for the two TFs was counted.
+
+Last, we did FET
 
 
 ```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
