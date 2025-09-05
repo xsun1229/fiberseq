@@ -1,0 +1,484 @@
+---
+title: "TF Co-accessibility for NRF1 pairs"
+author: "XSun"
+date: "2025-09-03"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+
+
+```{r warning=F, message=F}
+library(data.table)
+library(reshape2)
+library(GenomicRanges)
+library(ggplot2)
+library(tidyverse)
+library(gridExtra)
+
+source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/process_fiberseq_data.R")
+source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/plots.R")
+
+TF1 <- "NRF1"
+```
+
+
+# Extract the regions containing TF pairs
+
+TF pairs for one TF is two separate recognition motifs of one TF within the same CRE (<140 bp). Ref: https://www.cell.com/molecular-cell/fulltext/S1097-2765(20)30793-0?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS1097276520307930%3Fshowall%3Dtrue
+
+We extracted regions containing both motifs of a TF pair, retaining only those in which the motifs were separated by more than 14 bp but less than 140 bp.
+
+
+The detailed procedure is: 
+
+1. Load the motif sites and filter for `chip_label == 1`.
+
+```{r warning=F, message=F}
+
+
+# Read motif sites and filter
+motif_sites <- readRDS(
+  file.path("/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs",
+            paste0(TF1, ".GM12878.sites.chip.labels.rds"))
+) %>%
+  filter(chip_label == 1, !is.na(start))
+
+
+DT::datatable(motif_sites,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Motif sites'),options = list(pageLength = 5) )
+```
+
+
+2. Identify all possible pairs of motifs for the TF on the same chromosome, excluding self-pairs.
+
+3. Calculate the genomic distance between motif pairs and retain only those separated by `14 - 140bp`.
+
+
+```{r warning=F, message=F}
+# Convert to GRanges
+gr_motif <- GRanges(
+  seqnames = motif_sites$chr,
+  ranges   = IRanges(start = motif_sites$start + 100,
+                     end   = motif_sites$end   - 100),
+  site     = motif_sites$name
+)
+
+# Distance cutoffs
+dist_cutoff_large <- 140L
+dist_cutoff_small <- 15L
+
+# Find all motif pairs within large distance
+hits <- findOverlaps(gr_motif, gr_motif,
+                     ignore.strand = TRUE,
+                     maxgap = dist_cutoff_large)
+
+q <- queryHits(hits)
+s <- subjectHits(hits)
+
+# Keep unique orientation, no self-pairs
+keep <- q < s
+q <- q[keep]; s <- s[keep]
+
+# Distances
+d <- distance(gr_motif[q], gr_motif[s])
+
+# Filter by [small, large]
+sel <- d >= dist_cutoff_small & d <= dist_cutoff_large
+q <- q[sel]; s <- s[sel]; d <- d[sel]
+
+# Build pair dataframe
+df_close <- data.frame(
+  chr          = as.character(seqnames(gr_motif[q])),
+  motif1_start = start(gr_motif[q]),
+  motif1_end   = end(gr_motif[q]),
+  motif1_site  = gr_motif[q]$site,
+  motif2_start = start(gr_motif[s]),
+  motif2_end   = end(gr_motif[s]),
+  motif2_site  = gr_motif[s]$site,
+  distance     = as.integer(d)
+)
+
+df_close$id <- paste0(df_close$motif1_site,"-", df_close$motif2_site)
+
+DT::datatable(df_close,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Motif pairs kept'),options = list(pageLength = 5) )
+
+
+
+
+```
+
+4. For regions with multiple pairs, define broader genomic intervals covering both motifs in each pair, adding a 500 bp buffer on each side.
+
+5. Round these intervals to the nearest hundred bases to obtain the final regions.
+
+
+```{r warning=F, message=F}
+# Summarize per motif2 and build final regions
+df_final <- df_close %>%
+  group_by(chr, motif2_site, motif2_start, motif2_end) %>%
+  mutate(
+    min_motif1_start = min(motif1_start),
+    max_motif1_end   = max(motif1_end)
+  ) %>%
+  ungroup() %>%
+  transmute(
+    chr,
+    start = pmin(motif2_start, min_motif1_start) - 500,
+    end   = pmax(motif2_end,   max_motif1_end)   + 500
+  ) %>%
+  mutate(
+    chr_num = as.numeric(gsub("chr", "", chr)),
+    start   = floor(start / 100) * 100,
+    end     = ceiling(end / 100) * 100
+  ) %>%
+  arrange(chr_num, start) %>%
+  select(-chr_num) 
+
+df_final$id <- paste0(df_final$chr,"-", df_final$start, "-",df_final$end)
+
+df_final_region <- df_final[!duplicated(df_final$id),]
+
+DT::datatable(df_final_region,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Regions covering the motif pairs'),options = list(pageLength = 5) )
+
+```
+
+
+# Visualization and co-accessibility test 
+
+For visualization, highlighted windows are the ones `±7 bp` around each motif. 
+
+To determine whether a TF has a footprint, footprint data were extracted from `res$fiberHMM_fps_infire`. 
+
+Footprints were retained if they (1) had a FiberHMM footprint size <40 bp and (2) overlapped with the highlighted motif windows. 
+
+Next, reads covering both motif regions were extracted, and the presence or absence of footprints for the two TFs was counted.
+
+Last, we did FET 
+
+## Co-occupied rate
+
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+
+FET_or <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_or.RDS")
+FETp <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FETp.RDS")
+#plots <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/plots_naremoved2.RDS")
+FET_matrix <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_matrix.RDS")
+FET_res <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_res.RDS")
+
+FET_res_all <- data.frame(pair_region = names(FETp), FET_pvalues = FETp, FET_oddratio = FET_or)
+FET_res_all$fdr <- p.adjust(FET_res_all$FET_pvalues, method = "fdr")
+
+df_close$order <- seq_len(nrow(df_close))  # add index column
+df_close <- merge(
+  df_close, FET_res_all,
+  by.x = "id", by.y = "pair_region",
+  all.x = TRUE, sort = FALSE
+)
+df_close <- df_close[order(df_close$order), ]  # restore original order
+df_close$order <- NULL  # drop helper column
+
+df_close$FET_pvalues <- round(df_close$FET_pvalues, digits = 4)
+df_close$FET_oddratio <- round(df_close$FET_oddratio, digits = 4)
+df_close$fdr <- round(df_close$fdr, digits = 4)
+
+print(paste0("total pairs = ", nrow(FET_res_all)))
+
+
+DT::datatable(df_close,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','FET results for the TF pairs'),options = list(pageLength = 5) )
+
+
+```
+
+
+Using `FDR < 0.1` as cutoff, 
+
+The co-occupancy rate for the pairs: 
+
+```{r message=FALSE,warning=FALSE, fig.height=4, fig.width=10}
+
+# keep only rows with distance and fdr
+df_filtered <- df_close %>%
+  filter(!is.na(fdr), !is.na(distance)) %>%
+  # restrict to the 14-140 bp range so the overall row is the sum of the three sub-bins
+  filter(distance >= 14, distance <= 140)
+
+# create non-overlapping bins
+df_binned <- df_filtered %>%
+  mutate(bin = case_when(
+    distance >= 14  & distance <= 50  ~ "14-50bp",
+    distance >  50  & distance <= 70  ~ "50-70bp",
+    distance >  70  & distance <= 140 ~ "70-140bp",
+    TRUE ~ NA_character_
+  )) %>%
+  filter(!is.na(bin))
+
+# summary for the three sub-bins
+rates_df <- df_binned %>%
+  group_by(bin) %>%
+  summarise(
+    total_pairs = n(),
+    sig_pairs   = sum(fdr < 0.1),
+    cooccupancy_rate = ifelse(total_pairs > 0, sig_pairs / total_pairs, NA_real_)
+  ) %>%
+  ungroup()
+
+# add overall (14-140bp) as the sum of the three sub-bins
+overall <- rates_df %>%
+  summarise(
+    total_pairs = sum(total_pairs),
+    sig_pairs   = sum(sig_pairs)
+  ) %>%
+  mutate(
+    bin = "14-140bp",
+    cooccupancy_rate = ifelse(total_pairs > 0, sig_pairs / total_pairs, NA_real_)
+  ) %>%
+  select(bin, total_pairs, sig_pairs, cooccupancy_rate)
+
+rates_df <- bind_rows(overall, rates_df) %>%
+  # set plotting order: overall first, then sub-bins
+  mutate(bin = factor(bin, levels = c("14-140bp", "14-50bp", "50-70bp", "70-140bp")))
+
+print(rates_df)
+
+# prepare stacked counts: significant vs non-significant (so bars sum to total_pairs)
+counts_df <- rates_df %>%
+  mutate(nonsig_pairs = total_pairs - sig_pairs) %>%
+  select(bin, sig_pairs, nonsig_pairs) %>%
+  pivot_longer(cols = c("nonsig_pairs", "sig_pairs"),
+               names_to = "pair_type",
+               values_to = "count") %>%
+  mutate(
+    pair_type = factor(pair_type, levels = c("nonsig_pairs", "sig_pairs"),
+                       labels = c("Other pairs", "Co-occupied pairs \n(FDR < 0.1)"))
+  )
+
+# stacked barplot (total bar = total_pairs; blue segment = significant pairs)
+p1 <- ggplot(counts_df, aes(x = bin, y = count, fill = pair_type)) +
+  geom_col() +
+  # counts inside each segment
+  geom_text(aes(label = count), position = position_stack(vjust = 0.5), size = 3.5, color = "white") +
+  # total count on top of each bar
+  geom_text(
+    data = rates_df,
+    aes(x = bin, y = total_pairs, label = total_pairs),
+    vjust = -0.5, inherit.aes = FALSE, size = 3.8
+  ) +
+  scale_fill_manual(values = c("steelblue", "orange")) +
+  theme_minimal(base_size = 12) +
+  labs(
+    x = "Distance bin",
+    y = "Number of pairs",
+    fill = "",
+    title = "Co-occupied pairs\n(FDR < 0.1)"
+  ) +
+  coord_cartesian(ylim = c(0, max(rates_df$total_pairs, na.rm = TRUE) * 1.08))
+
+
+p2 <- ggplot(rates_df, aes(x = bin, y = cooccupancy_rate)) +
+  geom_col(fill = "orange") +
+  geom_text(aes(label = round(cooccupancy_rate, 3)), 
+            vjust = -0.5, size = 5) +
+  ylim(0, 0.5) +
+  theme_minimal(base_size = 12) +
+  labs(
+    x = "Distance bin",
+    y = "Co-occupancy rate",
+    title = "Co-occupancy rates \n(FDR < 0.1)"
+  )
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+
+Using `FET p-value < 0.05` as cutoff, 
+
+The co-occupancy rate for the pairs: 
+
+
+```{r message=FALSE,warning=FALSE, fig.height=4, fig.width=10}
+
+# summary for the three sub-bins
+rates_df <- df_binned %>%
+  group_by(bin) %>%
+  summarise(
+    total_pairs = n(),
+    sig_pairs   = sum(FET_pvalues < 0.05),
+    cooccupancy_rate = ifelse(total_pairs > 0, sig_pairs / total_pairs, NA_real_)
+  ) %>%
+  ungroup()
+
+# add overall (14-140bp) as the sum of the three sub-bins
+overall <- rates_df %>%
+  summarise(
+    total_pairs = sum(total_pairs),
+    sig_pairs   = sum(sig_pairs)
+  ) %>%
+  mutate(
+    bin = "14-140bp",
+    cooccupancy_rate = ifelse(total_pairs > 0, sig_pairs / total_pairs, NA_real_)
+  ) %>%
+  select(bin, total_pairs, sig_pairs, cooccupancy_rate)
+
+rates_df <- bind_rows(overall, rates_df) %>%
+  # set plotting order: overall first, then sub-bins
+  mutate(bin = factor(bin, levels = c("14-140bp", "14-50bp", "50-70bp", "70-140bp")))
+
+print(rates_df)
+
+# prepare stacked counts: significant vs non-significant (so bars sum to total_pairs)
+counts_df <- rates_df %>%
+  mutate(nonsig_pairs = total_pairs - sig_pairs) %>%
+  select(bin, sig_pairs, nonsig_pairs) %>%
+  pivot_longer(cols = c("nonsig_pairs", "sig_pairs"),
+               names_to = "pair_type",
+               values_to = "count") %>%
+  mutate(
+    pair_type = factor(pair_type, levels = c("nonsig_pairs", "sig_pairs"),
+                       labels = c("Other pairs", "Co-occupied pairs \n(FET_pvalues < 0.05)"))
+  )
+
+# stacked barplot (total bar = total_pairs; blue segment = significant pairs)
+p1 <- ggplot(counts_df, aes(x = bin, y = count, fill = pair_type)) +
+  geom_col() +
+  # counts inside each segment
+  geom_text(aes(label = count), position = position_stack(vjust = 0.5), size = 3.5, color = "white") +
+  # total count on top of each bar
+  geom_text(
+    data = rates_df,
+    aes(x = bin, y = total_pairs, label = total_pairs),
+    vjust = -0.5, inherit.aes = FALSE, size = 3.8
+  ) +
+  scale_fill_manual(values = c("steelblue", "orange")) +
+  theme_minimal(base_size = 12) +
+  labs(
+    x = "Distance bin",
+    y = "Number of pairs",
+    fill = "",
+    title = "Co-occupied pairs\n (FET_pvalues < 0.05)"
+  ) +
+  coord_cartesian(ylim = c(0, max(rates_df$total_pairs, na.rm = TRUE) * 1.08))
+
+
+p2 <- ggplot(rates_df, aes(x = bin, y = cooccupancy_rate)) +
+  geom_col(fill = "orange") +
+  geom_text(aes(label = round(cooccupancy_rate, 3)), 
+            vjust = -0.5, size = 5) +
+  ylim(0, 0.5) +
+  theme_minimal(base_size = 12) +
+  labs(
+    x = "Distance bin",
+    y = "Co-occupancy rate",
+    title = "Co-occupancy rates \n(FET_pvalues < 0.05)"
+  )
+
+grid.arrange(p1, p2, ncol = 2)
+```
+
+## Visualization
+
+We randomly visualize some regions with co-occupied motifs (FDR < 0.1).
+
+
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+index_sig <- which(df_close$fdr < 0.05)
+
+set.seed(1)
+index_sig <- index_sig[sample(x = 1:length(index_sig),size = 15,replace = F)]
+
+out_dir="/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1/"
+sample_name="LCL_18508"
+
+for (i in 1:length(index_sig)){
+
+  sig_pair <- df_close$id[index_sig[i]]
+
+  index <- which(df_close$id == sig_pair)
+
+
+  test_range_str <- paste0(df_final$chr[index],":",df_final$start[index],"-",df_final$end[index])
+  plot_name=paste0(TF1,"_pairs_",sample_name, "_", test_range_str)
+  result_dir = paste0(out_dir, "/", plot_name, "/parsed")
+
+  region <- get_region(result_dir)
+  subtitle <- sprintf("%s:%s-%s", region$chr, region$start, region$end)
+
+  print(subtitle)
+
+  df_close_region <- df_close[index,]
+  start_motif1 <- df_close_region$motif1_start
+  end_motif1   <- df_close_region$motif1_end
+
+  start_motif2 <- df_close_region$motif2_start
+  end_motif2   <- df_close_region$motif2_end
+
+  highlight_windows.df <- data.frame(start = c(start_motif1 - 7, start_motif2 -7 ),
+                                     end = c(end_motif1 + 7, end_motif2 +7))
+
+
+  res <- plot_region_reads(result_dir,
+                           filter_fire_reads = FALSE,
+                           cover_region_only = FALSE,
+                           cluster_reads = TRUE,
+                           select_A_only = TRUE,
+                           split_haplotype = FALSE,
+                           highlight_window = highlight_windows.df,
+                           color_highlight_window = "#ade6b3",
+                           plot_name = plot_name,
+                           subtitle = subtitle)
+
+  gg <- res$gg
+
+  print(cowplot::plot_grid(
+    gg$pileup,
+    gg$dimelo_reads,
+    gg$fire_fdr,
+    gg$fire_reads,
+    gg$fiberHMM,
+    ncol = 1,
+    rel_heights = c(4,8,2,8,8),
+    align = "v",
+    axis = "b"
+  ))
+
+  print(FET_matrix[[index]])
+  print(FET_res[[index]])
+
+}
+
+
+
+# plots_select <- plots[index_sig]
+# FET_matrix_select <- FET_matrix[index_sig]
+# FET_res_select <- FET_res[index_sig]
+# for (i in 1:length(plots_select)){
+#   
+#   gg <- plots_select[[i]]
+#   
+#   print(cowplot::plot_grid(
+#     gg$pileup,
+#     gg$dimelo_reads,
+#     gg$fire_fdr,
+#     gg$fire_reads,
+#     gg$fiberHMM,
+#     ncol = 1,
+#     rel_heights = c(4,8,2,8,8),
+#     align = "v",
+#     axis = "b"
+#   ))
+#   
+#   print(FET_matrix_select[[i]])
+#   print(FET_res_select[[i]])
+#   
+# 
+# }
+
+```
+
+
+
+
+
+
