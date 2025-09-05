@@ -16,4 +16,6 @@ TF examples
 
 TF Co-accessibility
 
+* [NRF1 pairs](TF_co-acc_NRF1_pairs.html)
+
 * [NRF1 & SP1](TF_co-acc_NRF1_SP1.html)
