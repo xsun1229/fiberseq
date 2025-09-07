@@ -161,11 +161,11 @@ Last, we did FET
 ```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
 
 
-FET_or <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_or.RDS")
-FETp <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FETp.RDS")
+FET_or <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FET_or.RDS")
+FETp <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FETp.RDS")
 #plots <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/plots_naremoved2.RDS")
-FET_matrix <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_matrix.RDS")
-FET_res <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_res.RDS")
+FET_matrix <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FET_matrix.RDS")
+FET_res <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FET_res.RDS")
 
 FET_res_all <- data.frame(pair_region = names(FETp), FET_pvalues = FETp, FET_oddratio = FET_or)
 FET_res_all$fdr <- p.adjust(FET_res_all$FET_pvalues, method = "fdr")
@@ -406,6 +406,7 @@ for (i in 1:length(index_sig)){
   subtitle <- sprintf("%s:%s-%s", region$chr, region$start, region$end)
 
   print(subtitle)
+  print(sig_pair)
 
   df_close_region <- df_close[index,]
   start_motif1 <- df_close_region$motif1_start

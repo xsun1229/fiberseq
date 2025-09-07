@@ -410,7 +410,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2025-09-05
+<strong>Last updated:</strong> 2025-09-07
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -448,10 +448,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -544,15 +544,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreea4e0dbbccd49e1fd1fb4c3bf08749a2f80b5ebabtargetblanka4e0dbba">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree8cee84087f95aa13f09bb1fbdba447d04bbe9287targetblank8cee840a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/xsun1229/fiberseq/tree/a4e0dbbccd49e1fd1fb4c3bf08749a2f80b5ebab" target="_blank">a4e0dbb</a>
+<a href="https://github.com/xsun1229/fiberseq/tree/8cee84087f95aa13f09bb1fbdba447d04bbe9287" target="_blank">8cee840</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreea4e0dbbccd49e1fd1fb4c3bf08749a2f80b5ebabtargetblanka4e0dbba"
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree8cee84087f95aa13f09bb1fbdba447d04bbe9287targetblank8cee840a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -562,7 +562,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/xsun1229/fiberseq/tree/a4e0dbbccd49e1fd1fb4c3bf08749a2f80b5ebab" target="_blank">a4e0dbb</a>.
+<a href="https://github.com/xsun1229/fiberseq/tree/8cee84087f95aa13f09bb1fbdba447d04bbe9287" target="_blank">8cee840</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -576,11 +576,11 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-Untracked files:
-    Untracked:  analysis/TF_co-acc_NRF1_pairs.Rmd
+Ignored files:
+    Ignored:    analysis/figure/
 
 Unstaged changes:
-    Deleted:    analysis/TF_co-acc_NRF1_SP1_400800apart.Rmd
+    Modified:   analysis/TF_co-acc_NRF1_pairs.Rmd
 
 </code></pre>
 <p>
@@ -595,10 +595,74 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/TF_co-acc_NRF1_pairs.Rmd</code>)
+and HTML (<code>docs/TF_co-acc_NRF1_pairs.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/analysis/TF_co-acc_NRF1_pairs.Rmd" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/TF_co-acc_NRF1_pairs.html" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+<td>
+update
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -744,11 +808,11 @@ presence or absence of footprints for the two TFs was counted.</p>
 <p>Last, we did FET</p>
 <div id="co-occupied-rate" class="section level2">
 <h2>Co-occupied rate</h2>
-<pre class="r"><code>FET_or &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_or.RDS&quot;)
-FETp &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FETp.RDS&quot;)
+<pre class="r"><code>FET_or &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FET_or.RDS&quot;)
+FETp &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FETp.RDS&quot;)
 #plots &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/plots_naremoved2.RDS&quot;)
-FET_matrix &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_matrix.RDS&quot;)
-FET_res &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_res.RDS&quot;)
+FET_matrix &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FET_matrix.RDS&quot;)
+FET_res &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FET_res.RDS&quot;)
 
 FET_res_all &lt;- data.frame(pair_region = names(FETp), FET_pvalues = FETp, FET_oddratio = FET_or)
 FET_res_all$fdr &lt;- p.adjust(FET_res_all$FET_pvalues, method = &quot;fdr&quot;)
@@ -871,6 +935,43 @@ p2 &lt;- ggplot(rates_df, aes(x = bin, y = cooccupancy_rate)) +
 
 grid.arrange(p1, p2, ncol = 2)</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-6-1.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Using <code>FET p-value &lt; 0.05</code> as cutoff,</p>
 <p>The co-occupancy rate for the pairs:</p>
 <pre class="r"><code># summary for the three sub-bins
@@ -955,6 +1056,43 @@ p2 &lt;- ggplot(rates_df, aes(x = bin, y = cooccupancy_rate)) +
 
 grid.arrange(p1, p2, ncol = 2)</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-7-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-7-1.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="visualization" class="section level2">
 <h2>Visualization</h2>
@@ -983,6 +1121,7 @@ for (i in 1:length(index_sig)){
   subtitle &lt;- sprintf(&quot;%s:%s-%s&quot;, region$chr, region$start, region$end)
 
   print(subtitle)
+  print(sig_pair)
 
   df_close_region &lt;- df_close[index,]
   start_motif1 &lt;- df_close_region$motif1_start
@@ -1025,10 +1164,48 @@ for (i in 1:length(index_sig)){
 
 }</code></pre>
 <pre><code>[1] &quot;chr2:27134098-27135200&quot;
+[1] &quot;site3293-site3296&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 43 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-1.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE    21    0
@@ -1046,10 +1223,48 @@ odds ratio
        Inf 
 
 [1] &quot;chr1:202888598-202889800&quot;
+[1] &quot;site2283-site2285&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 35 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-2.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-2">
+Past versions of unnamed-chunk-8-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-2.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE    14    6
@@ -1067,10 +1282,48 @@ odds ratio
        Inf 
 
 [1] &quot;chr19:43595598-43596900&quot;
+[1] &quot;site29469-site29470&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 39 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-3.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-3">
+Past versions of unnamed-chunk-8-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-3.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE    10    4
@@ -1088,10 +1341,48 @@ odds ratio
   44.26493 
 
 [1] &quot;chr10:27099898-27101100&quot;
+[1] &quot;site16507-site16510&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 36 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-4.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-4">
+Past versions of unnamed-chunk-8-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-4.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE    15    0
@@ -1109,10 +1400,48 @@ odds ratio
        Inf 
 
 [1] &quot;chr3:52197498-52198700&quot;
+[1] &quot;site5868-site5870&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 32 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-5.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-5">
+Past versions of unnamed-chunk-8-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-5.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE    25    0
@@ -1130,10 +1459,48 @@ odds ratio
        Inf 
 
 [1] &quot;chr3:196431898-196433100&quot;
+[1] &quot;site6899-site6900&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 36 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-6.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-6">
+Past versions of unnamed-chunk-8-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-6.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE     9    2
@@ -1151,10 +1518,48 @@ odds ratio
   19.74757 
 
 [1] &quot;chr6:152983098-152984200&quot;
+[1] &quot;site11381-site11383&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 23 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-7.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-7">
+Past versions of unnamed-chunk-8-7.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-7.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE     8    0
@@ -1172,10 +1577,48 @@ odds ratio
        Inf 
 
 [1] &quot;chr13:50081598-50082700&quot;
+[1] &quot;site21232-site21233&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 29 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-8.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-8">
+Past versions of unnamed-chunk-8-8.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-8.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE    10    0
@@ -1193,10 +1636,48 @@ odds ratio
        Inf 
 
 [1] &quot;chr6:152983098-152984200&quot;
+[1] &quot;site11381-site11384&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 23 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-9.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-9">
+Past versions of unnamed-chunk-8-9.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-9" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-9.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE     8    0
@@ -1214,10 +1695,48 @@ odds ratio
        Inf 
 
 [1] &quot;chr19:50357998-50359100&quot;
+[1] &quot;site29803-site29804&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 32 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-10.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-10">
+Past versions of unnamed-chunk-8-10.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-10" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-10.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE    24    2
@@ -1235,10 +1754,48 @@ odds ratio
        Inf 
 
 [1] &quot;chr6:152983098-152984200&quot;
+[1] &quot;site11382-site11384&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 23 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-11.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-11">
+Past versions of unnamed-chunk-8-11.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-11" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-11.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE     8    0
@@ -1256,10 +1813,48 @@ odds ratio
        Inf 
 
 [1] &quot;chr10:122878998-122880300&quot;
+[1] &quot;site17440-site17441&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 51 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-12.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-12">
+Past versions of unnamed-chunk-8-12.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-12" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-12.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE    29    1
@@ -1277,10 +1872,48 @@ odds ratio
   91.04373 
 
 [1] &quot;chr3:52197498-52198700&quot;
+[1] &quot;site5868-site5869&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 32 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-13.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-13">
+Past versions of unnamed-chunk-8-13.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-13" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-13.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE    25    0
@@ -1298,10 +1931,48 @@ odds ratio
        Inf 
 
 [1] &quot;chr10:27099898-27101100&quot;
+[1] &quot;site16507-site16509&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 36 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-14.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-14">
+Past versions of unnamed-chunk-8-14.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-14" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-14.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE    15    0
@@ -1319,10 +1990,48 @@ odds ratio
        Inf 
 
 [1] &quot;chr19:14529298-14530400&quot;
+[1] &quot;site28710-site28711&quot;
 Load region from regions.processed.bed 
 Load fiberHMM_res from subset_FiberHMM.bed 
 34 reads.</code></pre>
 <p><img src="figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-15.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-15">
+Past versions of unnamed-chunk-8-15.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-15" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0fc1cde9ea79d8bc10afdb2e105759f27827b35f/docs/figure/TF_co-acc_NRF1_pairs.Rmd/unnamed-chunk-8-15.png" target="_blank">0fc1cde</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2025-09-05
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre><code>       TF2
 TF1     FALSE TRUE
   FALSE    19    3
@@ -1394,31 +2103,31 @@ other attached packages:
 [16] reshape2_1.4.4       data.table_1.14.2   
 
 loaded via a namespace (and not attached):
- [1] httr_1.4.3             sass_0.4.1             jsonlite_1.8.0        
- [4] modelr_0.1.8           bslib_0.3.1            assertthat_0.2.1      
- [7] highr_0.9              GenomeInfoDbData_1.2.8 cellranger_1.1.0      
-[10] yaml_2.3.5             pillar_1.9.0           backports_1.4.1       
-[13] glue_1.6.2             digest_0.6.29          promises_1.2.0.1      
-[16] XVector_0.36.0         rvest_1.0.2            colorspace_2.0-3      
-[19] cowplot_1.1.1          htmltools_0.5.2        httpuv_1.6.5          
-[22] plyr_1.8.7             pkgconfig_2.0.3        broom_0.8.0           
-[25] haven_2.5.0            zlibbioc_1.42.0        scales_1.3.0          
-[28] later_1.3.0            tzdb_0.4.0             git2r_0.30.1          
-[31] farver_2.1.0           generics_0.1.2         ellipsis_0.3.2        
-[34] DT_0.22                withr_2.5.0            cli_3.6.1             
-[37] magrittr_2.0.3         crayon_1.5.1           readxl_1.4.0          
-[40] evaluate_0.15          fs_1.5.2               fansi_1.0.3           
-[43] xml2_1.3.3             tools_4.2.0            hms_1.1.1             
-[46] lifecycle_1.0.4        munsell_0.5.0          reprex_2.0.1          
-[49] compiler_4.2.0         jquerylib_0.1.4        rlang_1.1.2           
-[52] grid_4.2.0             RCurl_1.98-1.7         rstudioapi_0.13       
-[55] htmlwidgets_1.5.4      crosstalk_1.2.0        labeling_0.4.2        
-[58] bitops_1.0-7           rmarkdown_2.25         gtable_0.3.0          
-[61] DBI_1.2.2              R6_2.5.1               lubridate_1.8.0       
-[64] knitr_1.39             fastmap_1.1.0          utf8_1.2.2            
-[67] workflowr_1.7.0        rprojroot_2.0.3        stringi_1.7.6         
-[70] Rcpp_1.0.12            vctrs_0.6.5            dbplyr_2.1.1          
-[73] tidyselect_1.2.0       xfun_0.41             </code></pre>
+ [1] bitops_1.0-7           fs_1.5.2               lubridate_1.8.0       
+ [4] httr_1.4.3             rprojroot_2.0.3        tools_4.2.0           
+ [7] backports_1.4.1        bslib_0.3.1            utf8_1.2.2            
+[10] R6_2.5.1               DT_0.22                DBI_1.2.2             
+[13] colorspace_2.0-3       withr_2.5.0            tidyselect_1.2.0      
+[16] compiler_4.2.0         git2r_0.30.1           cli_3.6.1             
+[19] rvest_1.0.2            xml2_1.3.3             labeling_0.4.2        
+[22] sass_0.4.1             scales_1.3.0           digest_0.6.29         
+[25] rmarkdown_2.25         XVector_0.36.0         pkgconfig_2.0.3       
+[28] htmltools_0.5.2        dbplyr_2.1.1           fastmap_1.1.0         
+[31] highr_0.9              htmlwidgets_1.5.4      rlang_1.1.2           
+[34] readxl_1.4.0           rstudioapi_0.13        jquerylib_0.1.4       
+[37] generics_0.1.2         farver_2.1.0           jsonlite_1.8.0        
+[40] crosstalk_1.2.0        RCurl_1.98-1.7         magrittr_2.0.3        
+[43] GenomeInfoDbData_1.2.8 Rcpp_1.0.12            munsell_0.5.0         
+[46] fansi_1.0.3            lifecycle_1.0.4        stringi_1.7.6         
+[49] whisker_0.4            yaml_2.3.5             zlibbioc_1.42.0       
+[52] plyr_1.8.7             grid_4.2.0             promises_1.2.0.1      
+[55] crayon_1.5.1           haven_2.5.0            cowplot_1.1.1         
+[58] hms_1.1.1              knitr_1.39             pillar_1.9.0          
+[61] reprex_2.0.1           glue_1.6.2             evaluate_0.15         
+[64] modelr_0.1.8           vctrs_0.6.5            tzdb_0.4.0            
+[67] httpuv_1.6.5           cellranger_1.1.0       gtable_0.3.0          
+[70] assertthat_0.2.1       xfun_0.41              broom_0.8.0           
+[73] later_1.3.0            workflowr_1.7.0        ellipsis_0.3.2        </code></pre>
 </div>
 </div>
 </div>
