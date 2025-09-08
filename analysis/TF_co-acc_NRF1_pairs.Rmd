@@ -61,7 +61,8 @@ gr_motif <- GRanges(
   seqnames = motif_sites$chr,
   ranges   = IRanges(start = motif_sites$start + 100,
                      end   = motif_sites$end   - 100),
-  site     = motif_sites$name
+  site     = motif_sites$name,
+  strand   = motif_sites$strand  # Add strand information
 )
 
 # Distance cutoffs
@@ -81,7 +82,7 @@ keep <- q < s
 q <- q[keep]; s <- s[keep]
 
 # Distances
-d <- distance(gr_motif[q], gr_motif[s])
+d <- distance(gr_motif[q], gr_motif[s],ignore.strand = TRUE,)
 
 # Filter by [small, large]
 sel <- d >= dist_cutoff_small & d <= dist_cutoff_large
@@ -93,12 +94,15 @@ df_close <- data.frame(
   motif1_start = start(gr_motif[q]),
   motif1_end   = end(gr_motif[q]),
   motif1_site  = gr_motif[q]$site,
+  motif1_strand= as.character(strand(gr_motif[q])),  # motif1 strand
   motif2_start = start(gr_motif[s]),
   motif2_end   = end(gr_motif[s]),
   motif2_site  = gr_motif[s]$site,
+  motif2_strand= as.character(strand(gr_motif[s])),  # motif2 strand
   distance     = as.integer(d)
 )
 
+df_close$same_strand <- df_close$motif1_strand == df_close$motif2_strand
 df_close$id <- paste0(df_close$motif1_site,"-", df_close$motif2_site)
 
 DT::datatable(df_close,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Motif pairs kept'),options = list(pageLength = 5) )
@@ -150,7 +154,7 @@ For visualization, highlighted windows are the ones `±7 bp` around each motif.
 
 To determine whether a TF has a footprint, footprint data were extracted from `res$fiberHMM_fps_infire`. 
 
-Footprints were retained if they (1) had a FiberHMM footprint size <40 bp and (2) overlapped with the highlighted motif windows. 
+Footprints were retained if they (1) had a FiberHMM footprint size < 60 bp and (2) overlapped with the highlighted motif windows. 
 
 Next, reads covering both motif regions were extracted, and the presence or absence of footprints for the two TFs was counted.
 
@@ -161,11 +165,11 @@ Last, we did FET
 ```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
 
 
-FET_or <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FET_or.RDS")
-FETp <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FETp.RDS")
+FET_or <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_or.RDS")
+FETp <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FETp.RDS")
 #plots <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/plots_naremoved2.RDS")
-FET_matrix <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FET_matrix.RDS")
-FET_res <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/tmp/FET_res.RDS")
+FET_matrix <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_matrix.RDS")
+FET_res <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_pairs/FET_res.RDS")
 
 FET_res_all <- data.frame(pair_region = names(FETp), FET_pvalues = FETp, FET_oddratio = FET_or)
 FET_res_all$fdr <- p.adjust(FET_res_all$FET_pvalues, method = "fdr")
@@ -185,6 +189,7 @@ df_close$fdr <- round(df_close$fdr, digits = 4)
 
 print(paste0("total pairs = ", nrow(FET_res_all)))
 
+df_close$log2OR <- log2(df_close$FET_oddratio)
 
 DT::datatable(df_close,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','FET results for the TF pairs'),options = list(pageLength = 5) )
 
@@ -291,7 +296,6 @@ p2 <- ggplot(rates_df, aes(x = bin, y = cooccupancy_rate)) +
 grid.arrange(p1, p2, ncol = 2)
 ```
 
-
 Using `FET p-value < 0.05` as cutoff, 
 
 The co-occupancy rate for the pairs: 
@@ -376,6 +380,68 @@ p2 <- ggplot(rates_df, aes(x = bin, y = cooccupancy_rate)) +
 grid.arrange(p1, p2, ncol = 2)
 ```
 
+
+```{r message=FALSE,warning=FALSE, fig.height=4, fig.width=10}
+
+bin_labels <- paste(seq(10, 130, by = 10), seq(20, 140, by = 10), sep = "-")
+
+df_filtered_samestrand <- df_filtered[df_filtered$same_strand == T,]
+
+df_binned <- df_filtered_samestrand %>%
+  mutate(
+    bin = cut(
+      distance,
+      breaks = seq(10, 140, by = 10),
+      include.lowest = TRUE,
+      right = TRUE,
+      labels = bin_labels
+    ),
+    log_or = log2(FET_oddratio)  # natural log odds ratio
+  ) %>%
+  filter(!is.na(bin), is.finite(log_or))
+
+# Boxplot of log-OR by bin
+ggplot(df_binned, aes(x = bin, y = log_or)) +
+  geom_boxplot(fill = "skyblue", alpha = 0.7, outlier.size = 1) +
+  theme_minimal(base_size = 14) +
+  labs(
+    x = "Distance Bin (bp)",
+    y = "log2(Odds Ratio)",
+    title = "The pairs are on same strand"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+df_filtered_diffstrand <- df_filtered[df_filtered$same_strand == F,]
+
+df_binned <- df_filtered_diffstrand %>%
+  mutate(
+    bin = cut(
+      distance,
+      breaks = seq(10, 140, by = 10),
+      include.lowest = TRUE,
+      right = TRUE,
+      labels = bin_labels
+    ),
+    log_or = log2(FET_oddratio)  # natural log odds ratio
+  ) %>%
+  filter(!is.na(bin), is.finite(log_or))
+
+# Boxplot of log-OR by bin
+ggplot(df_binned, aes(x = bin, y = log_or)) +
+  geom_boxplot(fill = "skyblue", alpha = 0.7, outlier.size = 1) +
+  theme_minimal(base_size = 14) +
+  labs(
+    x = "Distance Bin (bp)",
+    y = "log2(Odds Ratio)",
+    title = "The pairs are on different strands"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+
+
 ## Visualization
 
 We randomly visualize some regions with co-occupied motifs (FDR < 0.1).
@@ -387,6 +453,8 @@ index_sig <- which(df_close$fdr < 0.05)
 
 set.seed(1)
 index_sig <- index_sig[sample(x = 1:length(index_sig),size = 15,replace = F)]
+index_highlight <- which(df_close$id == "site17440-site17441")
+index_sig <- c(index_highlight,index_sig)
 
 out_dir="/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1/"
 sample_name="LCL_18508"
