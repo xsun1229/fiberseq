@@ -21,6 +21,30 @@ source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/process_fiberseq_data.R"
 source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/plots.R")
 
 TF1 <- "NRF1"
+
+plot_binned_boxplot <- function(df, strand_label, breaks, labels, right = TRUE, step_label = "10bp") {
+  df %>%
+    mutate(
+      bin = cut(
+        distance,
+        breaks = breaks,
+        include.lowest = TRUE,
+        right = right,
+        labels = labels
+      ),
+      log_or = log2(FET_oddratio)
+    ) %>%
+    filter(!is.na(bin), is.finite(log_or)) %>%
+    ggplot(aes(x = bin, y = log_or)) +
+    geom_boxplot(fill = "skyblue", alpha = 0.7, outlier.size = 1) +
+    theme_minimal(base_size = 14) +
+    labs(
+      x = glue::glue("Distance Bin ({step_label})"),
+      y = "log2(Odds Ratio)",
+      title = glue::glue("The pairs are on {strand_label} strand")
+    ) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
 ```
 
 
@@ -383,59 +407,32 @@ grid.arrange(p1, p2, ncol = 2)
 
 ```{r message=FALSE,warning=FALSE, fig.height=4, fig.width=10}
 
-bin_labels <- paste(seq(10, 130, by = 10), seq(20, 140, by = 10), sep = "-")
+# 10-bp bins
+bin_breaks_10 <- seq(10, 140, by = 10)
+bin_labels_10 <- paste(seq(10, 130, by = 10), seq(20, 140, by = 10), sep = "-")
 
-df_filtered_samestrand <- df_filtered[df_filtered$same_strand == T,]
+# 1-bp bins
+bin_breaks_1 <- seq(14, 31, by = 1)
+bin_labels_1 <- paste0(seq(14, 30, by = 1), "bp")
 
-df_binned <- df_filtered_samestrand %>%
-  mutate(
-    bin = cut(
-      distance,
-      breaks = seq(10, 140, by = 10),
-      include.lowest = TRUE,
-      right = TRUE,
-      labels = bin_labels
-    ),
-    log_or = log2(FET_oddratio)  # natural log odds ratio
-  ) %>%
-  filter(!is.na(bin), is.finite(log_or))
+# ---- Filter data ----
+df_same <- df_filtered %>% filter(same_strand)
+df_diff <- df_filtered %>% filter(!same_strand)
 
-# Boxplot of log-OR by bin
-ggplot(df_binned, aes(x = bin, y = log_or)) +
-  geom_boxplot(fill = "skyblue", alpha = 0.7, outlier.size = 1) +
-  theme_minimal(base_size = 14) +
-  labs(
-    x = "Distance Bin (bp)",
-    y = "log2(Odds Ratio)",
-    title = "The pairs are on same strand"
-  ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# ---- Generate plots ----
+# Same strand
+p_same_10 <- plot_binned_boxplot(df_same, "same", bin_breaks_10, bin_labels_10, right = TRUE, step_label = "10bp")
+p_same_1  <- plot_binned_boxplot(df_same, "same", bin_breaks_1, bin_labels_1, right = FALSE, step_label = "1bp")
 
-df_filtered_diffstrand <- df_filtered[df_filtered$same_strand == F,]
+# Different strand
+p_diff_10 <- plot_binned_boxplot(df_diff, "different", bin_breaks_10, bin_labels_10, right = TRUE, step_label = "10bp")
+p_diff_1  <- plot_binned_boxplot(df_diff, "different", bin_breaks_1, bin_labels_1, right = FALSE, step_label = "1bp")
 
-df_binned <- df_filtered_diffstrand %>%
-  mutate(
-    bin = cut(
-      distance,
-      breaks = seq(10, 140, by = 10),
-      include.lowest = TRUE,
-      right = TRUE,
-      labels = bin_labels
-    ),
-    log_or = log2(FET_oddratio)  # natural log odds ratio
-  ) %>%
-  filter(!is.na(bin), is.finite(log_or))
+p_same_10
+p_diff_10
 
-# Boxplot of log-OR by bin
-ggplot(df_binned, aes(x = bin, y = log_or)) +
-  geom_boxplot(fill = "skyblue", alpha = 0.7, outlier.size = 1) +
-  theme_minimal(base_size = 14) +
-  labs(
-    x = "Distance Bin (bp)",
-    y = "log2(Odds Ratio)",
-    title = "The pairs are on different strands"
-  ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+p_same_1
+p_diff_1
 
 ```
 
