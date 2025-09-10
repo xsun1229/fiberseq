@@ -453,7 +453,7 @@ index_sig <- index_sig[sample(x = 1:length(index_sig),size = 15,replace = F)]
 index_highlight <- which(df_close$id == "site17440-site17441")
 index_sig <- c(index_highlight,index_sig)
 
-out_dir="/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1/"
+out_dir="/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1_pairs/"
 sample_name="LCL_18508"
 
 for (i in 1:length(index_sig)){
