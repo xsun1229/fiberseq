@@ -1,0 +1,421 @@
+---
+title: "Checking how CpG methylation affects TF binding"
+author: "XSun"
+date: "2025-09-12"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+library(data.table)
+library(reshape2)
+library(GenomicRanges)
+library(ggplot2)
+library(tidyverse)
+library(gridExtra)
+library(Biostrings)
+
+source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/process_fiberseq_data.R")
+source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/plots.R")
+
+DT::datatable(matrix())
+```
+
+We check how CpG methylation affects TF binding here. 
+
+We focus on the regions that only contains one NRF1 motif site.
+
+# Motif sites with CpG position and methylation
+
+```{r message=FALSE,warning=FALSE, fig.height=5, fig.width=5}
+
+TF1 <- "NRF1"
+
+motif_sites <- readRDS(file.path(
+  "/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs",
+  paste0(TF1, ".GM12878.sites.chip.labels.rds"))
+) %>% filter(chip_label == 1, !is.na(start))
+
+rid_motifsite_mat <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_singleton_cpg/rid_motifsite_mat.RDS")
+rid_motifsite_combined  <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_singleton_cpg/rid_motifsite_combined.RDS")
+rid_motifsite_methy <- readRDS("/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_singleton_cpg/rid_motifsite_methy.RDS")
+
+num_cols_with_cpg_all <- c()
+sites_all <- c()
+num_cols_with_methy_all <- c()
+num_cpgs_with_methy_all <- c()
+for (i in 1:length(rid_motifsite_methy)) {
+  
+  site <- names(rid_motifsite_methy)[i]
+  sites_all <- c(sites_all, site)
+  
+  mat_cpg_position <- rid_motifsite_mat[[i]]
+  num_cols_with_cpg <- sum(colSums(!is.na(mat_cpg_position)) > 0)
+  num_cols_with_cpg_all <- c(num_cols_with_cpg_all, num_cols_with_cpg)
+  
+  mat_methy <- rid_motifsite_methy[[i]]
+  num_cols_with_methy <- sum(colSums(!is.na(mat_methy)) > 0)
+  num_cols_with_methy_all <- c(num_cols_with_methy_all, num_cols_with_methy)
+  
+  mat_combined <- rid_motifsite_combined[[i]]
+  num_cpgs_with_methy <- sum(colSums(mat_combined == "mCpG", na.rm = TRUE) > 0)
+  num_cpgs_with_methy_all <- c(num_cpgs_with_methy_all,num_cpgs_with_methy)
+  
+  
+}
+
+
+df <- data.frame(site = sites_all, num_cpg_position = num_cols_with_cpg_all,
+                 num_position_with_methy = num_cols_with_methy_all, num_cpgs_with_methy = num_cpgs_with_methy_all)
+
+df <- merge(df, motif_sites, by.x = "site", by.y = "name")
+df <- df[order(as.numeric(sub("site", "", df$site))), ]
+
+DT::datatable(df,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Motif sites with CpG position and methylation'),options = list(pageLength = 10) )
+
+hist(as.numeric(df$num_cpg_position), main = "Histogram of number of \n CpG positions in a motif site", xlab = "# of CpGs")
+
+```
+
+
+# Examples
+
+We illustrate the workflow using several examples.
+
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+gr_motif <- GRanges(
+  seqnames = motif_sites$chr,
+  ranges   = IRanges(start = motif_sites$start + 100,
+                     end   = motif_sites$end   - 100),
+  site     = motif_sites$name
+)
+
+# ---- Find motif pairs ----
+dist_cutoff_large <- 300L
+dist_cutoff_small <- 0L
+
+hits <- findOverlaps(gr_motif, gr_motif, ignore.strand = TRUE, maxgap = dist_cutoff_large)
+q <- queryHits(hits); s <- subjectHits(hits)
+
+keep <- q < s
+q <- q[keep]; s <- s[keep]
+d <- distance(gr_motif[q], gr_motif[s])
+
+sel <- d >= dist_cutoff_small & d <= dist_cutoff_large
+q <- q[sel]; s <- s[sel]; d <- d[sel]
+
+df_close <- data.frame(
+  motif1_site  = gr_motif[q]$site,
+  motif2_site  = gr_motif[s]$site,
+  distance     = as.integer(d)
+)
+
+# ---- Motifs involved in "close" pairs ----
+motifs_with_neighbors <- unique(c(df_close$motif1_site, df_close$motif2_site))
+
+# ---- Opposite case: motifs without neighbors ----
+singleton_motifs <- motif_sites %>%
+  filter(!(name %in% motifs_with_neighbors))
+
+df_final <- singleton_motifs %>%
+  group_by(chr, name, start, end) %>%
+  ungroup() %>%
+  transmute(
+    chr,
+    start = floor(start / 100) * 100 - 500,
+    end   = ceiling(end / 100) * 100 + 500
+  ) %>%
+  mutate(chr_num = as.numeric(gsub("chr", "", chr))) %>%
+  arrange(chr_num, start) %>%
+  select(-chr_num)
+
+
+df_final$id <- paste0(df_final$chr,"-", df_final$start, "-",df_final$end)
+df_final <- df_final[!duplicated(df_final$id),]
+
+```
+
+
+```{r results='asis',message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+
+out_dir="/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1_singleton/"
+sample_name="LCL_18508"
+
+
+sites_selected <- c("site185","site638","site871")
+
+
+for (site in sites_selected){
+  
+  index_region <- which(singleton_motifs$name == site)
+  
+  test_range_str <- paste0(df_final$chr[index_region],":",df_final$start[index_region],"-",df_final$end[index_region])
+  plot_name <- paste0(TF1,"_pairs_",sample_name,"_",test_range_str)
+  result_dir <- paste0(out_dir, "/", plot_name, "/parsed")
+  
+  region <- get_region(result_dir)
+  subtitle <- sprintf("%s:%s-%s", region$chr, region$start, region$end)
+  
+  # motif coordinates
+  start <- singleton_motifs$start[index_region] + 100
+  end   <- singleton_motifs$end[index_region] -100
+  
+  region_plot <- list(chr = df_final$chr[index_region],
+                    start = start - 150,
+                    end = end + 150)
+  
+  res <- get_region_result(result_dir,
+                                    filter_fire_reads = FALSE,
+                                    cover_region_only = FALSE,
+                                    select_A_only = FALSE,
+                                    split_haplotype = FALSE,
+                                    highlight_window = data.frame(start=c(start), end=c(end)),
+                                    color_highlight_window = "#44d6d8ff",
+                                    plot_name = plot_name,
+                                    region = region_plot,
+                                    # cluster = "fiberHMM",
+                                    # cluster_class = c("< 40bp", "40-60bp"),
+                                    # cluster_regions = cluster_regions,
+                                    subtitle = subtitle)
+  
+  gg <- res$gg
+  
+  print(cowplot::plot_grid(
+    gg$pileup,
+    gg$dimelo_reads,
+    gg$fire_fdr,
+    gg$fire_reads,
+    gg$fiberHMM,
+    ncol = 1,
+    rel_heights = c(4,8,2,8,8),
+    align = "v",
+    axis = "b"
+  ))
+  
+
+  cat("We identify CpG positions within this motif. The CpG positions are extracted from the corresponding .fa files. \n")
+  
+  cat("<br>")
+  cat(knitr::knit_print(DT::datatable(rid_motifsite_mat[[site]],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','CpG positions in the motif for each read'),options = list(pageLength = 10) )))
+  cat("<br>")
+  
+  cat("We then retrieve methylation information from res$read. \n")
+  
+  cat("<br>")
+  cat(knitr::knit_print(DT::datatable(rid_motifsite_methy[[site]],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Methylation quality score for each read'),options = list(pageLength = 10) )))
+  cat("<br>")
+  
+  cat("By combining the CpG position matrix with the methylation quality matrix, we annotate methylated sites as mCpG. A read is classified as mCpG if it contains at least one methylated CpG.")
+  
+  
+  cat("<br>")
+  cat(knitr::knit_print(DT::datatable(rid_motifsite_combined[[site]],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Methylation annotation for each read'),options = list(pageLength = 10) )))
+  cat("<br>")
+  
+  
+}
+
+
+
+```
+
+<!-- ## chr10:122879000-122880300 -->
+
+<!-- The first example is region chr10:122879500–122879700, focusing on the motif chr10:122879629–122879640. -->
+
+<!-- ```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10} -->
+<!-- library(data.table) -->
+<!-- library(reshape2) -->
+<!-- library(GenomicRanges) -->
+<!-- library(ggplot2) -->
+<!-- library(tidyverse) -->
+<!-- library(gridExtra) -->
+<!-- library(Biostrings) -->
+
+<!-- source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/process_fiberseq_data.R") -->
+<!-- source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/plots.R") -->
+
+<!-- test_range_str <- "chr10:122879000-122880300" -->
+<!-- plot_name <- "NRF1_pairs_LCL_18508_chr10:122879000-122880300" -->
+<!-- result_dir <- "/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1_pairs//NRF1_pairs_LCL_18508_chr10:122879000-122880300/parsed" -->
+
+<!-- region <- get_region(result_dir) -->
+<!-- subtitle <- sprintf("%s:%s-%s", region$chr, region$start, region$end) -->
+
+<!-- # motif coordinates -->
+<!-- start_motif1 <- 122879629 -->
+<!-- end_motif1   <- 122879640 -->
+
+<!-- region_plot <- list(chr ="chr10", -->
+<!--                     start = 122879500, -->
+<!--                     end = 122879800) -->
+
+<!-- res <- try(assemble_region_result(result_dir, -->
+<!--                        filter_fire_reads = FALSE, -->
+<!--                        cover_region_only = FALSE, -->
+<!--                        select_A_only = FALSE, -->
+<!--                        split_haplotype = FALSE, -->
+<!--                        highlight_window = data.frame(start=c(start_motif1), end=c(end_motif1)), -->
+<!--                        color_highlight_window = "#44d6d8ff", -->
+<!--                        plot_name = plot_name,region = region_plot, -->
+<!--                        subtitle = subtitle) -->
+<!--   ) -->
+
+<!-- gg <- res$gg -->
+
+<!-- print(cowplot::plot_grid( -->
+<!--   gg$pileup, -->
+<!--   gg$dimelo_reads, -->
+<!--   gg$fire_fdr, -->
+<!--   gg$fire_reads, -->
+<!--   gg$fiberHMM, -->
+<!--   ncol = 1, -->
+<!--   rel_heights = c(4,8,2,8,8), -->
+<!--   align = "v", -->
+<!--   axis = "b" -->
+<!-- )) -->
+
+
+<!-- ``` -->
+
+<!-- Next, we identify CpG positions within this motif. The CpG positions are extracted from the corresponding .fa files.  -->
+
+<!-- ```{r} -->
+<!-- seq_region <- readDNAStringSet(file.path(result_dir,"/region.fa")) -->
+<!-- dna_seq <- seq_region[[1]] -->
+<!-- cpg_rel_pos <- start(matchPattern("CG", dna_seq)) -->
+<!-- header <- names(seq_region)       # e.g. "chr10:122879000-122880300" -->
+<!-- parts <- strsplit(header, "[:-]")[[1]] -->
+<!-- chrom <- parts[1] -->
+<!-- region_start <- as.integer(parts[2]) -->
+<!-- cpg_df <- data.frame( -->
+<!--   chrom = chrom, -->
+<!--   position = region_start + cpg_rel_pos - 1 -->
+<!-- ) -->
+<!-- cpg_df_inmotif <- cpg_df[cpg_df$position >= start_motif1 & cpg_df$position <= end_motif1,] -->
+
+<!-- rid_motif1 <- as.character(res$rids_df$RID[res$rids_df$start <= end_motif1 & res$rids_df$end >= start_motif1]) -->
+
+<!-- rid_motifsite_mat <- matrix( -->
+<!--   NA,  -->
+<!--   nrow = length(rid_motif1),  -->
+<!--   ncol = length(start_motif1:end_motif1), -->
+<!--   dimnames = list(rid_motif1, as.character(start_motif1:end_motif1)) -->
+<!-- ) -->
+<!-- rid_motifsite_methy <- rid_motifsite_mat -->
+
+<!-- # Mark CpG positions -->
+<!-- rid_motifsite_mat[,colnames(rid_motifsite_mat) %in% as.character(cpg_df_inmotif$position)] <- "CpG" -->
+
+<!-- DT::datatable(rid_motifsite_mat,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','CpG positions in the motif for each read'),options = list(pageLength = 10) ) -->
+
+
+<!-- ``` -->
+
+
+<!-- We then retrieve methylation information from res$read. -->
+
+<!-- ```{r} -->
+
+<!-- # Fill methylation -->
+<!-- reads_cpg <- res$reads[res$reads$base == "CG",] -->
+<!-- reads_cpg$RID <- as.character(reads_cpg$RID) -->
+
+<!-- idx <- which(reads_cpg$RID %in% rownames(rid_motifsite_methy) & -->
+<!--                reads_cpg$ref_position %in% colnames(rid_motifsite_methy)) -->
+
+<!-- for (j in idx) { -->
+<!--   rid_motifsite_methy[reads_cpg$RID[j], as.character(reads_cpg$ref_position[j])] <- reads_cpg$mod_qual[j] -->
+<!-- } -->
+
+<!-- DT::datatable(rid_motifsite_methy,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Methylation quality score for each read'),options = list(pageLength = 10) ) -->
+
+<!-- stopifnot(identical(dimnames(rid_motifsite_methy), dimnames(rid_motifsite_mat))) -->
+
+<!-- ``` -->
+
+<!-- By combining the CpG position matrix with the methylation quality matrix, we annotate methylated sites as mCpG. A read is classified as mCpG if it contains at least one methylated CpG. -->
+
+<!-- ```{r} -->
+<!-- # Combine CpG & methylation -->
+<!-- rid_motifsite_combined <- ifelse( -->
+<!--   !is.na(rid_motifsite_methy) & !is.na(rid_motifsite_mat),  -->
+<!--   "mCpG", -->
+<!--   ifelse(!is.na(rid_motifsite_mat), "CpG", NA) -->
+<!-- ) -->
+
+<!-- DT::datatable(rid_motifsite_combined,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Methylation annotation for each read'),options = list(pageLength = 10) ) -->
+
+<!-- ``` -->
+
+<!-- If a read has at least one mCpG, we annotate this read as mCpG -->
+
+<!-- ```{r} -->
+<!-- RID_cpg <- data.frame( -->
+<!--   RID = rownames(rid_motifsite_combined), -->
+<!--   status = apply(rid_motifsite_combined, 1, function(x) { -->
+<!--     if ("mCpG" %in% x) "mCpG" -->
+<!--     else if (all(na.omit(x) == "CpG")) "CpG" -->
+<!--     else NA -->
+<!--   }), -->
+<!--   row.names = NULL -->
+<!-- ) -->
+
+<!-- DT::datatable(RID_cpg,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Methylation info for each read'),options = list(pageLength = 10) ) -->
+<!-- ``` -->
+
+<!-- This results in two groups of reads: those containing mCpG and those without methylation. We then compare footprint frequencies between the two groups. -->
+
+<!-- We restrict the analysis to reads without nucleosome footprints, since transcription factors cannot bind when the motif is occupied by a nucleosome. -->
+
+<!-- ```{r} -->
+<!-- fps <- res$fiberHMM_fps_infire -->
+<!-- fps_TF <- fps[fps$class %in% c("< 40bp", "40-60bp"),] -->
+<!-- fps_gr <- GRanges(fps_TF$chr, IRanges(fps_TF$start, fps_TF$end), strand=fps_TF$strand) -->
+<!-- mcols(fps_gr) <- fps_TF[, !(names(fps_TF) %in% c("chr","start","end","strand"))] -->
+
+<!-- hw <- GRanges(region$chr, IRanges(start_motif1, end_motif1)) -->
+<!-- fps_gr <- fps_gr[width(pintersect(fps_gr, hw)) > 0] -->
+<!-- rid_motif1_fp <- as.character(fps_gr$RID) -->
+
+<!-- fps <- res$fiberHMM_fps -->
+<!-- fps_nucl <- fps[fps$size %in% c("> 100bp", "60-100bp"),] -->
+<!-- fps_gr_nucl <- GRanges(fps_nucl$chr, IRanges(fps_nucl$fp_blockStarts, fps_nucl$fp_blockEnds)) -->
+<!-- mcols(fps_gr_nucl) <- fps_nucl[, !(names(fps_nucl) %in% c("chr","start","end"))] -->
+<!-- fps_gr_nucl <- fps_gr_nucl[width(pintersect(fps_gr_nucl, hw, ignore.strand = T)) > 0] -->
+<!-- rid_fps_nucl <- as.character(fps_gr_nucl$RID) -->
+
+<!-- # filter rid sets -->
+<!-- rid_motif1_without_nucl <- setdiff(rid_motif1, rid_fps_nucl) -->
+<!-- RIDs_overlap_both <- intersect(rid_motif1_without_nucl, RID_cpg$RID) -->
+
+<!-- RIDs_access.df <- data.frame( -->
+<!--   RID = RIDs_overlap_both, -->
+<!--   TF = RIDs_overlap_both %in% rid_motif1_fp, -->
+<!--   mCpG = RIDs_overlap_both %in% RID_cpg$RID[RID_cpg$status=="mCpG"] -->
+<!-- ) -->
+
+<!-- RIDs_access.df$TF <- factor(RIDs_access.df$TF, levels=c(FALSE, TRUE)) -->
+<!-- RIDs_access.df$mCpG <- factor(RIDs_access.df$mCpG, levels=c(FALSE, TRUE)) -->
+
+<!-- print(RIDs_access.df) -->
+
+<!-- contingency_table <- table(RIDs_access.df[,c("TF","mCpG")])  -->
+<!-- prop_col <- round(prop.table(contingency_table, margin = 2) * 100,2) -->
+
+<!-- print(contingency_table) -->
+<!-- print(prop_col) -->
+
+<!-- ``` -->
+
+
+
+
+
+
+
+
+

@@ -482,18 +482,24 @@ for (i in 1:length(index_sig)){
 
   highlight_windows.df <- data.frame(start = c(start_motif1 - 7, start_motif2 -7 ),
                                      end = c(end_motif1 + 7, end_motif2 +7))
-
-
-  res <- plot_region_reads(result_dir,
-                           filter_fire_reads = FALSE,
-                           cover_region_only = FALSE,
-                           cluster_reads = TRUE,
-                           select_A_only = TRUE,
-                           split_haplotype = FALSE,
-                           highlight_window = highlight_windows.df,
-                           color_highlight_window = "#ade6b3",
-                           plot_name = plot_name,
-                           subtitle = subtitle)
+  
+  # cluster_region <- data.frame(seqnames = region$chr, start = min(highlight_windows.df$start) -100, end = max(highlight_windows.df$end) + 100)
+  
+  cluster_regions <- highlight_windows.df
+  cluster_regions$chr <- region$chr
+  
+  res <- get_region_result(result_dir,
+                                    filter_fire_reads = FALSE,
+                                    cover_region_only = FALSE,
+                                    select_A_only = TRUE,
+                                    split_haplotype = FALSE,
+                                    highlight_window = highlight_windows.df,
+                                    color_highlight_window = "#44d6d8ff",
+                                    plot_name = plot_name,
+                                    cluster = "fiberHMM",
+                                    #cluster_class = c("< 40bp", "40-60bp"),
+                                    cluster_regions = cluster_regions,
+                                    subtitle = subtitle)
 
   gg <- res$gg
 

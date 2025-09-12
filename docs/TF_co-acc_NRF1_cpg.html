@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="XSun" />
+
+<meta name="date" content="2025-09-12" />
+
+<title>Checking how CpG methylation affects TF binding</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.22/datatables.js"></script>
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">fiberseq</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/xsun1229/fiberseq">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Checking how CpG methylation affects TF
+binding</h1>
+<h4 class="author">XSun</h4>
+<h4 class="date">2025-09-12</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2025-09-12
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>fiberseq/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250831code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250831)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250831code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250831)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree427886e029d0571428a35f6d6fe9eab1f77da9aftargetblank427886ea">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/xsun1229/fiberseq/tree/427886e029d0571428a35f6d6fe9eab1f77da9af" target="_blank">427886e</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree427886e029d0571428a35f6d6fe9eab1f77da9aftargetblank427886ea"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/xsun1229/fiberseq/tree/427886e029d0571428a35f6d6fe9eab1f77da9af" target="_blank">427886e</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Untracked files:
+    Untracked:  analysis/TF_co-acc_NRF1_cpg.Rmd
+
+Unstaged changes:
+    Modified:   analysis/TF_co-acc_NRF1_pairs.Rmd
+    Modified:   analysis/TF_co-acc_NRF1_pairs_cpg.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>library(data.table)
+library(reshape2)
+library(GenomicRanges)
+library(ggplot2)
+library(tidyverse)
+library(gridExtra)
+library(Biostrings)
+
+source(&quot;/project/spott/kevinluo/Fiber_seq/fiberhub/code/process_fiberseq_data.R&quot;)
+source(&quot;/project/spott/kevinluo/Fiber_seq/fiberhub/code/plots.R&quot;)
+
+DT::datatable(matrix())</code></pre>
+<div id="htmlwidget-55d484e2ce688c3024c2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"data":[[null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>V1<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>We check how CpG methylation affects TF binding here.</p>
+<p>We focus on the regions that only contains one NRF1 motif site.</p>
+<div id="motif-sites-with-cpg-position-and-methylation"
+class="section level1">
+<h1>Motif sites with CpG position and methylation</h1>
+<pre class="r"><code>TF1 &lt;- &quot;NRF1&quot;
+
+motif_sites &lt;- readRDS(file.path(
+  &quot;/project/spott/kevinluo/Fiber_seq/processed_data/hg38/TFs&quot;,
+  paste0(TF1, &quot;.GM12878.sites.chip.labels.rds&quot;))
+) %&gt;% filter(chip_label == 1, !is.na(start))
+
+rid_motifsite_mat &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_singleton_cpg/rid_motifsite_mat.RDS&quot;)
+rid_motifsite_combined  &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_singleton_cpg/rid_motifsite_combined.RDS&quot;)
+rid_motifsite_methy &lt;- readRDS(&quot;/project/xinhe/xsun/fiberseq/1.TFs/results/NRF1_singleton_cpg/rid_motifsite_methy.RDS&quot;)
+
+num_cols_with_cpg_all &lt;- c()
+sites_all &lt;- c()
+num_cols_with_methy_all &lt;- c()
+num_cpgs_with_methy_all &lt;- c()
+for (i in 1:length(rid_motifsite_methy)) {
+  
+  site &lt;- names(rid_motifsite_methy)[i]
+  sites_all &lt;- c(sites_all, site)
+  
+  mat_cpg_position &lt;- rid_motifsite_mat[[i]]
+  num_cols_with_cpg &lt;- sum(colSums(!is.na(mat_cpg_position)) &gt; 0)
+  num_cols_with_cpg_all &lt;- c(num_cols_with_cpg_all, num_cols_with_cpg)
+  
+  mat_methy &lt;- rid_motifsite_methy[[i]]
+  num_cols_with_methy &lt;- sum(colSums(!is.na(mat_methy)) &gt; 0)
+  num_cols_with_methy_all &lt;- c(num_cols_with_methy_all, num_cols_with_methy)
+  
+  mat_combined &lt;- rid_motifsite_combined[[i]]
+  num_cpgs_with_methy &lt;- sum(colSums(mat_combined == &quot;mCpG&quot;, na.rm = TRUE) &gt; 0)
+  num_cpgs_with_methy_all &lt;- c(num_cpgs_with_methy_all,num_cpgs_with_methy)
+  
+  
+}
+
+
+df &lt;- data.frame(site = sites_all, num_cpg_position = num_cols_with_cpg_all,
+                 num_position_with_methy = num_cols_with_methy_all, num_cpgs_with_methy = num_cpgs_with_methy_all)
+
+df &lt;- merge(df, motif_sites, by.x = &quot;site&quot;, by.y = &quot;name&quot;)
+df &lt;- df[order(as.numeric(sub(&quot;site&quot;, &quot;&quot;, df$site))), ]
+
+DT::datatable(df,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Motif sites with CpG position and methylation&#39;),options = list(pageLength = 10) )</code></pre>
+<div id="htmlwidget-0c375f72d786c94bb27a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0c375f72d786c94bb27a">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Motif sites with CpG position and methylation<\/caption>","data":[["1","5","6","26","27","41","48","50","58","73","94","100","137","140","142","154","175","181","197","200","204","206","208","219","222","226","228","230","231","238","247","249","251","254","257","261","262","263","269","272","282","291","2","3","4","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","28","29","30","31","32","33","34","35","36","37","38","39","40","42","43","44","45","46","47","49","51","52","53","54","55","56","57","59","60","61","62","63","64","65","66","67","68","69","70","71","72","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","95","96","97","98","99","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","138","139","141","143","144","145","146","147","148","149","150","151","152","153","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","176","177","178","179","180","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","198","199","201","202","203","205","207","209","210","211","212","213","214","215","216","217","218","220","221","223","224","225","227","229","232","233","234","235","236","237","239","240","241","242","243","244","245","246","248","250","252","253","255","256","258","259","260","264","265","266","267","268","270","271","273","274","275","276","277","278","279","280","281","283","284","285","286","287","288","289","290"],["site102","site113","site115","site185","site186","site199","site218","site225","site263","site328","site379","site387","site498","site501","site534","site569","site621","site638","site676","site681","site694","site697","site706","site731","site745","site762","site770","site773","site774","site786","site826","site829","site855","site871","site889","site919","site920","site923","site936","site941","site965","site988","site1034","site1063","site1111","site1179","site1208","site1245","site1257","site1274","site1393","site1451","site1457","site1468","site1513","site1568","site1619","site1621","site1637","site1690","site1708","site1709","site1714","site1780","site1863","site1874","site1893","site1894","site1895","site1898","site1906","site1910","site1928","site1929","site1932","site1962","site1984","site2034","site2045","site2151","site2155","site2160","site2161","site2240","site2276","site2292","site2309","site2427","site2472","site2546","site2567","site2658","site2675","site2687","site2726","site2743","site2758","site2761","site2831","site2849","site2975","site3011","site3205","site3231","site3264","site3301","site3304","site3363","site3405","site3452","site3454","site3586","site3587","site3588","site3626","site3657","site3710","site3731","site3754","site3756","site3760","site3767","site3768","site3771","site3786","site3810","site3820","site3822","site3835","site3860","site3893","site3908","site3918","site3930","site3936","site3940","site3957","site3959","site3962","site3987","site4017","site4088","site4090","site4099","site4119","site4128","site4236","site4241","site4281","site4519","site4531","site4532","site4577","site4587","site4605","site4612","site4665","site4677","site4714","site4751","site4808","site4837","site4839","site4855","site4856","site4920","site4982","site4983","site5126","site5364","site5367","site5398","site5460","site5461","site5535","site5598","site5607","site5608","site5664","site5682","site5709","site5714","site5737","site5749","site5754","site5766","site5769","site5802","site5819","site5878","site5893","site5921","site5928","site5941","site5952","site5961","site6037","site6117","site6121","site6156","site6235","site6238","site6239","site6331","site6346","site6401","site6425","site6455","site6468","site6609","site6618","site6642","site6643","site6662","site6698","site6707","site6728","site6737","site6739","site6747","site6787","site6798","site6835","site6863","site6902","site6944","site6994","site7104","site7106","site7132","site7171","site7199","site7245","site7264","site7267","site7285","site7298","site7316","site7360","site7465","site7483","site7491","site7666","site7716","site7744","site7779","site7801","site7810","site7834","site7850","site7932","site7939","site7957","site8092","site8102","site8224","site8254","site8255","site8284","site8317","site8594","site8675","site8835","site8846","site9153","site9154","site9158","site9240","site9266","site9269","site9357","site9358","site9385","site9399","site9418","site9439","site9473","site9490","site9550","site9571","site9572","site9573","site9608","site9663","site9677","site9683","site9692","site9693","site9709","site9727","site9728"],[2,1,2,2,3,2,3,2,2,2,4,3,2,3,2,2,1,3,4,2,3,3,3,2,2,3,3,1,3,3,3,1,2,2,2,2,1,3,2,2,1,1,2,2,2,4,1,2,1,1,2,3,2,2,2,2,3,1,2,4,1,4,2,4,2,2,2,1,1,2,3,1,3,4,2,1,2,2,1,2,3,2,3,1,3,2,3,1,3,2,4,4,2,3,2,3,2,1,4,1,2,3,3,2,3,3,3,2,2,2,2,3,1,3,2,2,2,3,3,3,1,5,3,2,4,3,4,2,4,3,3,2,4,2,1,4,2,2,2,2,3,3,2,2,2,2,1,3,2,2,2,4,2,3,3,2,2,2,1,2,2,3,4,2,2,4,2,1,3,3,2,2,3,2,3,2,3,1,2,3,3,2,2,4,1,3,2,2,2,3,1,2,3,2,3,3,2,1,3,2,1,2,2,3,2,2,3,2,1,2,2,1,1,2,1,1,1,4,2,4,3,3,2,1,3,3,1,3,3,3,1,2,2,2,2,2,2,2,3,3,3,2,2,2,3,2,1,1,3,2,2,2,3,2,2,1,4,2,3,2,3,2,3,3,2,2,2,2,3,3,4,2,2,3,2,3,2,2,2,3,3,4,2,2,2,3,2,2,3,3,2],[2,2,1,4,5,4,5,2,1,2,3,3,1,2,4,4,2,5,1,2,1,4,2,4,4,3,3,2,3,1,4,2,1,0,4,2,2,4,2,3,1,2,2,3,4,2,2,4,2,1,4,3,3,3,1,3,4,2,1,5,2,3,3,3,1,3,3,0,2,0,2,1,0,2,2,2,3,3,2,1,3,2,2,2,2,2,1,2,0,1,5,4,3,1,4,5,3,0,0,2,4,6,3,3,6,3,5,1,2,4,4,2,2,0,2,2,2,2,2,5,2,1,0,4,5,2,0,4,3,2,3,4,4,3,2,4,3,1,4,1,5,4,1,2,2,1,2,2,3,4,2,2,2,4,5,3,2,2,0,2,3,2,0,3,2,7,2,2,5,0,3,1,1,4,5,4,0,2,2,0,3,4,3,2,1,2,1,3,1,4,2,4,2,4,0,0,2,1,3,3,2,4,3,5,3,1,1,4,1,2,2,1,2,4,2,3,1,5,4,2,2,3,1,0,4,2,2,1,3,1,1,4,3,4,4,1,4,3,3,1,1,3,0,3,4,2,2,0,0,3,2,3,3,2,3,2,3,1,4,4,3,2,2,5,0,4,0,4,5,5,2,1,4,2,4,0,4,2,4,1,3,3,4,2,1,5,4,3,1,4,4],[1,1,1,2,3,2,3,2,0,0,2,1,1,2,2,2,1,2,0,0,0,2,1,2,1,1,3,1,2,0,2,1,1,0,2,2,1,3,1,1,0,1,1,1,2,0,1,2,1,1,2,2,1,1,1,2,3,1,1,3,1,0,1,2,1,2,2,0,1,0,0,1,0,1,2,1,2,1,1,0,1,0,1,1,1,0,1,1,0,1,3,2,2,1,2,3,2,0,0,1,2,3,1,2,3,1,3,1,1,2,2,1,1,0,2,1,1,1,1,3,1,0,0,2,3,1,0,2,2,2,2,2,2,1,1,3,1,1,2,1,2,2,1,0,1,1,1,2,2,2,0,0,1,3,1,2,0,0,0,2,2,1,0,1,0,3,0,1,2,0,0,1,0,2,2,2,0,1,1,0,1,2,1,2,0,1,0,1,1,2,1,2,1,2,0,0,0,0,2,1,1,2,1,2,2,1,1,2,0,1,1,1,1,2,1,1,1,2,2,0,2,0,1,0,1,1,1,0,1,0,1,2,1,2,2,1,2,2,3,0,1,1,0,2,1,1,1,0,0,2,1,2,1,2,1,1,3,0,2,2,2,1,0,3,0,2,0,2,3,3,1,1,2,2,2,0,2,1,2,1,2,2,2,1,1,2,2,1,0,3,2],["chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr1","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr2","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr3","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr4","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5","chr5"],[1231440,1250956,1273899,1833408,1891062,2189491,2391580,2586270,3624697,6701839,9652096,10032719,16237101,16367109,17437571,19210394,21384775,21783120,23559400,23868218,24643044,24744919,25232538,26234329,26890276,27725858,28232928,28369443,28369952,28648213,30718515,30824387,31788065,32205507,32964768,35031839,35079232,35192005,35718776,35883907,37690422,38489813,40692172,42924542,45686544,51729396,53393464,54764410,55641270,59296857,74198134,84479434,85276678,86914531,89763083,95072808,107965783,108661199,109483730,113812220,117363648,117366702,117605688,147242609,153633860,153783693,155173195,155173740,155194647,155320750,155563097,155857169,156591652,156660056,156741230,160098440,161159362,167936061,170074640,181099506,181482748,182839198,182839538,200738781,202341845,203267591,204494524,213015792,220089744,227542569,228165778,229559026,230642670,231241080,234356857,234610867,235328459,235504594,244864525,246566162,676866,3379647,19901631,23385871,25216106,27356941,27489715,32356875,38751306,42361375,42810360,55282194,55519470,55617775,61764308,64524089,70142686,71331660,73214418,73284447,73780008,74198499,74391972,74465274,74958528,84919469,85539019,85616060,86105780,88055772,95159677,96208391,96638226,96816479,97645822,97996157,99180966,99335997,99337267,101252517,105037928,111120822,111884139,112584006,113889767,118088342,127811144,128233553,130727492,169694396,169798686,169824818,174248520,175181613,177264277,177618866,195657009,197453341,199910961,203014596,216013497,218216953,218270262,218892785,218896954,226835823,232550454,232697016,240560781,9731638,9843908,11846805,15065212,15099176,25789980,33798461,36993195,36993666,42590584,43894373,45388355,46558463,47475911,48241168,48556936,48717189,48847825,49786648,50272951,52287672,52770839,55488430,56683224,57597398,58433448,58491860,69052188,88149612,93979909,101513163,119463620,119810053,120094360,127598127,128052109,133573159,136250199,139389596,142596282,158110277,160449769,169772673,169812933,171810320,179071765,179942366,183116117,184017831,184135148,184299128,186567275,186930176,193593012,195747843,196568637,197791133,125514,1856355,2041890,2934673,3955399,6200641,8158918,10116856,10461285,13627719,15681628,17810731,26319405,41214519,44678552,47463667,76949554,83455820,88284742,94451700,98143496,98929131,102760940,105708848,118278434,119212552,121823963,140373437,143184612,164977593,173369847,173370781,177309669,184445026,271353,1801259,14264717,14871873,69093843,69166833,69492612,78984639,81971926,82278540,97183192,97183705,103119821,108748709,112976426,119452606,123423467,127517518,133051702,134648656,134845736,134874233,138575689,140700182,141320758,141397820,141850405,141968932,144170573,149345404,149551474],[1231651,1251167,1274110,1833619,1891273,2189702,2391791,2586481,3624908,6702050,9652307,10032930,16237312,16367320,17437782,19210605,21384986,21783331,23559611,23868429,24643255,24745130,25232749,26234540,26890487,27726069,28233139,28369654,28370163,28648424,30718726,30824598,31788276,32205718,32964979,35032050,35079443,35192216,35718987,35884118,37690633,38490024,40692383,42924753,45686755,51729607,53393675,54764621,55641481,59297068,74198345,84479645,85276889,86914742,89763294,95073019,107965994,108661410,109483941,113812431,117363859,117366913,117605899,147242820,153634071,153783904,155173406,155173951,155194858,155320961,155563308,155857380,156591863,156660267,156741441,160098651,161159573,167936272,170074851,181099717,181482959,182839409,182839749,200738992,202342056,203267802,204494735,213016003,220089955,227542780,228165989,229559237,230642881,231241291,234357068,234611078,235328670,235504805,244864736,246566373,677077,3379858,19901842,23386082,25216317,27357152,27489926,32357086,38751517,42361586,42810571,55282405,55519681,55617986,61764519,64524300,70142897,71331871,73214629,73284658,73780219,74198710,74392183,74465485,74958739,84919680,85539230,85616271,86105991,88055983,95159888,96208602,96638437,96816690,97646033,97996368,99181177,99336208,99337478,101252728,105038139,111121033,111884350,112584217,113889978,118088553,127811355,128233764,130727703,169694607,169798897,169825029,174248731,175181824,177264488,177619077,195657220,197453552,199911172,203014807,216013708,218217164,218270473,218892996,218897165,226836034,232550665,232697227,240560992,9731849,9844119,11847016,15065423,15099387,25790191,33798672,36993406,36993877,42590795,43894584,45388566,46558674,47476122,48241379,48557147,48717400,48848036,49786859,50273162,52287883,52771050,55488641,56683435,57597609,58433659,58492071,69052399,88149823,93980120,101513374,119463831,119810264,120094571,127598338,128052320,133573370,136250410,139389807,142596493,158110488,160449980,169772884,169813144,171810531,179071976,179942577,183116328,184018042,184135359,184299339,186567486,186930387,193593223,195748054,196568848,197791344,125725,1856566,2042101,2934884,3955610,6200852,8159129,10117067,10461496,13627930,15681839,17810942,26319616,41214730,44678763,47463878,76949765,83456031,88284953,94451911,98143707,98929342,102761151,105709059,118278645,119212763,121824174,140373648,143184823,164977804,173370058,173370992,177309880,184445237,271564,1801470,14264928,14872084,69094054,69167044,69492823,78984850,81972137,82278751,97183403,97183916,103120032,108748920,112976637,119452817,123423678,127517729,133051913,134648867,134845947,134874444,138575900,140700393,141320969,141398031,141850616,141969143,144170784,149345615,149551685],[16.1636,15.0727,16.4182,15.8182,14.4364,15.4182,14.8545,14.8545,16.0909,16.1636,17.0727,15.9455,14.2727,15.9455,15.5091,16.0909,15.7273,18.4727,15.0909,14.3455,15.4,19.0545,16.1636,17.4909,14.9636,14.8,16.4,15.0727,16.0909,15.9455,16.7455,15.7273,15.8182,15.5091,19.2727,16.4,15.7273,16.2,14.1455,15.5091,15.7273,15.7273,15.2,16.1636,18.6909,15.5455,16.3091,15.2182,15.7273,16.3091,14.6182,16.2,16.4,14.9636,16.1636,14.6182,15.8182,15.0727,16.4182,16.2,15.7273,15.0909,16.4182,16.1455,16.4,16.4182,15.8182,15.7273,14.4545,14,15.9455,14.5273,14.2727,14.2,15.5091,15.0727,19.2727,16.4182,16.3091,14.0727,14.9636,15.8182,15.2182,14.5273,19.0545,15.4182,15.0909,15.7273,16.2,14.4909,15.9455,13.9273,15.3091,18.4727,19.2727,15.3091,16.4,15.7273,15.5273,16.3091,15.3091,16.1818,16.2,16.1636,15.6,16.1818,16.4182,15.5091,15.8182,16.4182,15.5091,16.1636,16.3091,15.2,15.1636,19.2727,16.1636,15.6,16.0909,14.9636,13.9818,15.1455,15.7818,18.0727,15.2,15.4,16.1455,14.9636,16.2,16.2,14.1455,14.8,18.0545,15.2182,15.0727,15.9455,14.9636,16.4182,16.4182,14.1455,18.0727,15.9455,14.9636,14.1455,15.7273,14.8545,13.9818,15.9455,18.0727,14.9636,15.5091,15.1818,14.3455,16.4182,15.2182,16.4,16.1636,16,15.7273,16.1636,14.6182,15.9455,14.1636,16.1636,16.1636,15.5273,16.1636,16.3091,14.4364,14.1455,14.2727,14.8545,13.9273,19.2727,15.7818,16.1636,16.2,15.0727,16.4182,14.0727,13.9273,15.8182,15.8182,16.1818,15.7273,15,15.2182,17.4909,15.2,14.8,15.7273,15.8182,15.7818,15.2182,15.9455,14.5455,18.6909,14.5636,14.5818,16.4182,14.5636,16,16.1636,15.7818,16.1636,15.8182,16.4182,19.2727,15.7273,15.8182,16.1636,15.0727,15.0727,14.3455,13.9818,15.0727,14.2182,16.2,15.8182,14.9455,16.4182,16.1636,18.6909,15.0727,14.5455,18.4727,15.0727,16.2,18.4727,15.9455,14.8,15.3091,16.1636,16.0909,15.5091,15.2182,15.8182,14.6182,14.4364,15.9455,18.2727,16.4182,16.0909,15.8182,16.2,14.5818,15.7273,14.5636,14.9636,14.8,15.8182,15.7273,16.1818,16.4,14.3455,15.7273,18.0545,16.4182,17.4909,14.5273,15.7818,15.8182,15.7818,15.3091,14.1455,16.1636,14.8545,14.8545,15.3091,19.0545,18.0545,16.1636,16.4182,14.9636,15.8182,15.9455,16.4182,14.5273,16.3091,15.9455,16.2,15.5273,14.2727,16.1636,16.1636,15.9455,15.7273,16.1636,16.1818,15.7818,16.4],["+","-","+","+","-","-","+","-","+","-","+","+","+","+","+","+","+","+","-","-","-","-","-","+","-","+","-","+","-","-","-","-","+","-","-","+","-","-","+","+","-","+","-","-","+","+","+","+","-","-","-","+","+","-","-","-","-","+","+","-","-","+","+","-","-","-","-","+","-","+","+","+","-","+","-","+","-","+","-","-","-","-","+","-","+","+","+","+","-","-","+","-","-","-","-","-","+","+","-","+","-","-","-","-","-","+","-","-","-","-","-","-","-","+","+","+","+","-","-","+","-","-","+","+","+","-","-","-","+","+","-","-","+","+","-","-","-","+","+","-","+","-","-","+","-","-","-","+","-","-","-","-","+","-","-","-","+","-","-","+","-","-","+","-","+","+","-","+","+","-","+","-","-","-","-","-","-","+","-","-","-","+","-","-","-","-","+","-","+","+","-","-","+","+","+","-","-","+","-","+","+","+","-","+","-","-","-","+","+","-","+","+","-","+","-","+","+","-","+","+","-","-","-","-","-","-","-","+","+","+","-","+","+","+","+","-","+","+","-","+","-","+","-","-","+","+","+","+","-","-","-","-","+","-","+","-","-","+","+","+","-","-","-","-","-","+","+","-","-","-","-","-","+","+","-","-","-","+","-","+","-","-","+","-","+","-","-","+","-","-","-"],[2.1e-06,5.93e-06,1.27e-06,2.75e-06,8e-06,4.23e-06,6.55e-06,6.55e-06,2.28e-06,2.1e-06,9.64e-07,2.58e-06,8.36e-06,2.58e-06,3.99e-06,2.28e-06,3.22e-06,4.58e-07,5.66e-06,8.22e-06,4.36e-06,2.07e-07,2.1e-06,8.71e-07,6.23e-06,6.76e-06,1.41e-06,5.93e-06,2.28e-06,2.58e-06,1.06e-06,3.22e-06,2.75e-06,3.99e-06,1.13e-07,1.41e-06,3.22e-06,1.75e-06,8.94e-06,3.99e-06,3.22e-06,3.22e-06,5.05e-06,2.1e-06,3.45e-07,3.78e-06,1.64e-06,4.82e-06,3.22e-06,1.64e-06,7.1e-06,1.75e-06,1.41e-06,6.23e-06,2.1e-06,7.1e-06,2.75e-06,5.93e-06,1.27e-06,1.75e-06,3.22e-06,5.66e-06,1.27e-06,2.17e-06,1.41e-06,1.27e-06,2.75e-06,3.22e-06,7.9e-06,9.31e-06,2.58e-06,7.64e-06,8.36e-06,8.73e-06,3.99e-06,5.93e-06,1.13e-07,1.27e-06,1.64e-06,9.19e-06,6.23e-06,2.75e-06,4.82e-06,7.64e-06,2.07e-07,4.23e-06,5.66e-06,3.22e-06,1.75e-06,7.81e-06,2.58e-06,9.68e-06,4.71e-06,4.58e-07,1.13e-07,4.71e-06,1.41e-06,3.22e-06,3.86e-06,1.64e-06,4.71e-06,1.87e-06,1.75e-06,2.1e-06,3.47e-06,1.87e-06,1.27e-06,3.99e-06,2.75e-06,1.27e-06,3.99e-06,2.1e-06,1.64e-06,5.05e-06,5.35e-06,1.13e-07,2.1e-06,3.47e-06,2.28e-06,6.23e-06,9.47e-06,5.43e-06,2.96e-06,6.65e-07,5.05e-06,4.36e-06,2.17e-06,6.23e-06,1.75e-06,1.75e-06,8.94e-06,6.76e-06,7.58e-07,4.82e-06,5.93e-06,2.58e-06,6.23e-06,1.27e-06,1.27e-06,8.94e-06,6.65e-07,2.58e-06,6.23e-06,8.94e-06,3.22e-06,6.55e-06,9.47e-06,2.58e-06,6.65e-07,6.23e-06,3.99e-06,5.16e-06,8.22e-06,1.27e-06,4.82e-06,1.41e-06,2.1e-06,2.4e-06,3.22e-06,2.1e-06,7.1e-06,2.58e-06,8.8e-06,2.1e-06,2.1e-06,3.86e-06,2.1e-06,1.64e-06,8e-06,8.94e-06,8.36e-06,6.55e-06,9.68e-06,1.13e-07,2.96e-06,2.1e-06,1.75e-06,5.93e-06,1.27e-06,9.19e-06,9.68e-06,2.75e-06,2.75e-06,1.87e-06,3.22e-06,6.05e-06,4.82e-06,8.71e-07,5.05e-06,6.76e-06,3.22e-06,2.75e-06,2.96e-06,4.82e-06,2.58e-06,7.5e-06,3.45e-07,7.43e-06,7.29e-06,1.27e-06,7.43e-06,2.4e-06,2.1e-06,2.96e-06,2.1e-06,2.75e-06,1.27e-06,1.13e-07,3.22e-06,2.75e-06,2.1e-06,5.93e-06,5.93e-06,8.22e-06,9.47e-06,5.93e-06,8.61e-06,1.75e-06,2.75e-06,6.32e-06,1.27e-06,2.1e-06,3.45e-07,5.93e-06,7.5e-06,4.58e-07,5.93e-06,1.75e-06,4.58e-07,2.58e-06,6.76e-06,4.71e-06,2.1e-06,2.28e-06,3.99e-06,4.82e-06,2.75e-06,7.1e-06,8e-06,2.58e-06,5.71e-07,1.27e-06,2.28e-06,2.75e-06,1.75e-06,7.29e-06,3.22e-06,7.43e-06,6.23e-06,6.76e-06,2.75e-06,3.22e-06,1.87e-06,1.41e-06,8.22e-06,3.22e-06,7.58e-07,1.27e-06,8.71e-07,7.64e-06,2.96e-06,2.75e-06,2.96e-06,4.71e-06,8.94e-06,2.1e-06,6.55e-06,6.55e-06,4.71e-06,2.07e-07,7.58e-07,2.1e-06,1.27e-06,6.23e-06,2.75e-06,2.58e-06,1.27e-06,7.64e-06,1.64e-06,2.58e-06,1.75e-06,3.86e-06,8.36e-06,2.1e-06,2.1e-06,2.58e-06,3.22e-06,2.1e-06,1.87e-06,2.96e-06,1.41e-06],[23.3963293147993,59.6606397527382,29.2454116434991,18.1321552189695,27.4906869448892,29.2454116434991,146.811966450366,39.7737598351588,22.2265128490593,43.2832092323787,14.0377975888796,126.925086532786,151.491232313326,91.8305925605873,43.8681174652487,90.6607760948473,21.0566963833194,78.3777032045777,36.8492186708089,42.1133927666388,211.151872066064,104.698573683727,39.7737598351588,95.3400419578072,38.0190351365489,11.6981646573997,54.3964656569084,111.717472478167,22.2265128490593,112.302380711037,31.0001363421091,25.7359622462792,64.3399056156981,166.113938135075,157.925222874895,87.1513266976274,150.321415847586,45.0379339309887,43.2832092323787,40.3586680680288,111.132564245297,22.2265128490593,39.7737598351588,46.7926586295986,183.076276888305,37.4341269036789,25.7359622462792,45.0379339309887,16.9623387532295,131.604352395746,84.2267855332775,54.9813738897784,178.981919258215,29.8303198763691,36.8492186708089,28.0755951777592,39.1888516022888,35.6794022050689,70.1889879443979,153.245957011935,29.2454116434991,26.3208704791492,53.2266491911684,28.0755951777592,184.831001586915,91.8305925605873,163.189396970725,51.4719244925585,18.7170634518394,50.8870162596885,78.9626114374477,61.4153644513482,47.9624750953386,79.5475196703177,214.076413230414,21.0566963833194,232.793476682253,170.793203998035,193.019716847094,26.9057787120192,21.0566963833194,129.264719464266,72.5286208758779,25.1510540134093,94.1702254920672,29.8303198763691,25.7359622462792,186.585726285524,71.3588044101379,51.4719244925585,64.3399056156981,114.057105409647,86.5664184647574,111.132564245297,36.8492186708089,93.5853172591972,66.094630314308,136.868526491576,95.3400419578072,176.057378093865,66.679538547178,83.0569690675376,128.679811231396,27.4906869448892,39.1888516022888,57.3210068212583,155.000681710545,112.302380711037,84.2267855332775,83.0569690675376,67.849355012918,60.2455479856082,99.4343995878971,62.5851809170882,92.4155007934573,141.547792354536,165.529029902205,152.661048779065,16.9623387532295,41.5284845337688,91.8305925605873,22.2265128490593,63.1700891499581,56.7360985883883,64.3399056156981,66.094630314308,38.6039433694189,107.623114848077,170.793203998035,72.5286208758779,39.7737598351588,29.2454116434991,62.0002726842182,70.1889879443979,93.5853172591972,89.4909596291074,86.5664184647574,125.755270067046,167.283754600815,86.5664184647574,40.9435763008988,28.6605034106292,62.0002726842182,14.0377975888796,47.3775668624686,129.849627697136,57.3210068212583,39.1888516022888,35.6794022050689,53.8115574240384,142.717608820276,42.6983009995087,43.8681174652487,57.9059150541283,21.6416046161894,153.245957011935,156.755406409155,115.811830108257,33.924677506459,115.226921875387,46.7926586295986,146.227058217496,44.4530256981187,29.2454116434991,23.3963293147993,88.9060513962374,157.925222874895,62.5851809170882,15.7925222874895,16.3774305203595,71.3588044101379,28.0755951777592,150.906324080456,47.3775668624686,142.717608820276,160.264855806375,50.3021080268185,29.8303198763691,76.6229785059677,19.3019716847094,33.924677506459,45.6228421638586,92.4155007934573,80.7173361360576,256.774714229922,116.981646573997,119.321279505476,94.7551337249372,29.2454116434991,46.2077503967286,97.0947666564171,47.3775668624686,40.9435763008988,163.774305203595,73.1135291087478,19.3019716847094,111.132564245297,77.2078867388377,45.0379339309887,63.1700891499581,94.7551337249372,22.8114210819293,47.9624750953386,151.491232313326,43.8681174652487,112.887288943907,132.189260628616,121.660912436956,115.226921875387,91.2456843277173,97.0947666564171,81.8871526017976,59.6606397527382,23.3963293147993,138.038342957316,38.0190351365489,98.2645831221571,69.019171478658,44.4530256981187,53.2266491911684,143.302517053146,29.2454116434991,173.132836929515,19.8868799175794,19.8868799175794,109.962747779557,11.6981646573997,60.2455479856082,86.5664184647574,15.7925222874895,32.1699528078491,53.2266491911684,112.302380711037,28.0755951777592,79.5475196703177,38.6039433694189,145.057241751756,70.1889879443979,16.9623387532295,31.5850445749791,42.1133927666388,194.189533312834,22.8114210819293,189.510267449874,94.7551337249372,30.4152281092391,115.811830108257,138.623251190186,42.1133927666388,7.60380702730978,85.3966019990175,40.9435763008988,52.0568327254285,59.6606397527382,31.0001363421091,98.8494913550271,53.2266491911684,134.528893560096,62.5851809170882,40.9435763008988,91.2456843277173,112.302380711037,130.434535930006,18.1321552189695,193.604625079964,88.3211431633674,41.5284845337688,90.0758678619773,70.1889879443979,56.1511903555183,138.038342957316,155.000681710545,29.8303198763691,31.5850445749791,145.642149984626,83.6418773004075,108.208023080947,80.1324279031876,39.7737598351588,60.2455479856082,164.359213436465,13.4528893560096,146.227058217496,107.038206615207,98.2645831221571,14.0377975888796,19.8868799175794,83.0569690675376,153.245957011935,75.4531620402278,209.982055600324],[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>site<\/th>\n      <th>num_cpg_position<\/th>\n      <th>num_position_with_methy<\/th>\n      <th>num_cpgs_with_methy<\/th>\n      <th>chr<\/th>\n      <th>start<\/th>\n      <th>end<\/th>\n      <th>pwm.score<\/th>\n      <th>strand<\/th>\n      <th>p.value<\/th>\n      <th>chip<\/th>\n      <th>chip_label<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[2,3,4,6,7,8,10,11,12]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>hist(as.numeric(df$num_cpg_position), main = &quot;Histogram of number of \n CpG positions in a motif site&quot;, xlab = &quot;# of CpGs&quot;)</code></pre>
+<p><img src="figure/TF_co-acc_NRF1_cpg.Rmd/unnamed-chunk-2-2.png" width="480" style="display: block; margin: auto;" /></p>
+</div>
+<div id="examples" class="section level1">
+<h1>Examples</h1>
+<p>We illustrate the workflow using several examples.</p>
+<pre class="r"><code>gr_motif &lt;- GRanges(
+  seqnames = motif_sites$chr,
+  ranges   = IRanges(start = motif_sites$start + 100,
+                     end   = motif_sites$end   - 100),
+  site     = motif_sites$name
+)
+
+# ---- Find motif pairs ----
+dist_cutoff_large &lt;- 300L
+dist_cutoff_small &lt;- 0L
+
+hits &lt;- findOverlaps(gr_motif, gr_motif, ignore.strand = TRUE, maxgap = dist_cutoff_large)
+q &lt;- queryHits(hits); s &lt;- subjectHits(hits)
+
+keep &lt;- q &lt; s
+q &lt;- q[keep]; s &lt;- s[keep]
+d &lt;- distance(gr_motif[q], gr_motif[s])
+
+sel &lt;- d &gt;= dist_cutoff_small &amp; d &lt;= dist_cutoff_large
+q &lt;- q[sel]; s &lt;- s[sel]; d &lt;- d[sel]
+
+df_close &lt;- data.frame(
+  motif1_site  = gr_motif[q]$site,
+  motif2_site  = gr_motif[s]$site,
+  distance     = as.integer(d)
+)
+
+# ---- Motifs involved in &quot;close&quot; pairs ----
+motifs_with_neighbors &lt;- unique(c(df_close$motif1_site, df_close$motif2_site))
+
+# ---- Opposite case: motifs without neighbors ----
+singleton_motifs &lt;- motif_sites %&gt;%
+  filter(!(name %in% motifs_with_neighbors))
+
+df_final &lt;- singleton_motifs %&gt;%
+  group_by(chr, name, start, end) %&gt;%
+  ungroup() %&gt;%
+  transmute(
+    chr,
+    start = floor(start / 100) * 100 - 500,
+    end   = ceiling(end / 100) * 100 + 500
+  ) %&gt;%
+  mutate(chr_num = as.numeric(gsub(&quot;chr&quot;, &quot;&quot;, chr))) %&gt;%
+  arrange(chr_num, start) %&gt;%
+  select(-chr_num)
+
+
+df_final$id &lt;- paste0(df_final$chr,&quot;-&quot;, df_final$start, &quot;-&quot;,df_final$end)
+df_final &lt;- df_final[!duplicated(df_final$id),]</code></pre>
+<pre class="r"><code>out_dir=&quot;/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1_singleton/&quot;
+sample_name=&quot;LCL_18508&quot;
+
+
+sites_selected &lt;- c(&quot;site185&quot;,&quot;site638&quot;,&quot;site871&quot;)
+
+
+for (site in sites_selected){
+  
+  index_region &lt;- which(singleton_motifs$name == site)
+  
+  test_range_str &lt;- paste0(df_final$chr[index_region],&quot;:&quot;,df_final$start[index_region],&quot;-&quot;,df_final$end[index_region])
+  plot_name &lt;- paste0(TF1,&quot;_pairs_&quot;,sample_name,&quot;_&quot;,test_range_str)
+  result_dir &lt;- paste0(out_dir, &quot;/&quot;, plot_name, &quot;/parsed&quot;)
+  
+  region &lt;- get_region(result_dir)
+  subtitle &lt;- sprintf(&quot;%s:%s-%s&quot;, region$chr, region$start, region$end)
+  
+  # motif coordinates
+  start &lt;- singleton_motifs$start[index_region] + 100
+  end   &lt;- singleton_motifs$end[index_region] -100
+  
+  region_plot &lt;- list(chr = df_final$chr[index_region],
+                    start = start - 150,
+                    end = end + 150)
+  
+  res &lt;- get_region_result(result_dir,
+                                    filter_fire_reads = FALSE,
+                                    cover_region_only = FALSE,
+                                    select_A_only = FALSE,
+                                    split_haplotype = FALSE,
+                                    highlight_window = data.frame(start=c(start), end=c(end)),
+                                    color_highlight_window = &quot;#44d6d8ff&quot;,
+                                    plot_name = plot_name,
+                                    region = region_plot,
+                                    # cluster = &quot;fiberHMM&quot;,
+                                    # cluster_class = c(&quot;&lt; 40bp&quot;, &quot;40-60bp&quot;),
+                                    # cluster_regions = cluster_regions,
+                                    subtitle = subtitle)
+  
+  gg &lt;- res$gg
+  
+  print(cowplot::plot_grid(
+    gg$pileup,
+    gg$dimelo_reads,
+    gg$fire_fdr,
+    gg$fire_reads,
+    gg$fiberHMM,
+    ncol = 1,
+    rel_heights = c(4,8,2,8,8),
+    align = &quot;v&quot;,
+    axis = &quot;b&quot;
+  ))
+  
+
+  cat(&quot;We identify CpG positions within this motif. The CpG positions are extracted from the corresponding .fa files. \n&quot;)
+  
+  cat(&quot;&lt;br&gt;&quot;)
+  cat(knitr::knit_print(DT::datatable(rid_motifsite_mat[[site]],caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;CpG positions in the motif for each read&#39;),options = list(pageLength = 10) )))
+  cat(&quot;&lt;br&gt;&quot;)
+  
+  cat(&quot;We then retrieve methylation information from res$read. \n&quot;)
+  
+  cat(&quot;&lt;br&gt;&quot;)
+  cat(knitr::knit_print(DT::datatable(rid_motifsite_methy[[site]],caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Methylation quality score for each read&#39;),options = list(pageLength = 10) )))
+  cat(&quot;&lt;br&gt;&quot;)
+  
+  cat(&quot;By combining the CpG position matrix with the methylation quality matrix, we annotate methylated sites as mCpG. A read is classified as mCpG if it contains at least one methylated CpG.&quot;)
+  
+  
+  cat(&quot;&lt;br&gt;&quot;)
+  cat(knitr::knit_print(DT::datatable(rid_motifsite_combined[[site]],caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Methylation annotation for each read&#39;),options = list(pageLength = 10) )))
+  cat(&quot;&lt;br&gt;&quot;)
+  
+  
+}</code></pre>
+<p>Assembling region result… Clustering reads… 31 reads. highlight
+windows: start end 1 1833508 1833519
+<img src="figure/TF_co-acc_NRF1_cpg.Rmd/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;" />We
+identify CpG positions within this motif. The CpG positions are
+extracted from the corresponding .fa files. <br></p>
+<div id="htmlwidget-9fa6da26214ebfd05e61" style="width:960px;height:500px;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9fa6da26214ebfd05e61">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">CpG positions in the motif for each read<\/caption>","data":[["m64403e_220916_085351/151783680/ccs","m64403e_220916_085351/176489891/ccs","m64403e_220916_085351/28576575/ccs","m64403e_220916_085351/46138977/ccs","m64403e_220916_085351/50397912/ccs","m64403e_220916_085351/65143465/ccs","m64403e_220916_085351/65735207/ccs","m64403e_230429_051256/23333412/ccs","m64403e_230429_051256/23595697/ccs","m64403e_230429_051256/50201352/ccs","m64403e_230429_051256/65929403/ccs","m64403e_230429_051256/68159744/ccs","m64403e_230430_142929/136840468/ccs","m64403e_230430_142929/163382443/ccs","m64403e_230430_142929/20120532/ccs","m64403e_230430_142929/3737610/ccs","m64403e_230430_142929/53085919/ccs","m64403e_230430_142929/85983601/ccs","m64403e_230430_142929/97910901/ccs","m64403e_230501_235831/110364016/ccs","m64403e_230501_235831/11732423/ccs","m64403e_230501_235831/151063211/ccs","m64403e_230501_235831/161810631/ccs","m64403e_230501_235831/38471198/ccs","m64403e_230501_235831/73663686/ccs","m64403e_230501_235831/80087543/ccs"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>1833508<\/th>\n      <th>1833509<\/th>\n      <th>1833510<\/th>\n      <th>1833511<\/th>\n      <th>1833512<\/th>\n      <th>1833513<\/th>\n      <th>1833514<\/th>\n      <th>1833515<\/th>\n      <th>1833516<\/th>\n      <th>1833517<\/th>\n      <th>1833518<\/th>\n      <th>1833519<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p><br>We then retrieve methylation information from res<span
+class="math inline">\(read. &lt;br&gt; ```{=html} &lt;div
+id=&quot;htmlwidget-1b1a8ec0941961691c13&quot;
+style=&quot;width:960px;height:500px;&quot; class=&quot;datatables
+html-widget&quot;&gt;&lt;/div&gt; &lt;script
+type=&quot;application/json&quot;
+data-for=&quot;htmlwidget-1b1a8ec0941961691c13&quot;&gt;{&quot;x&quot;:{&quot;filter&quot;:&quot;none&quot;,&quot;vertical&quot;:false,&quot;caption&quot;:&quot;&lt;caption
+style=\&quot;caption-side: left; text-align: left; color:black;
+font-size:150% ;\&quot;&gt;Methylation quality score for each
+read&lt;\/caption&gt;&quot;,&quot;data&quot;:[[&quot;m64403e_220916_085351/151783680/ccs&quot;,&quot;m64403e_220916_085351/176489891/ccs&quot;,&quot;m64403e_220916_085351/28576575/ccs&quot;,&quot;m64403e_220916_085351/46138977/ccs&quot;,&quot;m64403e_220916_085351/50397912/ccs&quot;,&quot;m64403e_220916_085351/65143465/ccs&quot;,&quot;m64403e_220916_085351/65735207/ccs&quot;,&quot;m64403e_230429_051256/23333412/ccs&quot;,&quot;m64403e_230429_051256/23595697/ccs&quot;,&quot;m64403e_230429_051256/50201352/ccs&quot;,&quot;m64403e_230429_051256/65929403/ccs&quot;,&quot;m64403e_230429_051256/68159744/ccs&quot;,&quot;m64403e_230430_142929/136840468/ccs&quot;,&quot;m64403e_230430_142929/163382443/ccs&quot;,&quot;m64403e_230430_142929/20120532/ccs&quot;,&quot;m64403e_230430_142929/3737610/ccs&quot;,&quot;m64403e_230430_142929/53085919/ccs&quot;,&quot;m64403e_230430_142929/85983601/ccs&quot;,&quot;m64403e_230430_142929/97910901/ccs&quot;,&quot;m64403e_230501_235831/110364016/ccs&quot;,&quot;m64403e_230501_235831/11732423/ccs&quot;,&quot;m64403e_230501_235831/151063211/ccs&quot;,&quot;m64403e_230501_235831/161810631/ccs&quot;,&quot;m64403e_230501_235831/38471198/ccs&quot;,&quot;m64403e_230501_235831/73663686/ccs&quot;,&quot;m64403e_230501_235831/80087543/ccs&quot;],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,0.6738281,null,null,null,null,null,null,null,null,null,null,null,null,0.8417969,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.9121094,0.9238281,null,null,null,null,0.6933594,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,0.8691406,null,null,null,null,null,null,null,null,null,null,null,0.8964844,0.8457031,null,null,0.6894531,null,null,null],[0.8652344,null,0.7910156,null,0.9042969,null,null,null,null,0.9511719,null,null,0.7167969,0.8808594,null,null,null,null,null,null,0.8652344,null,null,null,null,0.7402344],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],&quot;container&quot;:&quot;&lt;table
+class=\&quot;display\&quot;&gt;\n &lt;thead&gt;\n &lt;tr&gt;\n
+&lt;th&gt; &lt;\/th&gt;\n &lt;th&gt;1833508&lt;\/th&gt;\n
+&lt;th&gt;1833509&lt;\/th&gt;\n &lt;th&gt;1833510&lt;\/th&gt;\n
+&lt;th&gt;1833511&lt;\/th&gt;\n &lt;th&gt;1833512&lt;\/th&gt;\n
+&lt;th&gt;1833513&lt;\/th&gt;\n &lt;th&gt;1833514&lt;\/th&gt;\n
+&lt;th&gt;1833515&lt;\/th&gt;\n &lt;th&gt;1833516&lt;\/th&gt;\n
+&lt;th&gt;1833517&lt;\/th&gt;\n &lt;th&gt;1833518&lt;\/th&gt;\n
+&lt;th&gt;1833519&lt;\/th&gt;\n &lt;\/tr&gt;\n
+&lt;\/thead&gt;\n&lt;\/table&gt;&quot;,&quot;options&quot;:{&quot;pageLength&quot;:10,&quot;columnDefs&quot;:[{&quot;className&quot;:&quot;dt-right&quot;,&quot;targets&quot;:[1,2,3,4,5,6,7,8,9,10,11,12]},{&quot;orderable&quot;:false,&quot;targets&quot;:0}],&quot;order&quot;:[],&quot;autoWidth&quot;:false,&quot;orderClasses&quot;:false}},&quot;evals&quot;:[],&quot;jsHooks&quot;:[]}&lt;/script&gt;
+``` &lt;br&gt;By combining the CpG position matrix with the methylation
+quality matrix, we annotate methylated sites as mCpG. A read is
+classified as mCpG if it contains at least one methylated CpG.&lt;br&gt;
+```{=html} &lt;div id=&quot;htmlwidget-d3bdb3a70b69fe9ab76d&quot;
+style=&quot;width:960px;height:500px;&quot; class=&quot;datatables
+html-widget&quot;&gt;&lt;/div&gt; &lt;script
+type=&quot;application/json&quot;
+data-for=&quot;htmlwidget-d3bdb3a70b69fe9ab76d&quot;&gt;{&quot;x&quot;:{&quot;filter&quot;:&quot;none&quot;,&quot;vertical&quot;:false,&quot;caption&quot;:&quot;&lt;caption
+style=\&quot;caption-side: left; text-align: left; color:black;
+font-size:150% ;\&quot;&gt;Methylation annotation for each
+read&lt;\/caption&gt;&quot;,&quot;data&quot;:[[&quot;m64403e_220916_085351/151783680/ccs&quot;,&quot;m64403e_220916_085351/176489891/ccs&quot;,&quot;m64403e_220916_085351/28576575/ccs&quot;,&quot;m64403e_220916_085351/46138977/ccs&quot;,&quot;m64403e_220916_085351/50397912/ccs&quot;,&quot;m64403e_220916_085351/65143465/ccs&quot;,&quot;m64403e_220916_085351/65735207/ccs&quot;,&quot;m64403e_230429_051256/23333412/ccs&quot;,&quot;m64403e_230429_051256/23595697/ccs&quot;,&quot;m64403e_230429_051256/50201352/ccs&quot;,&quot;m64403e_230429_051256/65929403/ccs&quot;,&quot;m64403e_230429_051256/68159744/ccs&quot;,&quot;m64403e_230430_142929/136840468/ccs&quot;,&quot;m64403e_230430_142929/163382443/ccs&quot;,&quot;m64403e_230430_142929/20120532/ccs&quot;,&quot;m64403e_230430_142929/3737610/ccs&quot;,&quot;m64403e_230430_142929/53085919/ccs&quot;,&quot;m64403e_230430_142929/85983601/ccs&quot;,&quot;m64403e_230430_142929/97910901/ccs&quot;,&quot;m64403e_230501_235831/110364016/ccs&quot;,&quot;m64403e_230501_235831/11732423/ccs&quot;,&quot;m64403e_230501_235831/151063211/ccs&quot;,&quot;m64403e_230501_235831/161810631/ccs&quot;,&quot;m64403e_230501_235831/38471198/ccs&quot;,&quot;m64403e_230501_235831/73663686/ccs&quot;,&quot;m64403e_230501_235831/80087543/ccs&quot;],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;mCpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;mCpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;mCpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;mCpG&quot;,&quot;mCpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;mCpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],&quot;container&quot;:&quot;&lt;table
+class=\&quot;display\&quot;&gt;\n &lt;thead&gt;\n &lt;tr&gt;\n
+&lt;th&gt; &lt;\/th&gt;\n &lt;th&gt;1833508&lt;\/th&gt;\n
+&lt;th&gt;1833509&lt;\/th&gt;\n &lt;th&gt;1833510&lt;\/th&gt;\n
+&lt;th&gt;1833511&lt;\/th&gt;\n &lt;th&gt;1833512&lt;\/th&gt;\n
+&lt;th&gt;1833513&lt;\/th&gt;\n &lt;th&gt;1833514&lt;\/th&gt;\n
+&lt;th&gt;1833515&lt;\/th&gt;\n &lt;th&gt;1833516&lt;\/th&gt;\n
+&lt;th&gt;1833517&lt;\/th&gt;\n &lt;th&gt;1833518&lt;\/th&gt;\n
+&lt;th&gt;1833519&lt;\/th&gt;\n &lt;\/tr&gt;\n
+&lt;\/thead&gt;\n&lt;\/table&gt;&quot;,&quot;options&quot;:{&quot;pageLength&quot;:10,&quot;columnDefs&quot;:[{&quot;orderable&quot;:false,&quot;targets&quot;:0}],&quot;order&quot;:[],&quot;autoWidth&quot;:false,&quot;orderClasses&quot;:false}},&quot;evals&quot;:[],&quot;jsHooks&quot;:[]}&lt;/script&gt;
+``` &lt;br&gt;Assembling region result... Clustering reads... 32 reads.
+highlight windows:  start end 1 21783220 21783231 &lt;img
+src=&quot;figure/TF_co-acc_NRF1_cpg.Rmd/unnamed-chunk-4-2.png&quot;
+width=&quot;960&quot; style=&quot;display: block; margin: auto;&quot;
+/&gt;We identify CpG positions within this motif. The CpG positions are
+extracted from the corresponding .fa files. &lt;br&gt; ```{=html}
+&lt;div id=&quot;htmlwidget-e41253b73217ca07c332&quot;
+style=&quot;width:960px;height:500px;&quot; class=&quot;datatables
+html-widget&quot;&gt;&lt;/div&gt; &lt;script
+type=&quot;application/json&quot;
+data-for=&quot;htmlwidget-e41253b73217ca07c332&quot;&gt;{&quot;x&quot;:{&quot;filter&quot;:&quot;none&quot;,&quot;vertical&quot;:false,&quot;caption&quot;:&quot;&lt;caption
+style=\&quot;caption-side: left; text-align: left; color:black;
+font-size:150% ;\&quot;&gt;CpG positions in the motif for each
+read&lt;\/caption&gt;&quot;,&quot;data&quot;:[[&quot;m64403e_220914_215953/11470786/ccs&quot;,&quot;m64403e_220914_215953/122094388/ccs&quot;,&quot;m64403e_220914_215953/148965842/ccs&quot;,&quot;m64403e_220914_215953/150930932/ccs&quot;,&quot;m64403e_220916_085351/7209690/ccs&quot;,&quot;m64403e_230429_051256/109315892/ccs&quot;,&quot;m64403e_230429_051256/20579601/ccs&quot;,&quot;m64403e_230429_051256/36244004/ccs&quot;,&quot;m64403e_230429_051256/90767839/ccs&quot;,&quot;m64403e_230430_142929/100075671/ccs&quot;,&quot;m64403e_230430_142929/110625904/ccs&quot;,&quot;m64403e_230430_142929/124388643/ccs&quot;,&quot;m64403e_230430_142929/164431987/ccs&quot;,&quot;m64403e_230430_142929/27330145/ccs&quot;,&quot;m64403e_230430_142929/31327052/ccs&quot;,&quot;m64403e_230430_142929/61407942/ccs&quot;,&quot;m64403e_230430_142929/73728091/ccs&quot;,&quot;m64403e_230430_142929/77267872/ccs&quot;,&quot;m64403e_230430_142929/95029643/ccs&quot;,&quot;m64403e_230430_142929/98107939/ccs&quot;,&quot;m64403e_230501_235831/134875892/ccs&quot;,&quot;m64403e_230501_235831/2229495/ccs&quot;,&quot;m64403e_230501_235831/27984514/ccs&quot;,&quot;m64403e_230501_235831/35324178/ccs&quot;,&quot;m64403e_230501_235831/3736515/ccs&quot;,&quot;m64403e_230501_235831/39584976/ccs&quot;,&quot;m64403e_230501_235831/63637215/ccs&quot;,&quot;m64403e_230501_235831/64684376/ccs&quot;,&quot;m64403e_230501_235831/81396806/ccs&quot;,&quot;m64403e_230501_235831/84280591/ccs&quot;,&quot;m64403e_230501_235831/96012702/ccs&quot;],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;,&quot;CpG&quot;],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],&quot;container&quot;:&quot;&lt;table
+class=\&quot;display\&quot;&gt;\n &lt;thead&gt;\n &lt;tr&gt;\n
+&lt;th&gt; &lt;\/th&gt;\n &lt;th&gt;21783220&lt;\/th&gt;\n
+&lt;th&gt;21783221&lt;\/th&gt;\n &lt;th&gt;21783222&lt;\/th&gt;\n
+&lt;th&gt;21783223&lt;\/th&gt;\n &lt;th&gt;21783224&lt;\/th&gt;\n
+&lt;th&gt;21783225&lt;\/th&gt;\n &lt;th&gt;21783226&lt;\/th&gt;\n
+&lt;th&gt;21783227&lt;\/th&gt;\n &lt;th&gt;21783228&lt;\/th&gt;\n
+&lt;th&gt;21783229&lt;\/th&gt;\n &lt;th&gt;21783230&lt;\/th&gt;\n
+&lt;th&gt;21783231&lt;\/th&gt;\n &lt;\/tr&gt;\n
+&lt;\/thead&gt;\n&lt;\/table&gt;&quot;,&quot;options&quot;:{&quot;pageLength&quot;:10,&quot;columnDefs&quot;:[{&quot;orderable&quot;:false,&quot;targets&quot;:0}],&quot;order&quot;:[],&quot;autoWidth&quot;:false,&quot;orderClasses&quot;:false}},&quot;evals&quot;:[],&quot;jsHooks&quot;:[]}&lt;/script&gt;
+``` &lt;br&gt;We then retrieve methylation information from
+res\)</span>read. <br></p>
+<div id="htmlwidget-6b35d4872c33fe5849ab" style="width:960px;height:500px;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6b35d4872c33fe5849ab">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Methylation quality score for each read<\/caption>","data":[["m64403e_220914_215953/11470786/ccs","m64403e_220914_215953/122094388/ccs","m64403e_220914_215953/148965842/ccs","m64403e_220914_215953/150930932/ccs","m64403e_220916_085351/7209690/ccs","m64403e_230429_051256/109315892/ccs","m64403e_230429_051256/20579601/ccs","m64403e_230429_051256/36244004/ccs","m64403e_230429_051256/90767839/ccs","m64403e_230430_142929/100075671/ccs","m64403e_230430_142929/110625904/ccs","m64403e_230430_142929/124388643/ccs","m64403e_230430_142929/164431987/ccs","m64403e_230430_142929/27330145/ccs","m64403e_230430_142929/31327052/ccs","m64403e_230430_142929/61407942/ccs","m64403e_230430_142929/73728091/ccs","m64403e_230430_142929/77267872/ccs","m64403e_230430_142929/95029643/ccs","m64403e_230430_142929/98107939/ccs","m64403e_230501_235831/134875892/ccs","m64403e_230501_235831/2229495/ccs","m64403e_230501_235831/27984514/ccs","m64403e_230501_235831/35324178/ccs","m64403e_230501_235831/3736515/ccs","m64403e_230501_235831/39584976/ccs","m64403e_230501_235831/63637215/ccs","m64403e_230501_235831/64684376/ccs","m64403e_230501_235831/81396806/ccs","m64403e_230501_235831/84280591/ccs","m64403e_230501_235831/96012702/ccs"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.6660156,null,0.6738281,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,0.7988281,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.7207031,null,null,null,null,null,null,null,null,null,null,null],[0.9355469,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.8457031,null,null,null,null,null,null,null,null,null,null,null,0.6816406,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,0.8691406,0.9160156,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>21783220<\/th>\n      <th>21783221<\/th>\n      <th>21783222<\/th>\n      <th>21783223<\/th>\n      <th>21783224<\/th>\n      <th>21783225<\/th>\n      <th>21783226<\/th>\n      <th>21783227<\/th>\n      <th>21783228<\/th>\n      <th>21783229<\/th>\n      <th>21783230<\/th>\n      <th>21783231<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7,8,9,10,11,12]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p><br>By combining the CpG position matrix with the methylation quality
+matrix, we annotate methylated sites as mCpG. A read is classified as
+mCpG if it contains at least one methylated CpG.<br></p>
+<div id="htmlwidget-6e49b5d231d9a4691769" style="width:960px;height:500px;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6e49b5d231d9a4691769">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Methylation annotation for each read<\/caption>","data":[["m64403e_220914_215953/11470786/ccs","m64403e_220914_215953/122094388/ccs","m64403e_220914_215953/148965842/ccs","m64403e_220914_215953/150930932/ccs","m64403e_220916_085351/7209690/ccs","m64403e_230429_051256/109315892/ccs","m64403e_230429_051256/20579601/ccs","m64403e_230429_051256/36244004/ccs","m64403e_230429_051256/90767839/ccs","m64403e_230430_142929/100075671/ccs","m64403e_230430_142929/110625904/ccs","m64403e_230430_142929/124388643/ccs","m64403e_230430_142929/164431987/ccs","m64403e_230430_142929/27330145/ccs","m64403e_230430_142929/31327052/ccs","m64403e_230430_142929/61407942/ccs","m64403e_230430_142929/73728091/ccs","m64403e_230430_142929/77267872/ccs","m64403e_230430_142929/95029643/ccs","m64403e_230430_142929/98107939/ccs","m64403e_230501_235831/134875892/ccs","m64403e_230501_235831/2229495/ccs","m64403e_230501_235831/27984514/ccs","m64403e_230501_235831/35324178/ccs","m64403e_230501_235831/3736515/ccs","m64403e_230501_235831/39584976/ccs","m64403e_230501_235831/63637215/ccs","m64403e_230501_235831/64684376/ccs","m64403e_230501_235831/81396806/ccs","m64403e_230501_235831/84280591/ccs","m64403e_230501_235831/96012702/ccs"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","mCpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["mCpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","mCpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","mCpG","CpG","CpG","CpG"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>21783220<\/th>\n      <th>21783221<\/th>\n      <th>21783222<\/th>\n      <th>21783223<\/th>\n      <th>21783224<\/th>\n      <th>21783225<\/th>\n      <th>21783226<\/th>\n      <th>21783227<\/th>\n      <th>21783228<\/th>\n      <th>21783229<\/th>\n      <th>21783230<\/th>\n      <th>21783231<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p><br>Assembling region result… Clustering reads… 36 reads. highlight
+windows: start end 1 32205607 32205618
+<img src="figure/TF_co-acc_NRF1_cpg.Rmd/unnamed-chunk-4-3.png" width="960" style="display: block; margin: auto;" />We
+identify CpG positions within this motif. The CpG positions are
+extracted from the corresponding .fa files. <br></p>
+<div id="htmlwidget-3f92d051ff887de577da" style="width:960px;height:500px;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3f92d051ff887de577da">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">CpG positions in the motif for each read<\/caption>","data":[["m64403e_220914_215953/135989309/ccs","m64403e_220914_215953/162596538/ccs","m64403e_220916_085351/110431013/ccs","m64403e_220916_085351/169607796/ccs","m64403e_220916_085351/176423754/ccs","m64403e_220916_085351/64488755/ccs","m64403e_230429_051256/101057610/ccs","m64403e_230429_051256/108660169/ccs","m64403e_230429_051256/134545723/ccs","m64403e_230429_051256/137562839/ccs","m64403e_230429_051256/149684703/ccs","m64403e_230429_051256/157089932/ccs","m64403e_230429_051256/163906768/ccs","m64403e_230429_051256/20186657/ccs","m64403e_230429_051256/25952430/ccs","m64403e_230429_051256/4393286/ccs","m64403e_230429_051256/57083623/ccs","m64403e_230429_051256/64816108/ccs","m64403e_230430_142929/120325692/ccs","m64403e_230430_142929/127011599/ccs","m64403e_230430_142929/146932432/ccs","m64403e_230430_142929/17302772/ccs","m64403e_230430_142929/62588992/ccs","m64403e_230430_142929/69468198/ccs","m64403e_230430_142929/94242938/ccs","m64403e_230501_235831/110691509/ccs","m64403e_230501_235831/119866220/ccs","m64403e_230501_235831/13894725/ccs","m64403e_230501_235831/141886462/ccs","m64403e_230501_235831/161417574/ccs","m64403e_230501_235831/172624120/ccs","m64403e_230501_235831/51381966/ccs","m64403e_230501_235831/60622554/ccs","m64403e_230501_235831/76351590/ccs"],["CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>32205607<\/th>\n      <th>32205608<\/th>\n      <th>32205609<\/th>\n      <th>32205610<\/th>\n      <th>32205611<\/th>\n      <th>32205612<\/th>\n      <th>32205613<\/th>\n      <th>32205614<\/th>\n      <th>32205615<\/th>\n      <th>32205616<\/th>\n      <th>32205617<\/th>\n      <th>32205618<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p><br>We then retrieve methylation information from res$read. <br></p>
+<div id="htmlwidget-b11be92bafaf5007f73e" style="width:960px;height:500px;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-b11be92bafaf5007f73e">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Methylation quality score for each read<\/caption>","data":[["m64403e_220914_215953/135989309/ccs","m64403e_220914_215953/162596538/ccs","m64403e_220916_085351/110431013/ccs","m64403e_220916_085351/169607796/ccs","m64403e_220916_085351/176423754/ccs","m64403e_220916_085351/64488755/ccs","m64403e_230429_051256/101057610/ccs","m64403e_230429_051256/108660169/ccs","m64403e_230429_051256/134545723/ccs","m64403e_230429_051256/137562839/ccs","m64403e_230429_051256/149684703/ccs","m64403e_230429_051256/157089932/ccs","m64403e_230429_051256/163906768/ccs","m64403e_230429_051256/20186657/ccs","m64403e_230429_051256/25952430/ccs","m64403e_230429_051256/4393286/ccs","m64403e_230429_051256/57083623/ccs","m64403e_230429_051256/64816108/ccs","m64403e_230430_142929/120325692/ccs","m64403e_230430_142929/127011599/ccs","m64403e_230430_142929/146932432/ccs","m64403e_230430_142929/17302772/ccs","m64403e_230430_142929/62588992/ccs","m64403e_230430_142929/69468198/ccs","m64403e_230430_142929/94242938/ccs","m64403e_230501_235831/110691509/ccs","m64403e_230501_235831/119866220/ccs","m64403e_230501_235831/13894725/ccs","m64403e_230501_235831/141886462/ccs","m64403e_230501_235831/161417574/ccs","m64403e_230501_235831/172624120/ccs","m64403e_230501_235831/51381966/ccs","m64403e_230501_235831/60622554/ccs","m64403e_230501_235831/76351590/ccs"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>32205607<\/th>\n      <th>32205608<\/th>\n      <th>32205609<\/th>\n      <th>32205610<\/th>\n      <th>32205611<\/th>\n      <th>32205612<\/th>\n      <th>32205613<\/th>\n      <th>32205614<\/th>\n      <th>32205615<\/th>\n      <th>32205616<\/th>\n      <th>32205617<\/th>\n      <th>32205618<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p><br>By combining the CpG position matrix with the methylation quality
+matrix, we annotate methylated sites as mCpG. A read is classified as
+mCpG if it contains at least one methylated CpG.<br></p>
+<div id="htmlwidget-bc27f7549192058b9f6a" style="width:960px;height:500px;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bc27f7549192058b9f6a">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Methylation annotation for each read<\/caption>","data":[["m64403e_220914_215953/135989309/ccs","m64403e_220914_215953/162596538/ccs","m64403e_220916_085351/110431013/ccs","m64403e_220916_085351/169607796/ccs","m64403e_220916_085351/176423754/ccs","m64403e_220916_085351/64488755/ccs","m64403e_230429_051256/101057610/ccs","m64403e_230429_051256/108660169/ccs","m64403e_230429_051256/134545723/ccs","m64403e_230429_051256/137562839/ccs","m64403e_230429_051256/149684703/ccs","m64403e_230429_051256/157089932/ccs","m64403e_230429_051256/163906768/ccs","m64403e_230429_051256/20186657/ccs","m64403e_230429_051256/25952430/ccs","m64403e_230429_051256/4393286/ccs","m64403e_230429_051256/57083623/ccs","m64403e_230429_051256/64816108/ccs","m64403e_230430_142929/120325692/ccs","m64403e_230430_142929/127011599/ccs","m64403e_230430_142929/146932432/ccs","m64403e_230430_142929/17302772/ccs","m64403e_230430_142929/62588992/ccs","m64403e_230430_142929/69468198/ccs","m64403e_230430_142929/94242938/ccs","m64403e_230501_235831/110691509/ccs","m64403e_230501_235831/119866220/ccs","m64403e_230501_235831/13894725/ccs","m64403e_230501_235831/141886462/ccs","m64403e_230501_235831/161417574/ccs","m64403e_230501_235831/172624120/ccs","m64403e_230501_235831/51381966/ccs","m64403e_230501_235831/60622554/ccs","m64403e_230501_235831/76351590/ccs"],["CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG","CpG"],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>32205607<\/th>\n      <th>32205608<\/th>\n      <th>32205609<\/th>\n      <th>32205610<\/th>\n      <th>32205611<\/th>\n      <th>32205612<\/th>\n      <th>32205613<\/th>\n      <th>32205614<\/th>\n      <th>32205615<\/th>\n      <th>32205616<\/th>\n      <th>32205617<\/th>\n      <th>32205618<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p><br></p>
+<!-- ## chr10:122879000-122880300 -->
+<!-- The first example is region chr10:122879500–122879700, focusing on the motif chr10:122879629–122879640. -->
+<!-- ```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10} -->
+<!-- library(data.table) -->
+<!-- library(reshape2) -->
+<!-- library(GenomicRanges) -->
+<!-- library(ggplot2) -->
+<!-- library(tidyverse) -->
+<!-- library(gridExtra) -->
+<!-- library(Biostrings) -->
+<!-- source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/process_fiberseq_data.R") -->
+<!-- source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/plots.R") -->
+<!-- test_range_str <- "chr10:122879000-122880300" -->
+<!-- plot_name <- "NRF1_pairs_LCL_18508_chr10:122879000-122880300" -->
+<!-- result_dir <- "/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1_pairs//NRF1_pairs_LCL_18508_chr10:122879000-122880300/parsed" -->
+<!-- region <- get_region(result_dir) -->
+<!-- subtitle <- sprintf("%s:%s-%s", region$chr, region$start, region$end) -->
+<!-- # motif coordinates -->
+<!-- start_motif1 <- 122879629 -->
+<!-- end_motif1   <- 122879640 -->
+<!-- region_plot <- list(chr ="chr10", -->
+<!--                     start = 122879500, -->
+<!--                     end = 122879800) -->
+<!-- res <- try(assemble_region_result(result_dir, -->
+<!--                        filter_fire_reads = FALSE, -->
+<!--                        cover_region_only = FALSE, -->
+<!--                        select_A_only = FALSE, -->
+<!--                        split_haplotype = FALSE, -->
+<!--                        highlight_window = data.frame(start=c(start_motif1), end=c(end_motif1)), -->
+<!--                        color_highlight_window = "#44d6d8ff", -->
+<!--                        plot_name = plot_name,region = region_plot, -->
+<!--                        subtitle = subtitle) -->
+<!--   ) -->
+<!-- gg <- res$gg -->
+<!-- print(cowplot::plot_grid( -->
+<!--   gg$pileup, -->
+<!--   gg$dimelo_reads, -->
+<!--   gg$fire_fdr, -->
+<!--   gg$fire_reads, -->
+<!--   gg$fiberHMM, -->
+<!--   ncol = 1, -->
+<!--   rel_heights = c(4,8,2,8,8), -->
+<!--   align = "v", -->
+<!--   axis = "b" -->
+<!-- )) -->
+<!-- ``` -->
+<!-- Next, we identify CpG positions within this motif. The CpG positions are extracted from the corresponding .fa files.  -->
+<!-- ```{r} -->
+<!-- seq_region <- readDNAStringSet(file.path(result_dir,"/region.fa")) -->
+<!-- dna_seq <- seq_region[[1]] -->
+<!-- cpg_rel_pos <- start(matchPattern("CG", dna_seq)) -->
+<!-- header <- names(seq_region)       # e.g. "chr10:122879000-122880300" -->
+<!-- parts <- strsplit(header, "[:-]")[[1]] -->
+<!-- chrom <- parts[1] -->
+<!-- region_start <- as.integer(parts[2]) -->
+<!-- cpg_df <- data.frame( -->
+<!--   chrom = chrom, -->
+<!--   position = region_start + cpg_rel_pos - 1 -->
+<!-- ) -->
+<!-- cpg_df_inmotif <- cpg_df[cpg_df$position >= start_motif1 & cpg_df$position <= end_motif1,] -->
+<!-- rid_motif1 <- as.character(res$rids_df$RID[res$rids_df$start <= end_motif1 & res$rids_df$end >= start_motif1]) -->
+<!-- rid_motifsite_mat <- matrix( -->
+<!--   NA,  -->
+<!--   nrow = length(rid_motif1),  -->
+<!--   ncol = length(start_motif1:end_motif1), -->
+<!--   dimnames = list(rid_motif1, as.character(start_motif1:end_motif1)) -->
+<!-- ) -->
+<!-- rid_motifsite_methy <- rid_motifsite_mat -->
+<!-- # Mark CpG positions -->
+<!-- rid_motifsite_mat[,colnames(rid_motifsite_mat) %in% as.character(cpg_df_inmotif$position)] <- "CpG" -->
+<!-- DT::datatable(rid_motifsite_mat,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','CpG positions in the motif for each read'),options = list(pageLength = 10) ) -->
+<!-- ``` -->
+<!-- We then retrieve methylation information from res$read. -->
+<!-- ```{r} -->
+<!-- # Fill methylation -->
+<!-- reads_cpg <- res$reads[res$reads$base == "CG",] -->
+<!-- reads_cpg$RID <- as.character(reads_cpg$RID) -->
+<!-- idx <- which(reads_cpg$RID %in% rownames(rid_motifsite_methy) & -->
+<!--                reads_cpg$ref_position %in% colnames(rid_motifsite_methy)) -->
+<!-- for (j in idx) { -->
+<!--   rid_motifsite_methy[reads_cpg$RID[j], as.character(reads_cpg$ref_position[j])] <- reads_cpg$mod_qual[j] -->
+<!-- } -->
+<!-- DT::datatable(rid_motifsite_methy,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Methylation quality score for each read'),options = list(pageLength = 10) ) -->
+<!-- stopifnot(identical(dimnames(rid_motifsite_methy), dimnames(rid_motifsite_mat))) -->
+<!-- ``` -->
+<!-- By combining the CpG position matrix with the methylation quality matrix, we annotate methylated sites as mCpG. A read is classified as mCpG if it contains at least one methylated CpG. -->
+<!-- ```{r} -->
+<!-- # Combine CpG & methylation -->
+<!-- rid_motifsite_combined <- ifelse( -->
+<!--   !is.na(rid_motifsite_methy) & !is.na(rid_motifsite_mat),  -->
+<!--   "mCpG", -->
+<!--   ifelse(!is.na(rid_motifsite_mat), "CpG", NA) -->
+<!-- ) -->
+<!-- DT::datatable(rid_motifsite_combined,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Methylation annotation for each read'),options = list(pageLength = 10) ) -->
+<!-- ``` -->
+<!-- If a read has at least one mCpG, we annotate this read as mCpG -->
+<!-- ```{r} -->
+<!-- RID_cpg <- data.frame( -->
+<!--   RID = rownames(rid_motifsite_combined), -->
+<!--   status = apply(rid_motifsite_combined, 1, function(x) { -->
+<!--     if ("mCpG" %in% x) "mCpG" -->
+<!--     else if (all(na.omit(x) == "CpG")) "CpG" -->
+<!--     else NA -->
+<!--   }), -->
+<!--   row.names = NULL -->
+<!-- ) -->
+<!-- DT::datatable(RID_cpg,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Methylation info for each read'),options = list(pageLength = 10) ) -->
+<!-- ``` -->
+<!-- This results in two groups of reads: those containing mCpG and those without methylation. We then compare footprint frequencies between the two groups. -->
+<!-- We restrict the analysis to reads without nucleosome footprints, since transcription factors cannot bind when the motif is occupied by a nucleosome. -->
+<!-- ```{r} -->
+<!-- fps <- res$fiberHMM_fps_infire -->
+<!-- fps_TF <- fps[fps$class %in% c("< 40bp", "40-60bp"),] -->
+<!-- fps_gr <- GRanges(fps_TF$chr, IRanges(fps_TF$start, fps_TF$end), strand=fps_TF$strand) -->
+<!-- mcols(fps_gr) <- fps_TF[, !(names(fps_TF) %in% c("chr","start","end","strand"))] -->
+<!-- hw <- GRanges(region$chr, IRanges(start_motif1, end_motif1)) -->
+<!-- fps_gr <- fps_gr[width(pintersect(fps_gr, hw)) > 0] -->
+<!-- rid_motif1_fp <- as.character(fps_gr$RID) -->
+<!-- fps <- res$fiberHMM_fps -->
+<!-- fps_nucl <- fps[fps$size %in% c("> 100bp", "60-100bp"),] -->
+<!-- fps_gr_nucl <- GRanges(fps_nucl$chr, IRanges(fps_nucl$fp_blockStarts, fps_nucl$fp_blockEnds)) -->
+<!-- mcols(fps_gr_nucl) <- fps_nucl[, !(names(fps_nucl) %in% c("chr","start","end"))] -->
+<!-- fps_gr_nucl <- fps_gr_nucl[width(pintersect(fps_gr_nucl, hw, ignore.strand = T)) > 0] -->
+<!-- rid_fps_nucl <- as.character(fps_gr_nucl$RID) -->
+<!-- # filter rid sets -->
+<!-- rid_motif1_without_nucl <- setdiff(rid_motif1, rid_fps_nucl) -->
+<!-- RIDs_overlap_both <- intersect(rid_motif1_without_nucl, RID_cpg$RID) -->
+<!-- RIDs_access.df <- data.frame( -->
+<!--   RID = RIDs_overlap_both, -->
+<!--   TF = RIDs_overlap_both %in% rid_motif1_fp, -->
+<!--   mCpG = RIDs_overlap_both %in% RID_cpg$RID[RID_cpg$status=="mCpG"] -->
+<!-- ) -->
+<!-- RIDs_access.df$TF <- factor(RIDs_access.df$TF, levels=c(FALSE, TRUE)) -->
+<!-- RIDs_access.df$mCpG <- factor(RIDs_access.df$mCpG, levels=c(FALSE, TRUE)) -->
+<!-- print(RIDs_access.df) -->
+<!-- contingency_table <- table(RIDs_access.df[,c("TF","mCpG")])  -->
+<!-- prop_col <- round(prop.table(contingency_table, margin = 2) * 100,2) -->
+<!-- print(contingency_table) -->
+<!-- print(prop_col) -->
+<!-- ``` -->
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /software/openblas-0.3.13-el7-x86_64/lib/libopenblas_haswellp-r0.3.13.so
+
+locale:
+[1] C
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+ [1] Biostrings_2.64.0    XVector_0.36.0       gridExtra_2.3       
+ [4] forcats_0.5.1        stringr_1.5.1        dplyr_1.1.4         
+ [7] purrr_1.0.2          readr_2.1.2          tidyr_1.3.0         
+[10] tibble_3.2.1         tidyverse_1.3.1      ggplot2_3.5.1       
+[13] GenomicRanges_1.48.0 GenomeInfoDb_1.39.9  IRanges_2.30.0      
+[16] S4Vectors_0.34.0     BiocGenerics_0.42.0  reshape2_1.4.4      
+[19] data.table_1.14.2   
+
+loaded via a namespace (and not attached):
+ [1] bitops_1.0-7           fs_1.5.2               lubridate_1.8.0       
+ [4] httr_1.4.3             rprojroot_2.0.3        tools_4.2.0           
+ [7] backports_1.4.1        bslib_0.3.1            utf8_1.2.2            
+[10] R6_2.5.1               DT_0.22                DBI_1.2.2             
+[13] colorspace_2.0-3       withr_2.5.0            tidyselect_1.2.0      
+[16] compiler_4.2.0         git2r_0.30.1           cli_3.6.1             
+[19] rvest_1.0.2            xml2_1.3.3             labeling_0.4.2        
+[22] sass_0.4.1             scales_1.3.0           digest_0.6.29         
+[25] rmarkdown_2.25         pkgconfig_2.0.3        htmltools_0.5.2       
+[28] dbplyr_2.1.1           fastmap_1.1.0          highr_0.9             
+[31] htmlwidgets_1.5.4      rlang_1.1.2            readxl_1.4.0          
+[34] rstudioapi_0.13        jquerylib_0.1.4        generics_0.1.2        
+[37] farver_2.1.0           jsonlite_1.8.0         crosstalk_1.2.0       
+[40] RCurl_1.98-1.7         magrittr_2.0.3         GenomeInfoDbData_1.2.8
+[43] Rcpp_1.0.12            munsell_0.5.0          fansi_1.0.3           
+[46] lifecycle_1.0.4        stringi_1.7.6          yaml_2.3.5            
+[49] zlibbioc_1.42.0        plyr_1.8.7             grid_4.2.0            
+[52] promises_1.2.0.1       crayon_1.5.1           haven_2.5.0           
+[55] cowplot_1.1.1          hms_1.1.1              knitr_1.39            
+[58] pillar_1.9.0           reprex_2.0.1           glue_1.6.2            
+[61] evaluate_0.15          modelr_0.1.8           vctrs_0.6.5           
+[64] tzdb_0.4.0             httpuv_1.6.5           cellranger_1.1.0      
+[67] gtable_0.3.0           assertthat_0.2.1       xfun_0.41             
+[70] broom_0.8.0            later_1.3.0            workflowr_1.7.0       
+[73] ellipsis_0.3.2        </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

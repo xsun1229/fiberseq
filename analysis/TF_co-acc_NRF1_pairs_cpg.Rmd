@@ -667,9 +667,9 @@ mat_table_nfp$motif <- names
 tmp <- merge(mat_table, mat_table_nfp, by = "motif")
 combine <- merge(tmp, mat, by = "motif")
 
-colnames(combine) <- c("motifsite","#of_fp_detected_in_methy_group","#of_fp_detected_in_non-methy_group","#of_no_fp_reads_in_methy_group","#of_no_fp_reads_in_non-methy_group","%of_fp_detected_in_methy_group","%of_fp_detected_in_non-methy_group")
+colnames(combine) <- c("motifsite","#of_fp_detected_in_methy_group","#of_fp_detected_in_un_methy_group","#of_no_fp_reads_in_methy_group","#of_no_fp_reads_in_un_methy_group","%of_fp_detected_in_methy_group","%of_fp_detected_in_un_methy_group")
 
-DT::datatable(combine,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','footprint detected, %of_fp_detected_in_methy_group is calculated as: #of_fp_detected_in_methy_group/(#of_fp_detected_in_methy_group+#of_fp_detected_in_non-methy_group)\n'),options = list(pageLength = 10) )
+DT::datatable(combine,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','footprint detected, %of_fp_detected_in_methy_group is calculated as: #of_fp_detected_in_methy_group/(#of_fp_detected_in_methy_group+#of_fp_detected_in_un_methy_group)\n'),options = list(pageLength = 10) )
 
 
 df_long <- mat[,1:2] %>%
