@@ -22,7 +22,7 @@ TF Co-accessibility
 
 CpG methylation and TF binding
 
-* [NRF1](TF_co-acc_NRF1_pairs_cpg.html)
+* [NRF1](TF_co-acc_NRF1_cpg.html)
 
 
 

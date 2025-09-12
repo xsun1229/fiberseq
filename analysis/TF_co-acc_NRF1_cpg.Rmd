@@ -201,11 +201,20 @@ for (site in sites_selected){
   cat("<br>")
   cat(knitr::knit_print(DT::datatable(rid_motifsite_mat[[site]],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','CpG positions in the motif for each read'),options = list(pageLength = 10) )))
   cat("<br>")
+  cat("<br>")
+  cat("<br>")
+  cat("<br>")
+  cat("<br>")
   
   cat("We then retrieve methylation information from res$read. \n")
   
   cat("<br>")
   cat(knitr::knit_print(DT::datatable(rid_motifsite_methy[[site]],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Methylation quality score for each read'),options = list(pageLength = 10) )))
+  cat("<br>")
+  cat("<br>")
+  cat("<br>")
+  cat("<br>")
+  cat("<br>")
   cat("<br>")
   
   cat("By combining the CpG position matrix with the methylation quality matrix, we annotate methylated sites as mCpG. A read is classified as mCpG if it contains at least one methylated CpG.")
@@ -214,7 +223,11 @@ for (site in sites_selected){
   cat("<br>")
   cat(knitr::knit_print(DT::datatable(rid_motifsite_combined[[site]],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Methylation annotation for each read'),options = list(pageLength = 10) )))
   cat("<br>")
-  
+  cat("<br>")
+  cat("<br>")
+  cat("<br>")
+  cat("<br>")
+  cat("<br>")
   
 }
 
