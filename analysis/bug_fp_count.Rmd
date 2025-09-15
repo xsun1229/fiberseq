@@ -1,0 +1,112 @@
+---
+title: "fp_count"
+author: "XSun"
+date: "2025-09-15"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+
+```{r message=FALSE,warning=FALSE, fig.height=10, fig.width=10}
+library(GenomicRanges)
+library(tidyverse)
+
+setwd("/project/xinhe/xsun/fiberseq/1.TFs/")
+
+source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/process_fiberseq_data.R")
+source("/project/spott/kevinluo/Fiber_seq/fiberhub/code/plots.R")
+
+TF1 <- "NRF1"
+
+test_range_str <- "chr7:101217500-101218700"
+plot_name <- "NRF1_pairs_LCL_18508_chr7:101217500-101218700"
+result_dir <- "/project/xinhe/xsun/fiberseq/1.TFs/plot_region/results/NRF1_pairs/NRF1_pairs_LCL_18508_chr7:101217500-101218700/parsed"
+
+
+region <- get_region(result_dir)
+subtitle <- sprintf("%s:%s-%s", region$chr, region$start, region$end)
+print(subtitle)
+
+highlight_windows.df <- data.frame(start = c(101218090, 101218154), end = c(101218101,101218165 ))
+
+cluster_regions <- highlight_windows.df
+cluster_regions$chr <- region$chr
+
+res <- get_region_result(result_dir,
+                         filter_fire_reads = FALSE,
+                         cover_region_only = FALSE,
+                         select_A_only = TRUE,
+                         split_haplotype = FALSE,
+                         highlight_window = highlight_windows.df,
+                         color_highlight_window = "#44d6d8ff",
+                         plot_name = plot_name,
+                         cluster = "fiberHMM",
+                         #cluster_class = c("< 40bp", "40-60bp"),
+                         cluster_regions = cluster_regions,
+                         subtitle = subtitle)
+
+
+gg <- res$gg
+  
+print(cowplot::plot_grid(
+    gg$pileup,
+    gg$dimelo_reads,
+    gg$fire_fdr,
+    gg$fire_reads,
+    gg$fiberHMM,
+    ncol = 1,
+    rel_heights = c(4,8,2,8,8),
+    align = "v",
+    axis = "b"
+  ))
+
+fps <- res$fiberHMM_fps_infire
+  
+# ---- <60bp footprints ----
+fps_TF <- fps[fps$class %in% c("< 40bp","40-60bp"),]
+fps_gr <- GRanges(fps_TF$chr, IRanges(fps_TF$start, fps_TF$end), strand = fps_TF$strand)
+mcols(fps_gr) <- fps_TF[, !(names(fps_TF) %in% c("chr", "start", "end", "strand"))]
+
+hw <- GRanges(region$chr, IRanges(highlight_windows.df$start, highlight_windows.df$end))
+
+
+# check if footprint overlap with the 2 motif sites
+ov1 <- width(pintersect(fps_gr, hw[1], ignore.strand =T))
+ov2 <- width(pintersect(fps_gr, hw[2], ignore.strand =T))
+
+print(ov1)
+print(ov2)
+
+# extract the footprints overlap with the 2 motif sites
+fps_tf_motif1 <- as.data.frame(fps_gr[ov1 > 0])
+fps_tf_motif2 <- as.data.frame(fps_gr[ov2 > 0])
+head(fps_tf_motif1)
+head(fps_tf_motif2)
+
+# extract the reads overlap with the 2 motif sites
+rid_motif1 <- as.character(res$rids_df$RID[res$rids_df$start <= highlight_windows.df$end[1] & res$rids_df$end >= highlight_windows.df$start[1]])
+rid_motif2 <- as.character(res$rids_df$RID[res$rids_df$start <= highlight_windows.df$end[2] & res$rids_df$end >= highlight_windows.df$start[1]])
+
+# create the counting matrix
+RIDs_overlap_both <- intersect(rid_motif1, rid_motif2)
+RIDs_access.df <- data.frame(RID = RIDs_overlap_both, TF1 = FALSE, TF2 = FALSE)
+
+
+# ---- Update RID table ----
+RIDs_access.df$TF1[RIDs_access.df$RID %in% c(fps_tf_motif1$RID)] <- TRUE
+RIDs_access.df$TF2[RIDs_access.df$RID %in% c(fps_tf_motif2$RID)] <- TRUE
+
+print(RIDs_access.df)
+
+RIDs_access.df$TF1 <- factor(RIDs_access.df$TF1, levels = c(FALSE, TRUE))
+RIDs_access.df$TF2 <- factor(RIDs_access.df$TF2, levels = c(FALSE, TRUE))
+
+
+contingency_table <- table(RIDs_access.df[,c("TF1", "TF2")]) + 1
+print(contingency_table)
+
+
+```
+

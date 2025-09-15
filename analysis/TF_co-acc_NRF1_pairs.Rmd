@@ -45,6 +45,33 @@ plot_binned_boxplot <- function(df, strand_label, breaks, labels, right = TRUE, 
     ) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
+
+plot_binned_boxplot_bothstrand <- function(df, breaks, labels, right = FALSE, step_label = "10bp") {
+  df %>%
+    mutate(
+      bin = cut(
+        distance,
+        breaks = breaks,
+        include.lowest = TRUE,
+        right = right,
+        labels = labels
+      ),
+      log_or = log2(FET_oddratio)
+    ) %>%
+    filter(!is.na(bin), is.finite(log_or)) %>%
+    ggplot(aes(x = bin, y = log_or)) +
+    geom_boxplot(fill = "skyblue", alpha = 0.7, outlier.size = 1) +
+    theme_minimal(base_size = 14) +
+    labs(
+      #x = glue::glue("Distance Bin ({step_label})"),
+      x = glue::glue("Distance Bin"),
+      y = expression(log[2]~"(Odds Ratio)"),
+      #title = "Pairs across all strands"
+    ) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+
+
 ```
 
 
@@ -434,6 +461,12 @@ p_diff_10
 p_same_1
 p_diff_1
 
+
+breaks <- c(10, 20, 30, 40, 50, 60, 120)
+labels <- c("10-20", "20-30", "30-40", "40-50", "50-60", "60-120")
+
+plot_binned_boxplot_bothstrand(df_filtered, breaks, labels)
+
 ```
 
 
@@ -517,6 +550,35 @@ for (i in 1:length(index_sig)){
 
   print(FET_matrix[[index]])
   print(FET_res[[index]])
+  
+  
+  df <- as.data.frame(as.table(FET_matrix[[index]]))
+  
+  # Add combination label
+  df <- df %>%
+    mutate(combo = paste0("TF1=", TF1, ", TF2=", TF2))
+  
+  # Compute percentages
+  df <- df %>%
+    mutate(percent = Freq / sum(Freq) * 100,
+           label = paste0(round(percent, 1), "%"))
+  
+  df <- df %>%
+    mutate(combo = case_when(
+      TF1 == "TRUE"  & TF2 == "TRUE"  ~ "Co-bounded",
+      TF1 == "TRUE"  & TF2 == "FALSE" ~ "First bounded",
+      TF1 == "FALSE" & TF2 == "TRUE"  ~ "Second bounded",
+      TF1 == "FALSE" & TF2 == "FALSE" ~ "Unbounded"
+    ))
+  
+  # Vertical stacked bar with % labels
+  ggplot(df, aes(x = "", y = percent, fill = combo)) +
+    geom_bar(stat = "identity") +
+    geom_text(aes(label = label),
+              position = position_stack(vjust = 0.5),
+              color = "white", size = 5) +
+    labs(x = "", y = "Percentage", fill = "Combination") +
+    theme_minimal()
 
 }
 
