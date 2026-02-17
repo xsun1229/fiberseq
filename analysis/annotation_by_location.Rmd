@@ -233,7 +233,7 @@ p_pct + p_cnt
 
 ```{r warning=FALSE, message=FALSE, fig.height=4, fig.width=10}
 
-summary_stats_all <- readRDS("/project/spott/xsun/fiberseq/2.annotating_footprints/results/overlap_with_promoter_TSS-2kb+500bp_proteincoding.RDS")
+summary_stats_all <- readRDS("/project/spott/xsun/fiberseq/2.annotating_footprints/results/overlap_with_promoter_TSS-2kb+500bp_allgenes.RDS")
 
 summary_stats_all[, fp_len_hi := as.integer(sub(".*-(\\d+)bp", "\\1", fp_length))]
 setorder(summary_stats_all, fp_len_hi)

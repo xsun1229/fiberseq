@@ -440,10 +440,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -536,15 +536,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree135f7647f43b090e4f5527690ba69c43f046ddf2targetblank135f764a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0targetblank31a3c60a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/xsun1229/fiberseq/tree/135f7647f43b090e4f5527690ba69c43f046ddf2" target="_blank">135f764</a>
+<a href="https://github.com/xsun1229/fiberseq/tree/31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0" target="_blank">31a3c60</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree135f7647f43b090e4f5527690ba69c43f046ddf2targetblank135f764a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0targetblank31a3c60a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -554,7 +554,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/xsun1229/fiberseq/tree/135f7647f43b090e4f5527690ba69c43f046ddf2" target="_blank">135f764</a>.
+<a href="https://github.com/xsun1229/fiberseq/tree/31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0" target="_blank">31a3c60</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -568,11 +568,8 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-Untracked files:
-    Untracked:  analysis/annotation_by_location.Rmd
-
 Unstaged changes:
-    Modified:   analysis/index.Rmd
+    Modified:   analysis/annotation_by_location.Rmd
 
 </code></pre>
 <p>
@@ -587,10 +584,75 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/annotation_by_location.Rmd</code>) and HTML
+(<code>docs/annotation_by_location.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0/analysis/annotation_by_location.Rmd" target="_blank">31a3c60</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-17
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0/docs/annotation_by_location.html" target="_blank">31a3c60</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-17
+</td>
+<td>
+update
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -652,6 +714,43 @@ ggplot(res_counts, aes(x = fp_length, y = n_fp)) +
   theme_classic(base_size = 13) +
   theme(axis.text.x = element_text(angle = 30, hjust = 1))</code></pre>
 <p><img src="figure/annotation_by_location.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0/docs/figure/annotation_by_location.Rmd/unnamed-chunk-2-1.png" target="_blank">31a3c60</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="promoter" class="section level1">
@@ -822,10 +921,47 @@ p_cnt &lt;- ggplot(cnt_long, aes(fp_length, n, color = threshold, group = thresh
 
 p_pct + p_cnt</code></pre>
 <p><img src="figure/annotation_by_location.Rmd/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0/docs/figure/annotation_by_location.Rmd/unnamed-chunk-3-1.png" target="_blank">31a3c60</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="all-genes" class="section level2">
 <h2>All genes</h2>
-<pre class="r"><code>summary_stats_all &lt;- readRDS(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/overlap_with_promoter_TSS-2kb+500bp_proteincoding.RDS&quot;)
+<pre class="r"><code>summary_stats_all &lt;- readRDS(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/overlap_with_promoter_TSS-2kb+500bp_allgenes.RDS&quot;)
 
 summary_stats_all[, fp_len_hi := as.integer(sub(&quot;.*-(\\d+)bp&quot;, &quot;\\1&quot;, fp_length))]
 setorder(summary_stats_all, fp_len_hi)
@@ -893,6 +1029,43 @@ p_cnt &lt;- ggplot(cnt_long, aes(fp_length, n, color = threshold, group = thresh
 
 p_pct + p_cnt</code></pre>
 <p><img src="figure/annotation_by_location.Rmd/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0/docs/figure/annotation_by_location.Rmd/unnamed-chunk-4-1.png" target="_blank">31a3c60</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="ocr-called-by-fire-using-fiber-seq-data"
@@ -967,6 +1140,43 @@ p_cnt &lt;- ggplot(cnt_long, aes(fp_length, n, color = threshold, group = thresh
 
 p_pct + p_cnt</code></pre>
 <p><img src="figure/annotation_by_location.Rmd/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0/docs/figure/annotation_by_location.Rmd/unnamed-chunk-5-1.png" target="_blank">31a3c60</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="pol2" class="section level1">
 <h1>Pol2</h1>
@@ -1043,6 +1253,43 @@ p_cnt &lt;- ggplot(cnt_long, aes(fp_length, n, color = threshold, group = thresh
 
 p_pct + p_cnt</code></pre>
 <p><img src="figure/annotation_by_location.Rmd/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0/docs/figure/annotation_by_location.Rmd/unnamed-chunk-6-1.png" target="_blank">31a3c60</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1077,11 +1324,11 @@ loaded via a namespace (and not attached):
 [21] rstudioapi_0.13    yaml_2.3.5         xfun_0.41          fastmap_1.1.0     
 [25] withr_2.5.0        dplyr_1.1.4        stringr_1.5.1      knitr_1.39        
 [29] generics_0.1.4     fs_1.5.2           vctrs_0.6.5        sass_0.4.1        
-[33] tidyselect_1.2.0   rprojroot_2.0.3    grid_4.2.0         glue_1.6.2        
+[33] tidyselect_1.2.0   grid_4.2.0         rprojroot_2.0.3    glue_1.6.2        
 [37] R6_2.5.1           fansi_1.0.3        rmarkdown_2.25     farver_2.1.0      
-[41] magrittr_2.0.3     scales_1.4.0       promises_1.2.0.1   htmltools_0.5.2   
-[45] dichromat_2.0-0.1  httpuv_1.6.5       labeling_0.4.2     S7_0.2.0          
-[49] utf8_1.2.2         stringi_1.7.6     </code></pre>
+[41] magrittr_2.0.3     whisker_0.4        scales_1.4.0       promises_1.2.0.1  
+[45] htmltools_0.5.2    dichromat_2.0-0.1  httpuv_1.6.5       labeling_0.4.2    
+[49] S7_0.2.0           utf8_1.2.2         stringi_1.7.6     </code></pre>
 </div>
 </div>
 
