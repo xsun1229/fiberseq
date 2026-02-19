@@ -1,0 +1,150 @@
+---
+title: "Checking the FIRE coverage for 15 states from ChromHMM"
+author: "XSun"
+date: "2026-02-19"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+
+# Introduction
+
+Here we check if the 15 states are fully covered by the FIRE peaks. If so, we can only use the footprints in the FIRE peaks, instead of those called whole genome.
+
+The FIRE peaks are shared by Kevin, `/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz`
+
+ChromHMM segmentations were downloaded from the Roadmap Epigenomics portal: https://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/
+
+We used: `E116_15_coreMarks_hg38lift_mnemonics.bed.gz`
+
+**E116 corresponds to GM12878 (lymphoblastoid cells)**, which is the closest Roadmap epigenome match to our LCL cell line (based on the Roadmap epigenome metadata table).
+
+
+
+```{r}
+suppressPackageStartupMessages({
+  library(GenomicRanges)
+  library(IRanges)
+  library(data.table)
+  library(ggplot2)
+})
+
+setwd("/project/spott/xsun/fiberseq/2.annotating_footprints/")
+source("0.functions.R")
+
+#-----------------------------
+# 1) Load FIRE peaks (BED: 0-based start, 1-based end)
+#-----------------------------
+FIREpeak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz",
+  showProgress = FALSE
+)
+stopifnot(ncol(FIREpeak_df) >= 3)
+setnames(FIREpeak_df, 1:3, c("chr","start0","end"))
+
+FIRE_gr <- GRanges(
+  seqnames = FIREpeak_df$chr,
+  ranges   = IRanges(start = FIREpeak_df$start0 + 1L, end = FIREpeak_df$end)
+)
+
+# IMPORTANT: merge overlapping FIRE peaks to avoid double-counting bp
+FIRE_gr <- reduce(FIRE_gr, ignore.strand = TRUE)
+
+#-----------------------------
+# 2) Load ChromHMM (BED: 0-based start, 1-based end; V4 like "9_Het")
+#-----------------------------
+ChromHMM_df <- fread("data/E116_15_coreMarks_hg38lift_mnemonics.bed.gz", showProgress = FALSE)
+ChromHMM_df <- ChromHMM_df[!is.na(V4) & V4 != ""]
+setnames(ChromHMM_df, 1:4, c("chr","start0","end","state"))
+
+# Parse state_id + mnemonic from "9_Het"
+ChromHMM_df[, c("state_id","mnemonic") := tstrsplit(state, "_", fixed = TRUE)]
+ChromHMM_df[, state_id := as.integer(state_id)]
+
+ChromHMM_gr <- GRanges(
+  seqnames = ChromHMM_df$chr,
+  ranges   = IRanges(start = ChromHMM_df$start0 + 1L, end = ChromHMM_df$end),
+  state_id = ChromHMM_df$state_id,
+  mnemonic = ChromHMM_df$mnemonic
+)
+
+# Optional: keep chr1-22 only (match your earlier convention)
+keep_chr <- paste0("chr", 1:22)
+ChromHMM_gr <- ChromHMM_gr[seqnames(ChromHMM_gr) %in% keep_chr]
+FIRE_gr     <- FIRE_gr[seqnames(FIRE_gr) %in% keep_chr]
+
+# Keep only seqlevels present in both
+common_chr <- intersect(seqlevelsInUse(ChromHMM_gr), seqlevelsInUse(FIRE_gr))
+ChromHMM_gr <- keepSeqlevels(ChromHMM_gr, common_chr, pruning.mode = "coarse")
+FIRE_gr     <- keepSeqlevels(FIRE_gr,     common_chr, pruning.mode = "coarse")
+
+#-----------------------------
+# 3) Compute bp overlaps: ChromHMM ∩ FIRE
+#    (ChromHMM is (typically) non-overlapping; FIRE has been reduced)
+#-----------------------------
+hits <- findOverlaps(ChromHMM_gr, FIRE_gr, ignore.strand = TRUE)
+ov   <- pintersect(ChromHMM_gr[queryHits(hits)], FIRE_gr[subjectHits(hits)], ignore.strand = TRUE)
+
+ov_dt <- data.table(
+  state_id = mcols(ChromHMM_gr)$state_id[queryHits(hits)],
+  mnemonic = mcols(ChromHMM_gr)$mnemonic[queryHits(hits)],
+  ov_bp    = width(ov)
+)
+
+# Overlap bp per state
+ov_by_state <- ov_dt[, .(fire_overlap_bp = sum(ov_bp)), by = .(state_id, mnemonic)]
+
+# Total bp per state genome-wide (within ChromHMM tracks you loaded)
+tot_by_state <- data.table(
+  state_id = mcols(ChromHMM_gr)$state_id,
+  mnemonic = mcols(ChromHMM_gr)$mnemonic,
+  total_bp = width(ChromHMM_gr)
+)[, .(total_bp_state = sum(total_bp)), by = .(state_id, mnemonic)]
+
+# Merge + fill missing overlap states with 0
+res <- merge(tot_by_state, ov_by_state, by = c("state_id","mnemonic"), all.x = TRUE)
+res[is.na(fire_overlap_bp), fire_overlap_bp := 0L]
+
+# Add your annotation (assumes chromhmm_annot exists in env)
+# chromhmm_annot has: state_id, mnemonic, description, rgb, hex
+res <- merge(res, chromhmm_annot[, .(state_id, mnemonic, description, hex)], 
+             by = c("state_id","mnemonic"), all.x = TRUE)
+
+#-----------------------------
+# 4) Metrics you asked for
+#-----------------------------
+# (A) Overall fraction of ChromHMM bp covered by FIRE
+overall_fire_coverage <- res[, sum(fire_overlap_bp)] / res[, sum(total_bp_state)]
+
+# (B) For each state: percent of that state's bp covered by FIRE
+#     i.e., "do the 15 states fall in FIRE peaks"
+res[, frac_state_covered_by_fire := fifelse(total_bp_state > 0, fire_overlap_bp / total_bp_state, NA_real_)]
+
+# (C) Composition within FIRE: fraction of FIRE-overlap bp that is each state
+#     i.e., "proportion of states in FIRE"
+res[, frac_of_fire_bp_in_state := fire_overlap_bp / sum(fire_overlap_bp)]
+
+# (D) Helpful in plots
+res[, `:=`(
+  fire_overlap_Mb = fire_overlap_bp / 1e6,
+  total_state_Mb  = total_bp_state / 1e6
+)]
+
+#-----------------------------
+# 5) Output
+#-----------------------------
+res <- res[order(state_id)]
+
+res <- res[,-c("hex","total_bp_state","fire_overlap_bp","frac_of_fire_bp_in_state")]
+res <- res[,c("state_id","description","total_state_Mb","fire_overlap_Mb","frac_state_covered_by_fire")]
+res$frac_state_covered_by_fire <- res$frac_state_covered_by_fire*100
+colnames(res)[5] <- "%state_covered_by_fire"
+
+
+DT::datatable(res,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','FIRE Coverage for 15 states from ChromHMM'),options = list(pageLength = 20) )
+
+cat("\nOverall ChromHMM bp covered by FIRE =", overall_fire_coverage*100, "%\n")
+
+```
+

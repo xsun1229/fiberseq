@@ -23,13 +23,13 @@ CpG methylation and TF binding
 
 * [NRF1](TF_co-acc_NRF1_cpg2.html)
 
-# Annotation for the footprints / FIRE peaks 
+# Annotation for the footprints
 
 Annotate footprints by location
 
 * [Promoters, Pol2, OCR](annotation_by_location_prompolocr.html)
 * [15 states from ChromHMM](annotation_by_location_ChromHMM.html)
 
-Annotate FIRE peaks by location
+Checking the FIRE coverage for 15 states from ChromHMM
 
-* [15 states from ChromHMM](annotation_firepeaks_by_location_ChromHMM.html)
+* [Link](fire_coverage_ChromHMM.html)
