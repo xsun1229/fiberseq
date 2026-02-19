@@ -1,0 +1,118 @@
+---
+title: "Annotate FIRE peaks by location -- 15 states from ChromHMM"
+author: "XSun"
+date: "2026-02-19"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+
+```{r}
+
+suppressPackageStartupMessages({
+  library(data.table)
+  library(ggplot2)
+  library(patchwork)
+})
+
+source("/project/spott/xsun/fiberseq/2.annotating_footprints/0.functions.R")
+```
+
+# Overview
+
+To quantify **where Fiber-seq FIRE peaks preferentially occur in the genome**, we measured their overlap with the **Roadmap Epigenomics ChromHMM core 15-state segmentation**.
+
+Because different chromatin states occupy very different fractions of the genome, we compute **genome-background–normalized enrichment** to determine whether FIRE peaks are over- or under-represented in each state.
+
+
+| STATE NO. | MNEMONIC | DESCRIPTION |
+|-----------|----------|-------------|
+| 1  | TssA      | Active TSS |
+| 2  | TssAFlnk  | Flanking Active TSS |
+| 3  | TxFlnk    | Transcription at gene 5' and 3' |
+| 4  | Tx        | Strong transcription |
+| 5  | TxWk      | Weak transcription |
+| 6  | EnhG      | Genic enhancers |
+| 7  | Enh       | Enhancers |
+| 8  | ZNF/Rpts  | ZNF genes & repeats |
+| 9  | Het       | Heterochromatin |
+| 10 | TssBiv    | Bivalent/Poised TSS |
+| 11 | BivFlnk   | Flanking Bivalent TSS/Enh |
+| 12 | EnhBiv    | Bivalent Enhancer |
+| 13 | ReprPC    | Repressed PolyComb |
+| 14 | ReprPCWk  | Weak Repressed PolyComb |
+| 15 | Quies     | Quiescent/Low |
+
+---
+
+## Data Source
+
+### ChromHMM 15 states
+
+ChromHMM segmentations were downloaded from the Roadmap Epigenomics portal: https://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/
+
+We used: `E116_15_coreMarks_hg38lift_mnemonics.bed.gz`
+
+
+**E116 corresponds to GM12878 (lymphoblastoid cells)**, which is the closest Roadmap epigenome match to our LCL cell line (based on the Roadmap epigenome metadata table).
+
+---
+
+### FIRE Peaks 
+
+`/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz`
+
+
+## Overlap Definition (Any-Overlap)
+
+We used an **any-overlap** criterion:
+
+> A footprint is considered to overlap a ChromHMM state if it shares **≥ 1 bp** with that state interval.
+
+---
+
+
+# Results
+
+- `n_fp`: total number of footprints  
+- `n_any`: number of footprints overlapping the state (≥ 1 bp)  
+- `pct_any`: percentage of footprints overlapping the state 
+
+
+```{r warning=FALSE, message=FALSE, fig.height=5, fig.width=12}
+
+ocr_by_state <- readRDS("/project/spott/xsun/fiberseq/2.annotating_footprints/results/FIREpeaks_any_overlap_with_ChromHMM_by_state.RDS")
+ocr_by_state <- ocr_by_state[,-c("hex")]
+col_map <- readRDS("/project/spott/xsun/fiberseq/2.annotating_footprints/results/any_overlap_with_ChromHMM_by_state_colmap.RDS")
+label_map <- readRDS("/project/spott/xsun/fiberseq/2.annotating_footprints/results/any_overlap_with_ChromHMM_by_state_labelmap.RDS")
+
+DT::datatable(ocr_by_state,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;',''),options = list(pageLength = 10) )
+
+
+ocr_by_state[, state_id := as.integer(state_id)]
+setorder(ocr_by_state, state_id)
+ocr_by_state[, state_f := factor(state_id, levels = state_id)]
+
+p_ocr_pct <- ggplot(ocr_by_state, aes(x = state_f, y = pct_ocr_any, fill = state_f)) +
+  geom_col() +
+  scale_fill_manual(values = col_map, labels = label_map) +
+  labs(x = "ChromHMM state",
+       y = "% FIRE peaks overlapping state (any overlap)",
+       fill = "ChromHMM state") +
+  theme_classic(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p_ocr_enrich <- ggplot(ocr_by_state, aes(x = state_f, y = enrichment, fill = state_f)) +
+  geom_hline(yintercept = 1, linetype = "dashed", linewidth = 0.8, color = "black") +
+  geom_col() +
+  scale_fill_manual(values = col_map, labels = label_map) +
+  labs(x = "ChromHMM state",
+       y = "Enrichment over genome background",
+       fill = "ChromHMM state") +
+  theme_classic(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+p_ocr_pct + p_ocr_enrich
+```
