@@ -105,6 +105,11 @@ Enrichment(state) = \frac{\%Footprints(state)}{\%Genome(state)}
 
 # Results
 
+- `n_fp`: total number of footprints  
+- `n_any`: number of footprints overlapping the state (≥ 1 bp)  
+- `pct_any`: percentage of footprints overlapping the state 
+
+
 ```{r warning=FALSE, message=FALSE, fig.height=5, fig.width=16}
 
 summary_any_by_state <- readRDS("/project/spott/xsun/fiberseq/2.annotating_footprints/results/any_overlap_with_ChromHMM_by_state.RDS")
