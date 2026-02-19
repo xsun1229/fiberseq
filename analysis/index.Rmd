@@ -17,7 +17,6 @@ TF examples
 TF Co-accessibility
 
 * [NRF1 pairs](TF_co-acc_NRF1_pairs.html)
-
 * [NRF1 & SP1](TF_co-acc_NRF1_SP1.html)
 
 CpG methylation and TF binding
@@ -28,6 +27,6 @@ CpG methylation and TF binding
 
 Annotate footprints by location
 
-* [link](annotation_by_location.html)
-
+* [Promoters, Pol2, OCR](annotation_by_location_prompolocr.html)
+* [15 states from ChromHMM](annotation_by_location_ChromHMM.html)
 

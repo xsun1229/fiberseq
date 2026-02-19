@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="XSun" />
+
+<meta name="date" content="2026-02-16" />
+
+<title>Annotate footprints by location</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">fiberseq</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/xsun1229/fiberseq">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Annotate footprints by location</h1>
+<h4 class="author">XSun</h4>
+<h4 class="date">2026-02-16</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-02-19
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>fiberseq/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250831code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250831)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250831code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250831)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree10bc51c18f2afd6800e3e150fed884f90c5d8811targetblank10bc51ca">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/xsun1229/fiberseq/tree/10bc51c18f2afd6800e3e150fed884f90c5d8811" target="_blank">10bc51c</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree10bc51c18f2afd6800e3e150fed884f90c5d8811targetblank10bc51ca"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/xsun1229/fiberseq/tree/10bc51c18f2afd6800e3e150fed884f90c5d8811" target="_blank">10bc51c</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Untracked files:
+    Untracked:  analysis/annotation_by_location_prompolocr.Rmd
+
+Unstaged changes:
+    Deleted:    analysis/annotation_by_location.Rmd
+    Modified:   analysis/index.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>suppressPackageStartupMessages({
+  library(data.table)
+  library(ggplot2)
+  library(patchwork)
+})</code></pre>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>We check how many footprints are in</p>
+<ul>
+<li>Promoter</li>
+<li>Pol2</li>
+<li>linker regions</li>
+<li>OCRs called by FIRE using Fiber-seq data</li>
+</ul>
+</div>
+<div id="footprint-and-peak-calling-data" class="section level1">
+<h1>Footprint and Peak Calling Data</h1>
+<p>From Kevin</p>
+<div id="fiberhmm-output" class="section level3">
+<h3>1. FiberHMM Output</h3>
+<p>FiberHMM results are available at:
+<code>/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM/merged/</code></p>
+</div>
+<div id="macs3-peak-calling-on-footprints" class="section level3">
+<h3>2. MACS3 Peak Calling on Footprints</h3>
+<p>Using the FiberHMM-derived footprints, peaks of different footprint
+size ranges were called with <strong>MACS3</strong>. The results are
+located at:
+<code>/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM/merged/combined/joint_trained_peaks</code></p>
+<p>Example files:</p>
+<pre><code>combined_all_chrs_10-30bp_macs3_q0.1_maxgap1_peaks.narrowPeak.gz
+combined_all_chrs_10-30bp_macs3_q0.1_maxgap1_peaks.xls</code></pre>
+<ul>
+<li><strong><code>.narrowPeak.gz</code></strong>
+<ul>
+<li>UCSC narrowPeak format<br />
+</li>
+<li>0-based coordinate system</li>
+</ul></li>
+<li><strong><code>.xls</code></strong>
+<ul>
+<li>Standard MACS3 peak output table<br />
+</li>
+<li>1-based coordinate system</li>
+</ul></li>
+</ul>
+<p>These files can serve as the starting point for downstream
+footprint-based analyses.</p>
+<pre class="r"><code>res_counts &lt;- readRDS(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/count_fp.RDS&quot;)
+
+ggplot(res_counts, aes(x = fp_length, y = n_fp)) +
+  geom_col() +
+  labs(x = &quot;Footprint length bin&quot;,
+       y = &quot;Number of footprints&quot;) +
+  theme_classic(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))</code></pre>
+<p><img src="figure/annotation_by_location_prompolocr.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="promoter" class="section level1">
+<h1>Promoter</h1>
+<p>Promoter regions were defined using the <a
+href="https://www.gencodegenes.org/human/">GENCODE v49 basic gene
+annotation (GRCh38.p14)</a>. TSSs were extracted from the GTF file
+<code>/project/spott/xsun/fiberseq/2.annotating_footprints/data/gencode.v49.basic.annotation.gtf.gz</code>.</p>
+<p>The genomic annotations were built using Kevin’s code: <a
+href="https://github.com/xinhe-lab/mapgen/blob/main/R/annots.R"
+class="uri">https://github.com/xinhe-lab/mapgen/blob/main/R/annots.R</a></p>
+<p>The promoter is defined as the resion <strong>2kb</strong> upstream
+and <strong>500bp</strong> downstream the TSS</p>
+<p><strong>Step-by-step logic</strong></p>
+<ol style="list-style-type: decimal">
+<li>Load the GTF and restrict chromosomes</li>
+</ol>
+<ul>
+<li>Imports the GTF into a <code>GRanges</code> object
+(<code>gtf.gr</code>)</li>
+<li>Drops everything not on autosomes
+<code>chr1</code>–<code>chr22</code> using
+<code>seqlevels(..., pruning.mode="coarse")</code></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Keep only protein-coding genes (Optional)</li>
+</ol>
+<ul>
+<li>Filters the full GTF down to entries with
+<code>gene_type == "protein_coding"</code></li>
+<li>Extracts <strong>gene-level</strong> ranges
+(<code>type == "gene"</code>) into <code>genes.gr</code></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Choose one canonical transcript per gene (longest transcript)</li>
+</ol>
+<ul>
+<li>Converts the GTF to a tibble, keeps only
+<code>type == "transcript"</code></li>
+<li>Groups by <code>gene_id</code></li>
+<li>Computes transcript length as <code>abs(end - start)</code></li>
+<li>Sorts by decreasing length and keeps the top transcript
+(<code>slice(1)</code>)</li>
+</ul>
+<p>This produces a table (<code>canonical.transcripts</code>) containing
+<strong>one transcript_id per gene</strong>.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Build canonical transcript annotation tracks</li>
+</ol>
+<ul>
+<li>Keeps only GTF records whose <code>transcript_id</code> is in the
+chosen canonical set:
+<ul>
+<li><code>gtf.canonical.gr</code></li>
+</ul></li>
+<li>Extracts:
+<ul>
+<li><code>exons.gr</code> where <code>type == "exon"</code></li>
+<li><code>UTRs.gr</code> where <code>type == "UTR"</code></li>
+</ul></li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li>Infer introns (gene minus exon intervals)</li>
+</ol>
+<ul>
+<li>Computes introns as:<br />
+<code>introns.gr &lt;- setdiff(genes.gr, exons.gr)</code></li>
+<li>Uses <code>findOverlaps(genes.gr, introns.gr)</code> to map each
+intron interval back to its gene</li>
+<li>Adds a <code>gene_name</code> metadata column to introns based on
+the overlapping gene</li>
+</ul>
+<ol start="6" style="list-style-type: decimal">
+<li>Define promoters (TSS - 2 kb, strand-aware)</li>
+</ol>
+<p>Promoters are built from <strong>gene coordinates</strong> using
+strand:</p>
+<ul>
+<li>For <code>+</code> strand genes: promoter =
+<code>[gene_start - 2000, gene_start]</code></li>
+<li>For <code>-</code> strand genes: promoter =
+<code>[gene_end, gene_end + 2000]</code></li>
+</ul>
+<p>Then assigns <code>gene_name</code> to each promoter interval.</p>
+<ol start="7" style="list-style-type: decimal">
+<li>Save outputs</li>
+</ol>
+<p>Creates a named list of <code>GRanges</code> objects:</p>
+<ul>
+<li><code>exons</code></li>
+<li><code>introns</code></li>
+<li><code>UTRs</code></li>
+<li><code>promoters</code></li>
+<li><code>genes</code></li>
+</ul>
+<!-- For transcripts annotated on the positive strand, the TSS was defined as the annotated transcript start coordinate; for transcripts on the negative strand, the TSS was defined as the transcript end coordinate. -->
+<!-- Promoter regions were constructed by extending each TSS symmetrically upstream(+200bp) and downstream(-1kb).  -->
+<!-- To obtain gene-level promoter regions, transcript-level promoters belonging to the same gene (identified by `gene_id`) were grouped and merged using genomic interval reduction (`reduce()` in *GenomicRanges*), producing the union of all promoter intervals associated with each gene. This approach preserves alternative promoter usage while avoiding double counting across transcript isoforms. -->
+<!-- Promoters were stratified by gene biotype (`gene_type` in GENCODE), enabling downstream analysis of footprint enrichment across protein-coding genes, long non-coding RNAs, and other gene classes. -->
+<!-- All coordinates were based on the GRCh38 reference assembly and exported in BED format for subsequent overlap analyses. -->
+<div id="protein-coding-genes-only" class="section level2">
+<h2>Protein coding genes only</h2>
+<pre class="r"><code>summary_stats_all &lt;- readRDS(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/overlap_with_promoter_TSS-2kb+500bp_proteincoding.RDS&quot;)
+
+summary_stats_all[, fp_len_hi := as.integer(sub(&quot;.*-(\\d+)bp&quot;, &quot;\\1&quot;, fp_length))]
+setorder(summary_stats_all, fp_len_hi)
+summary_stats_all[, fp_length := factor(fp_length, levels = unique(fp_length))]
+
+## long format for percent
+pct_long &lt;- melt(
+  summary_stats_all,
+  id.vars = c(&quot;fp_length&quot;, &quot;fp_len_hi&quot;),
+  measure.vars = c(&quot;pct_any&quot;, &quot;pct_50&quot;, &quot;pct_80&quot;, &quot;pct_100&quot;),
+  variable.name = &quot;threshold&quot;,
+  value.name = &quot;pct&quot;
+)
+
+## Use stable, ASCII keys in the data
+pct_long[, threshold := fifelse(threshold==&quot;pct_any&quot;,&quot;any&quot;,
+                        fifelse(threshold==&quot;pct_50&quot;,&quot;50&quot;,
+                        fifelse(threshold==&quot;pct_80&quot;,&quot;80&quot;,&quot;100&quot;)))]
+pct_long[, threshold := factor(threshold, levels = c(&quot;any&quot;,&quot;50&quot;,&quot;80&quot;,&quot;100&quot;))]
+
+p_pct &lt;- ggplot(pct_long, aes(fp_length, pct, color = threshold, group = threshold)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  labs(x = &quot;Footprint length bin&quot;,
+       y = &quot;% footprints overlapping promoters (protein coding genes only)&quot;,
+       color = NULL) +
+  scale_color_discrete(
+    breaks = c(&quot;any&quot;,&quot;50&quot;,&quot;80&quot;,&quot;100&quot;),
+    labels = c(&quot;Any overlap&quot;, &quot;&gt;=50% covered&quot;, &quot;&gt;=80% covered&quot;, &quot;100% covered&quot;)
+    ## If you insist on ≥, try this instead of the ASCII labels above:
+    # labels = c(&quot;Any overlap&quot;, &quot;\u226550% covered&quot;, &quot;\u226580% covered&quot;, &quot;100% covered&quot;)
+  ) +
+  theme_classic(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+cnt_long &lt;- melt(
+  summary_stats_all,
+  id.vars = c(&quot;fp_length&quot;, &quot;fp_len_hi&quot;),
+  measure.vars = c(&quot;n_any&quot;, &quot;n_50&quot;, &quot;n_80&quot;, &quot;n_100&quot;),
+  variable.name = &quot;threshold&quot;,
+  value.name = &quot;n&quot;
+)
+
+cnt_long[, threshold := fifelse(threshold==&quot;n_any&quot;,&quot;Any overlap&quot;,
+                                fifelse(threshold==&quot;n_50&quot;,&quot;≥50% covered&quot;,
+                                        fifelse(threshold==&quot;n_80&quot;,&quot;≥80% covered&quot;,
+                                                &quot;100% covered&quot;)))]
+cnt_long[, threshold := factor(threshold,
+                               levels = c(&quot;Any overlap&quot;,&quot;≥50% covered&quot;,&quot;≥80% covered&quot;,&quot;100% covered&quot;))]
+
+p_cnt &lt;- ggplot(cnt_long, aes(fp_length, n, color = threshold, group = threshold)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  labs(x = &quot;Footprint length bin&quot;,
+       y = &quot;Number of footprints overlapping promoters (protein coding genes only)&quot;,
+       color = NULL) +
+  scale_color_discrete(labels = c(
+    &quot;Any overlap&quot;,
+    &quot;&gt;=50% covered&quot;,
+    &quot;&gt;=80% covered&quot;,
+    &quot;100% covered&quot;
+  )) +
+  theme_classic(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p_pct + p_cnt</code></pre>
+<p><img src="figure/annotation_by_location_prompolocr.Rmd/unnamed-chunk-3-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="all-genes" class="section level2">
+<h2>All genes</h2>
+<pre class="r"><code>summary_stats_all &lt;- readRDS(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/overlap_with_promoter_TSS-2kb+500bp_allgenes.RDS&quot;)
+
+summary_stats_all[, fp_len_hi := as.integer(sub(&quot;.*-(\\d+)bp&quot;, &quot;\\1&quot;, fp_length))]
+setorder(summary_stats_all, fp_len_hi)
+summary_stats_all[, fp_length := factor(fp_length, levels = unique(fp_length))]
+
+## long format for percent
+pct_long &lt;- melt(
+  summary_stats_all,
+  id.vars = c(&quot;fp_length&quot;, &quot;fp_len_hi&quot;),
+  measure.vars = c(&quot;pct_any&quot;, &quot;pct_50&quot;, &quot;pct_80&quot;, &quot;pct_100&quot;),
+  variable.name = &quot;threshold&quot;,
+  value.name = &quot;pct&quot;
+)
+
+## Use stable, ASCII keys in the data
+pct_long[, threshold := fifelse(threshold==&quot;pct_any&quot;,&quot;any&quot;,
+                        fifelse(threshold==&quot;pct_50&quot;,&quot;50&quot;,
+                        fifelse(threshold==&quot;pct_80&quot;,&quot;80&quot;,&quot;100&quot;)))]
+pct_long[, threshold := factor(threshold, levels = c(&quot;any&quot;,&quot;50&quot;,&quot;80&quot;,&quot;100&quot;))]
+
+p_pct &lt;- ggplot(pct_long, aes(fp_length, pct, color = threshold, group = threshold)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  labs(x = &quot;Footprint length bin&quot;,
+       y = &quot;% footprints overlapping promoters (all genes)&quot;,
+       color = NULL) +
+  scale_color_discrete(
+    breaks = c(&quot;any&quot;,&quot;50&quot;,&quot;80&quot;,&quot;100&quot;),
+    labels = c(&quot;Any overlap&quot;, &quot;&gt;=50% covered&quot;, &quot;&gt;=80% covered&quot;, &quot;100% covered&quot;)
+    ## If you insist on ≥, try this instead of the ASCII labels above:
+    # labels = c(&quot;Any overlap&quot;, &quot;\u226550% covered&quot;, &quot;\u226580% covered&quot;, &quot;100% covered&quot;)
+  ) +
+  theme_classic(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+cnt_long &lt;- melt(
+  summary_stats_all,
+  id.vars = c(&quot;fp_length&quot;, &quot;fp_len_hi&quot;),
+  measure.vars = c(&quot;n_any&quot;, &quot;n_50&quot;, &quot;n_80&quot;, &quot;n_100&quot;),
+  variable.name = &quot;threshold&quot;,
+  value.name = &quot;n&quot;
+)
+
+cnt_long[, threshold := fifelse(threshold==&quot;n_any&quot;,&quot;Any overlap&quot;,
+                                fifelse(threshold==&quot;n_50&quot;,&quot;≥50% covered&quot;,
+                                        fifelse(threshold==&quot;n_80&quot;,&quot;≥80% covered&quot;,
+                                                &quot;100% covered&quot;)))]
+cnt_long[, threshold := factor(threshold,
+                               levels = c(&quot;Any overlap&quot;,&quot;≥50% covered&quot;,&quot;≥80% covered&quot;,&quot;100% covered&quot;))]
+
+p_cnt &lt;- ggplot(cnt_long, aes(fp_length, n, color = threshold, group = threshold)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  labs(x = &quot;Footprint length bin&quot;,
+       y = &quot;Number of footprints overlapping promoters (all genes)&quot;,
+       color = NULL) +
+  scale_color_discrete(labels = c(
+    &quot;Any overlap&quot;,
+    &quot;&gt;=50% covered&quot;,
+    &quot;&gt;=80% covered&quot;,
+    &quot;100% covered&quot;
+  )) +
+  theme_classic(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p_pct + p_cnt</code></pre>
+<p><img src="figure/annotation_by_location_prompolocr.Rmd/unnamed-chunk-4-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="ocr-called-by-fire-using-fiber-seq-data"
+class="section level1">
+<h1>OCR called by FIRE using Fiber-seq data</h1>
+<p><code>/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz</code></p>
+<pre class="r"><code>summary_stats_all &lt;- readRDS(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/overlap_with_OCR.RDS&quot;)
+
+summary_stats_all[, fp_len_hi := as.integer(sub(&quot;.*-(\\d+)bp&quot;, &quot;\\1&quot;, fp_length))]
+setorder(summary_stats_all, fp_len_hi)
+summary_stats_all[, fp_length := factor(fp_length, levels = unique(fp_length))]
+
+## long format for percent
+pct_long &lt;- melt(
+  summary_stats_all,
+  id.vars = c(&quot;fp_length&quot;, &quot;fp_len_hi&quot;),
+  measure.vars = c(&quot;pct_any&quot;, &quot;pct_50&quot;, &quot;pct_80&quot;, &quot;pct_100&quot;),
+  variable.name = &quot;threshold&quot;,
+  value.name = &quot;pct&quot;
+)
+
+## Use stable, ASCII keys in the data
+pct_long[, threshold := fifelse(threshold==&quot;pct_any&quot;,&quot;any&quot;,
+                        fifelse(threshold==&quot;pct_50&quot;,&quot;50&quot;,
+                        fifelse(threshold==&quot;pct_80&quot;,&quot;80&quot;,&quot;100&quot;)))]
+pct_long[, threshold := factor(threshold, levels = c(&quot;any&quot;,&quot;50&quot;,&quot;80&quot;,&quot;100&quot;))]
+
+p_pct &lt;- ggplot(pct_long, aes(fp_length, pct, color = threshold, group = threshold)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  labs(x = &quot;Footprint length bin&quot;,
+       y = &quot;% footprints overlapping OCR&quot;,
+       color = NULL) +
+  scale_color_discrete(
+    breaks = c(&quot;any&quot;,&quot;50&quot;,&quot;80&quot;,&quot;100&quot;),
+    labels = c(&quot;Any overlap&quot;, &quot;&gt;=50% covered&quot;, &quot;&gt;=80% covered&quot;, &quot;100% covered&quot;)
+    ## If you insist on ≥, try this instead of the ASCII labels above:
+    # labels = c(&quot;Any overlap&quot;, &quot;\u226550% covered&quot;, &quot;\u226580% covered&quot;, &quot;100% covered&quot;)
+  ) +
+  theme_classic(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+cnt_long &lt;- melt(
+  summary_stats_all,
+  id.vars = c(&quot;fp_length&quot;, &quot;fp_len_hi&quot;),
+  measure.vars = c(&quot;n_any&quot;, &quot;n_50&quot;, &quot;n_80&quot;, &quot;n_100&quot;),
+  variable.name = &quot;threshold&quot;,
+  value.name = &quot;n&quot;
+)
+
+cnt_long[, threshold := fifelse(threshold==&quot;n_any&quot;,&quot;Any overlap&quot;,
+                                fifelse(threshold==&quot;n_50&quot;,&quot;≥50% covered&quot;,
+                                        fifelse(threshold==&quot;n_80&quot;,&quot;≥80% covered&quot;,
+                                                &quot;100% covered&quot;)))]
+cnt_long[, threshold := factor(threshold,
+                               levels = c(&quot;Any overlap&quot;,&quot;≥50% covered&quot;,&quot;≥80% covered&quot;,&quot;100% covered&quot;))]
+
+p_cnt &lt;- ggplot(cnt_long, aes(fp_length, n, color = threshold, group = threshold)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  labs(x = &quot;Footprint length bin&quot;,
+       y = &quot;Number of footprints overlapping OCR&quot;,
+       color = NULL) +
+  scale_color_discrete(labels = c(
+    &quot;Any overlap&quot;,
+    &quot;&gt;=50% covered&quot;,
+    &quot;&gt;=80% covered&quot;,
+    &quot;100% covered&quot;
+  )) +
+  theme_classic(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p_pct + p_cnt</code></pre>
+<p><img src="figure/annotation_by_location_prompolocr.Rmd/unnamed-chunk-5-1.png" width="960" style="display: block; margin: auto;" /></p>
+</div>
+<div id="pol2" class="section level1">
+<h1>Pol2</h1>
+<p>GM12878 downloaded by kevin</p>
+<p><code>/project/spott/kevinluo/Fiber_seq/data/ChIPseq/GM12878/POLR2A.GM12878.ChIPseq.peaks.ENCFF886PSD.bed.gz</code></p>
+<p>Others to download: <a
+href="https://www.encodeproject.org/search/?type=Experiment&amp;control_type!=*&amp;status=released&amp;p"
+class="uri">https://www.encodeproject.org/search/?type=Experiment&amp;control_type!=*&amp;status=released&amp;p</a>[…]fic_name=Homo+sapiens&amp;biosample_ontology.term_name=GM12891</p>
+<pre class="r"><code>summary_stats_all &lt;- readRDS(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/overlap_with_pol2.RDS&quot;)
+
+summary_stats_all[, fp_len_hi := as.integer(sub(&quot;.*-(\\d+)bp&quot;, &quot;\\1&quot;, fp_length))]
+setorder(summary_stats_all, fp_len_hi)
+summary_stats_all[, fp_length := factor(fp_length, levels = unique(fp_length))]
+
+## long format for percent
+pct_long &lt;- melt(
+  summary_stats_all,
+  id.vars = c(&quot;fp_length&quot;, &quot;fp_len_hi&quot;),
+  measure.vars = c(&quot;pct_any&quot;, &quot;pct_50&quot;, &quot;pct_80&quot;, &quot;pct_100&quot;),
+  variable.name = &quot;threshold&quot;,
+  value.name = &quot;pct&quot;
+)
+
+## Use stable, ASCII keys in the data
+pct_long[, threshold := fifelse(threshold==&quot;pct_any&quot;,&quot;any&quot;,
+                        fifelse(threshold==&quot;pct_50&quot;,&quot;50&quot;,
+                        fifelse(threshold==&quot;pct_80&quot;,&quot;80&quot;,&quot;100&quot;)))]
+pct_long[, threshold := factor(threshold, levels = c(&quot;any&quot;,&quot;50&quot;,&quot;80&quot;,&quot;100&quot;))]
+
+p_pct &lt;- ggplot(pct_long, aes(fp_length, pct, color = threshold, group = threshold)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  labs(x = &quot;Footprint length bin&quot;,
+       y = &quot;% footprints overlapping Pol2&quot;,
+       color = NULL) +
+  scale_color_discrete(
+    breaks = c(&quot;any&quot;,&quot;50&quot;,&quot;80&quot;,&quot;100&quot;),
+    labels = c(&quot;Any overlap&quot;, &quot;&gt;=50% covered&quot;, &quot;&gt;=80% covered&quot;, &quot;100% covered&quot;)
+    ## If you insist on ≥, try this instead of the ASCII labels above:
+    # labels = c(&quot;Any overlap&quot;, &quot;\u226550% covered&quot;, &quot;\u226580% covered&quot;, &quot;100% covered&quot;)
+  ) +
+  theme_classic(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+cnt_long &lt;- melt(
+  summary_stats_all,
+  id.vars = c(&quot;fp_length&quot;, &quot;fp_len_hi&quot;),
+  measure.vars = c(&quot;n_any&quot;, &quot;n_50&quot;, &quot;n_80&quot;, &quot;n_100&quot;),
+  variable.name = &quot;threshold&quot;,
+  value.name = &quot;n&quot;
+)
+
+cnt_long[, threshold := fifelse(threshold==&quot;n_any&quot;,&quot;Any overlap&quot;,
+                                fifelse(threshold==&quot;n_50&quot;,&quot;≥50% covered&quot;,
+                                        fifelse(threshold==&quot;n_80&quot;,&quot;≥80% covered&quot;,
+                                                &quot;100% covered&quot;)))]
+cnt_long[, threshold := factor(threshold,
+                               levels = c(&quot;Any overlap&quot;,&quot;≥50% covered&quot;,&quot;≥80% covered&quot;,&quot;100% covered&quot;))]
+
+p_cnt &lt;- ggplot(cnt_long, aes(fp_length, n, color = threshold, group = threshold)) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  labs(x = &quot;Footprint length bin&quot;,
+       y = &quot;Number of footprints overlapping Pol2&quot;,
+       color = NULL) +
+  scale_color_discrete(labels = c(
+    &quot;Any overlap&quot;,
+    &quot;&gt;=50% covered&quot;,
+    &quot;&gt;=80% covered&quot;,
+    &quot;100% covered&quot;
+  )) +
+  theme_classic(base_size = 13) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p_pct + p_cnt</code></pre>
+<p><img src="figure/annotation_by_location_prompolocr.Rmd/unnamed-chunk-6-1.png" width="960" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /software/openblas-0.3.13-el7-x86_64/lib/libopenblas_haswellp-r0.3.13.so
+
+locale:
+[1] C
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] patchwork_1.3.2.9000 ggplot2_4.0.0        data.table_1.14.2   
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.12        highr_0.9          RColorBrewer_1.1-3 pillar_1.9.0      
+ [5] compiler_4.2.0     bslib_0.3.1        later_1.3.0        jquerylib_0.1.4   
+ [9] git2r_0.30.1       workflowr_1.7.0    tools_4.2.0        digest_0.6.29     
+[13] gtable_0.3.6       jsonlite_1.8.0     evaluate_0.15      lifecycle_1.0.4   
+[17] tibble_3.2.1       pkgconfig_2.0.3    rlang_1.1.2        cli_3.6.1         
+[21] rstudioapi_0.13    yaml_2.3.5         xfun_0.41          fastmap_1.1.0     
+[25] withr_2.5.0        dplyr_1.1.4        stringr_1.5.1      knitr_1.39        
+[29] generics_0.1.4     fs_1.5.2           vctrs_0.6.5        sass_0.4.1        
+[33] tidyselect_1.2.0   rprojroot_2.0.3    grid_4.2.0         glue_1.6.2        
+[37] R6_2.5.1           fansi_1.0.3        rmarkdown_2.25     farver_2.1.0      
+[41] magrittr_2.0.3     scales_1.4.0       promises_1.2.0.1   htmltools_0.5.2   
+[45] dichromat_2.0-0.1  httpuv_1.6.5       labeling_0.4.2     S7_0.2.0          
+[49] utf8_1.2.2         stringi_1.7.6     </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
