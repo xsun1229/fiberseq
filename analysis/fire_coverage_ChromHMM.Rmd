@@ -20,6 +20,9 @@ We used: `E116_15_coreMarks_hg38lift_mnemonics.bed.gz`
 
 **E116 corresponds to GM12878 (lymphoblastoid cells)**, which is the closest Roadmap epigenome match to our LCL cell line (based on the Roadmap epigenome metadata table).
 
+We sum the total number of base pairs of all the 15 ChromHMM states inside FIRE peaks, and then divided by the total number of base pairs across all states.
+
+Then, for each state, we do the same calculation.
 
 
 ```{r}
