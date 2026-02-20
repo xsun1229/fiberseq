@@ -25,7 +25,7 @@ We sum the total number of base pairs of all the 15 ChromHMM states inside FIRE 
 Then, for each state, we do the same calculation.
 
 
-```{r}
+```{r fig.height=6, fig.width=7}
 suppressPackageStartupMessages({
   library(GenomicRanges)
   library(IRanges)
@@ -139,15 +139,85 @@ res[, `:=`(
 #-----------------------------
 res <- res[order(state_id)]
 
-res <- res[,-c("hex","total_bp_state","fire_overlap_bp","frac_of_fire_bp_in_state")]
-res <- res[,c("state_id","description","total_state_Mb","fire_overlap_Mb","frac_state_covered_by_fire")]
+res <- res[,-c("total_bp_state","fire_overlap_bp")]
+res <- res[,c("state_id","description","total_state_Mb","fire_overlap_Mb","frac_state_covered_by_fire","frac_of_fire_bp_in_state","hex")]
 res$frac_state_covered_by_fire <- res$frac_state_covered_by_fire*100
-colnames(res)[5] <- "%state_covered_by_fire"
+res$frac_of_fire_bp_in_state <- res$frac_of_fire_bp_in_state *100
+colnames(res)[5:6] <- c("%state_covered_by_fire","%fire_in_state")
 
 
-DT::datatable(res,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','FIRE Coverage for 15 states from ChromHMM'),options = list(pageLength = 20) )
+DT::datatable(res[,-c("hex")],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','FIRE Coverage for 15 states from ChromHMM'),options = list(pageLength = 20) )
 
 cat("\nOverall ChromHMM bp covered by FIRE =", overall_fire_coverage*100, "%\n")
 
+
+plot_df <- copy(res)
+
+plot_long <- melt(
+  plot_df,
+  id.vars = c("state_id", "description", "hex"),
+  measure.vars = c("%state_covered_by_fire", "%fire_in_state"),
+  variable.name = "metric",
+  value.name = "value"
+)
+
+# Simple labels
+plot_long[, metric := fifelse(
+  metric == "%state_covered_by_fire",
+  "% of state covered by FIRE",
+  "% of FIRE in state"
+)]
+
+ggplot(plot_long, aes(x = state_id, y = value, fill = hex)) +
+  geom_col() +
+  facet_wrap(~ metric, ncol = 1, scales = "free_y") +
+  scale_fill_identity() +
+  scale_x_continuous(
+    breaks = plot_df$state_id,
+    labels = plot_df$description
+  ) +
+  labs(
+    x = "ChromHMM state (1–15)",
+    y = "Percent (%)",
+    title = "FIRE–ChromHMM Overlap"
+  ) +
+  theme_classic(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    strip.text = element_text(face = "bold"),
+    legend.position = "none"
+  )
+
+
+pie_df <- copy(res)
+
+# Ensure ordering by state_id
+setorder(pie_df, state_id)
+
+# Create numeric labels (1–15)
+pie_df[, state_label := as.character(state_id)]
+
+# Create legend labels: "1: Active TSS"
+pie_df[, legend_label := paste0(state_id, ": ", description)]
+
+ggplot(pie_df,
+       aes(x = "", 
+           y = `%fire_in_state`,
+           fill = legend_label)) +
+  geom_col(width = 1, color = "white") +
+  coord_polar(theta = "y") +
+  scale_fill_manual(values = setNames(pie_df$hex,
+                                      pie_df$legend_label)) +
+  theme_void(base_size = 14) +
+  labs(
+    title = "% of FIRE in each ChromHMM state",
+    fill = "ChromHMM States"
+  ) +
+  geom_text(
+    aes(label = state_label),
+    position = position_stack(vjust = 0.5),
+    size = 4,
+    color = "black"
+  )
 ```
 
