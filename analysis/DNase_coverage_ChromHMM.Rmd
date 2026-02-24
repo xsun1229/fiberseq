@@ -26,6 +26,9 @@ Cell lines included: currently include four LCLs:
 GM19238 is in our Fiber-seq sample list
 
 
+**We sum the total number of base pairs of DNase peaks inside each of the 15 ChromHMM states , and then divided by the total number of base pairs for each states.**
+
+
 ```{r}
 suppressPackageStartupMessages({
   library(GenomicRanges)

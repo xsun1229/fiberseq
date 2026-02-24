@@ -441,10 +441,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -537,15 +537,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreed5fba73f680507b61fd3ea4eddd5f0bc17ff1847targetblankd5fba73a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree0155d449347dd7d14a7443cd83a0d53487e2b53etargetblank0155d44a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/xsun1229/fiberseq/tree/d5fba73f680507b61fd3ea4eddd5f0bc17ff1847" target="_blank">d5fba73</a>
+<a href="https://github.com/xsun1229/fiberseq/tree/0155d449347dd7d14a7443cd83a0d53487e2b53e" target="_blank">0155d44</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreed5fba73f680507b61fd3ea4eddd5f0bc17ff1847targetblankd5fba73a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree0155d449347dd7d14a7443cd83a0d53487e2b53etargetblank0155d44a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -555,7 +555,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/xsun1229/fiberseq/tree/d5fba73f680507b61fd3ea4eddd5f0bc17ff1847" target="_blank">d5fba73</a>.
+<a href="https://github.com/xsun1229/fiberseq/tree/0155d449347dd7d14a7443cd83a0d53487e2b53e" target="_blank">0155d44</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -569,12 +569,8 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-Untracked files:
-    Untracked:  analysis/DNase_coverage_ChromHMM.Rmd
-    Untracked:  analysis/data.Rmd
-
 Unstaged changes:
-    Modified:   analysis/index.Rmd
+    Modified:   analysis/DNase_coverage_ChromHMM.Rmd
 
 </code></pre>
 <p>
@@ -589,10 +585,75 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/DNase_coverage_ChromHMM.Rmd</code>) and HTML
+(<code>docs/DNase_coverage_ChromHMM.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/analysis/DNase_coverage_ChromHMM.Rmd" target="_blank">0155d44</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/DNase_coverage_ChromHMM.html" target="_blank">0155d44</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+<td>
+update
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -615,6 +676,9 @@ at: <code>/project/spott/kevinluo/Fiber_seq/data/DNaseseq/</code></p>
 <li>GM19238</li>
 </ul>
 <p>GM19238 is in our Fiber-seq sample list</p>
+<p><strong>We sum the total number of base pairs of DNase peaks inside
+each of the 15 ChromHMM states , and then divided by the total number of
+base pairs for each states.</strong></p>
 <pre class="r"><code>suppressPackageStartupMessages({
   library(GenomicRanges)
   library(IRanges)
@@ -714,7 +778,310 @@ for (celline in cellines){
   print(pie)
   
 }</code></pre>
-<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-8.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-1.png" target="_blank">0155d44</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-2">
+Past versions of unnamed-chunk-2-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-2.png" target="_blank">0155d44</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-3">
+Past versions of unnamed-chunk-2-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-3.png" target="_blank">0155d44</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-4">
+Past versions of unnamed-chunk-2-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-4.png" target="_blank">0155d44</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-5">
+Past versions of unnamed-chunk-2-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-5.png" target="_blank">0155d44</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-6.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-6">
+Past versions of unnamed-chunk-2-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-6.png" target="_blank">0155d44</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-7.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-7">
+Past versions of unnamed-chunk-2-7.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-7.png" target="_blank">0155d44</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-8.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-8">
+Past versions of unnamed-chunk-2-8.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-8.png" target="_blank">0155d44</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -760,9 +1127,9 @@ loaded via a namespace (and not attached):
 [40] rprojroot_2.0.3        grid_4.2.0             cli_3.6.1             
 [43] tools_4.2.0            bitops_1.0-7           magrittr_2.0.3        
 [46] sass_0.4.1             RCurl_1.98-1.7         tibble_3.2.1          
-[49] dichromat_2.0-0.1      pkgconfig_2.0.3        rmarkdown_2.25        
-[52] rstudioapi_0.13        R6_2.5.1               git2r_0.30.1          
-[55] compiler_4.2.0        </code></pre>
+[49] dichromat_2.0-0.1      whisker_0.4            pkgconfig_2.0.3       
+[52] rmarkdown_2.25         rstudioapi_0.13        R6_2.5.1              
+[55] git2r_0.30.1           compiler_4.2.0        </code></pre>
 </div>
 </div>
 
