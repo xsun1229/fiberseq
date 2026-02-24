@@ -452,13 +452,13 @@ p_pie_bp <- ggplot(dt_pie_bp,
 
 p_pie_bp
 
-DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == "10-30bp",],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Distribution for 10-30bp'),options = list(pageLength = 20) )
+DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == "10-30bp",c("state_id","state_label","pct_bp","fp_bin")],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Distribution for 10-30bp'),options = list(pageLength = 20) )
 
 
-DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == "30-60bp",],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Distribution for 30-60bp'),options = list(pageLength = 20) )
+DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == "30-60bp",c("state_id","state_label","pct_bp","fp_bin")],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Distribution for 30-60bp'),options = list(pageLength = 20) )
 
 
-DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == "60-80bp",],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Distribution for 60-80bp'),options = list(pageLength = 20) )
+DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == "60-80bp",c("state_id","state_label","pct_bp","fp_bin")],caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Distribution for 60-80bp'),options = list(pageLength = 20) )
 ```
 
 

@@ -545,15 +545,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree904ae0e66e361829a1b47a599827816adb3c0ac5targetblank904ae0ea">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree346adbba6b4c723b7df3b395903b4b7e859924adtargetblank346adbba">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/xsun1229/fiberseq/tree/904ae0e66e361829a1b47a599827816adb3c0ac5" target="_blank">904ae0e</a>
+<a href="https://github.com/xsun1229/fiberseq/tree/346adbba6b4c723b7df3b395903b4b7e859924ad" target="_blank">346adbb</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree904ae0e66e361829a1b47a599827816adb3c0ac5targetblank904ae0ea"
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree346adbba6b4c723b7df3b395903b4b7e859924adtargetblank346adbba"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -563,7 +563,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/xsun1229/fiberseq/tree/904ae0e66e361829a1b47a599827816adb3c0ac5" target="_blank">904ae0e</a>.
+<a href="https://github.com/xsun1229/fiberseq/tree/346adbba6b4c723b7df3b395903b4b7e859924ad" target="_blank">346adbb</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -625,6 +625,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/346adbba6b4c723b7df3b395903b4b7e859924ad/analysis/determine_footprint_cutoffs.Rmd" target="_blank">346adbb</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/346adbba6b4c723b7df3b395903b4b7e859924ad/docs/determine_footprint_cutoffs.html" target="_blank">346adbb</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+<td>
+update
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1366,15 +1400,52 @@ p_pie_bp &lt;- ggplot(dt_pie_bp,
 
 p_pie_bp</code></pre>
 <p><img src="figure/determine_footprint_cutoffs.Rmd/unnamed-chunk-8-1.png" width="1248" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == &quot;10-30bp&quot;,],caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Distribution for 10-30bp&#39;),options = list(pageLength = 20) )</code></pre>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/346adbba6b4c723b7df3b395903b4b7e859924ad/docs/figure/determine_footprint_cutoffs.Rmd/unnamed-chunk-8-1.png" target="_blank">346adbb</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-24
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == &quot;10-30bp&quot;,c(&quot;state_id&quot;,&quot;state_label&quot;,&quot;pct_bp&quot;,&quot;fp_bin&quot;)],caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Distribution for 10-30bp&#39;),options = list(pageLength = 20) )</code></pre>
 <div id="htmlwidget-55d484e2ce688c3024c2" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Distribution for 10-30bp<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],["Active TSS","Flanking Active TSS","Transcr. at gene 5' and 3'","Strong transcription","Weak transcription","Genic enhancers","Enhancers","ZNF genes &amp; repeats","Heterochromatin","Bivalent/Poised TSS","Flanking Bivalent TSS/Enh","Bivalent Enhancer","Repressed PolyComb","Weak Repressed PolyComb","Quiescent/Low"],["#FF0000","#FF4500","#32CD32","#008000","#006400","#C2E105","#FFFF00","#66CDAA","#8A91D0","#CD5C5C","#E9967A","#BDB76B","#808080","#C0C0C0","#DDDDDD"],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[4675483,5759905,525856,5499249,13242736,953686,7291704,810705,3076000,95070,109589,139938,713750,17917747,96776683],[2.96690103525012,3.65503801584613,0.333690168650487,3.48963466473906,8.40338573532275,0.605176402246258,4.62706508532646,0.514445567181497,1.95192402248695,0.0603281589134703,0.0695414179779982,0.0887998517096161,0.45292125196686,11.3699872555733,61.411161366809],["10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>state_id<\/th>\n      <th>state_label<\/th>\n      <th>hex<\/th>\n      <th>bp.x<\/th>\n      <th>bp<\/th>\n      <th>pct_bp<\/th>\n      <th>fp_bin<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[1,4,5,6]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
-<pre class="r"><code>DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == &quot;30-60bp&quot;,],caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Distribution for 30-60bp&#39;),options = list(pageLength = 20) )</code></pre>
+<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Distribution for 10-30bp<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],["Active TSS","Flanking Active TSS","Transcr. at gene 5' and 3'","Strong transcription","Weak transcription","Genic enhancers","Enhancers","ZNF genes &amp; repeats","Heterochromatin","Bivalent/Poised TSS","Flanking Bivalent TSS/Enh","Bivalent Enhancer","Repressed PolyComb","Weak Repressed PolyComb","Quiescent/Low"],[2.96690103525012,3.65503801584613,0.333690168650487,3.48963466473906,8.40338573532275,0.605176402246258,4.62706508532646,0.514445567181497,1.95192402248695,0.0603281589134703,0.0695414179779982,0.0887998517096161,0.45292125196686,11.3699872555733,61.411161366809],["10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>state_id<\/th>\n      <th>state_label<\/th>\n      <th>pct_bp<\/th>\n      <th>fp_bin<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == &quot;30-60bp&quot;,c(&quot;state_id&quot;,&quot;state_label&quot;,&quot;pct_bp&quot;,&quot;fp_bin&quot;)],caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Distribution for 30-60bp&#39;),options = list(pageLength = 20) )</code></pre>
 <div id="htmlwidget-0c375f72d786c94bb27a" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-0c375f72d786c94bb27a">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Distribution for 30-60bp<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],["Active TSS","Flanking Active TSS","Transcr. at gene 5' and 3'","Strong transcription","Weak transcription","Genic enhancers","Enhancers","ZNF genes &amp; repeats","Heterochromatin","Bivalent/Poised TSS","Flanking Bivalent TSS/Enh","Bivalent Enhancer","Repressed PolyComb","Weak Repressed PolyComb","Quiescent/Low"],["#FF0000","#FF4500","#32CD32","#008000","#006400","#C2E105","#FFFF00","#66CDAA","#8A91D0","#CD5C5C","#E9967A","#BDB76B","#808080","#C0C0C0","#DDDDDD"],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[5582024,4410070,335205,2120874,6001202,553885,4899736,407789,1227343,86667,60674,79294,319013,8316563,42525983],[7.25632508466998,5.73284915402559,0.435748117529914,2.75701989235882,7.80123349716369,0.720020125230997,6.36938810099357,0.530103337060623,1.59547859314007,0.11266234722622,0.0788728726689936,0.103077851557754,0.41469940549088,10.8110758239553,55.2814457969276],["30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>state_id<\/th>\n      <th>state_label<\/th>\n      <th>hex<\/th>\n      <th>bp.x<\/th>\n      <th>bp<\/th>\n      <th>pct_bp<\/th>\n      <th>fp_bin<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[1,4,5,6]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
-<pre class="r"><code>DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == &quot;60-80bp&quot;,],caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Distribution for 60-80bp&#39;),options = list(pageLength = 20) )</code></pre>
+<script type="application/json" data-for="htmlwidget-0c375f72d786c94bb27a">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Distribution for 30-60bp<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],["Active TSS","Flanking Active TSS","Transcr. at gene 5' and 3'","Strong transcription","Weak transcription","Genic enhancers","Enhancers","ZNF genes &amp; repeats","Heterochromatin","Bivalent/Poised TSS","Flanking Bivalent TSS/Enh","Bivalent Enhancer","Repressed PolyComb","Weak Repressed PolyComb","Quiescent/Low"],[7.25632508466998,5.73284915402559,0.435748117529914,2.75701989235882,7.80123349716369,0.720020125230997,6.36938810099357,0.530103337060623,1.59547859314007,0.11266234722622,0.0788728726689936,0.103077851557754,0.41469940549088,10.8110758239553,55.2814457969276],["30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>state_id<\/th>\n      <th>state_label<\/th>\n      <th>pct_bp<\/th>\n      <th>fp_bin<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>DT::datatable(dt_pie_bp[dt_pie_bp$fp_bin == &quot;60-80bp&quot;,c(&quot;state_id&quot;,&quot;state_label&quot;,&quot;pct_bp&quot;,&quot;fp_bin&quot;)],caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Distribution for 60-80bp&#39;),options = list(pageLength = 20) )</code></pre>
 <div id="htmlwidget-9fa6da26214ebfd05e61" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-9fa6da26214ebfd05e61">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Distribution for 60-80bp<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],["Active TSS","Flanking Active TSS","Transcr. at gene 5' and 3'","Strong transcription","Weak transcription","Genic enhancers","Enhancers","ZNF genes &amp; repeats","Heterochromatin","Bivalent/Poised TSS","Flanking Bivalent TSS/Enh","Bivalent Enhancer","Repressed PolyComb","Weak Repressed PolyComb","Quiescent/Low"],["#FF0000","#FF4500","#32CD32","#008000","#006400","#C2E105","#FFFF00","#66CDAA","#8A91D0","#CD5C5C","#E9967A","#BDB76B","#808080","#C0C0C0","#DDDDDD"],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[980073,313088,21581,208194,555031,40181,366109,58631,142508,10982,3118,6212,17403,498441,2725331],[16.4804486652924,5.26474120980689,0.362895991059518,3.50089282065916,9.3331414120641,0.675664881922177,6.1563175196149,0.985911443019814,2.3963478010245,0.184668169863103,0.0524308280489123,0.104458083335421,0.292640699337788,8.38155046938035,45.827890005571],["60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>state_id<\/th>\n      <th>state_label<\/th>\n      <th>hex<\/th>\n      <th>bp.x<\/th>\n      <th>bp<\/th>\n      <th>pct_bp<\/th>\n      <th>fp_bin<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[1,4,5,6]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<script type="application/json" data-for="htmlwidget-9fa6da26214ebfd05e61">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Distribution for 60-80bp<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],["Active TSS","Flanking Active TSS","Transcr. at gene 5' and 3'","Strong transcription","Weak transcription","Genic enhancers","Enhancers","ZNF genes &amp; repeats","Heterochromatin","Bivalent/Poised TSS","Flanking Bivalent TSS/Enh","Bivalent Enhancer","Repressed PolyComb","Weak Repressed PolyComb","Quiescent/Low"],[16.4804486652924,5.26474120980689,0.362895991059518,3.50089282065916,9.3331414120641,0.675664881922177,6.1563175196149,0.985911443019814,2.3963478010245,0.184668169863103,0.0524308280489123,0.104458083335421,0.292640699337788,8.38155046938035,45.827890005571],["60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>state_id<\/th>\n      <th>state_label<\/th>\n      <th>pct_bp<\/th>\n      <th>fp_bin<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[1,3]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
