@@ -395,4 +395,37 @@ p_n_fp + p_enrich_q +
 
 ```
 
+```{r fig.height=5, fig.width=13}
 
+summary_joint <- summary_joint[summary_joint$fp_length != "60-80bp",]
+
+
+dt_nfp <- unique(summary_joint[, .(fp_length, n_fp)])
+
+p_n_fp <- ggplot(dt_nfp, aes(x = fp_length, y = n_fp, fill = fp_length)) +
+  geom_col() +
+  theme_classic(base_size = 13) +
+  labs(x = "Footprint bin",
+       y = "Number of peaks retained") +
+  theme(legend.position = "none")
+
+
+p_enrich_q <- ggplot(summary_joint,
+       aes(x = fp_length, y = enrichment,
+           color = factor(state_id),
+           group = state_id)) +
+  geom_hline(yintercept = 1, linetype = "dashed") +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_color_manual(values = col_map, labels = label_map) +
+  theme_classic(base_size = 13) +
+  labs(x = "Footprint bin",
+       y = "Enrichment over genome background",
+       color = "ChromHMM state") +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p_n_fp + p_enrich_q +
+  plot_layout(widths = c(1, 2.4))
+
+
+```

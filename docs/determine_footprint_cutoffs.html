@@ -382,7 +382,7 @@ q-value, fold-enrichment, pileup)</h1>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
 <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
-workflowr <span class="glyphicon glyphicon-ok text-success"
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span>
 </button>
 </p>
@@ -393,8 +393,8 @@ aria-hidden="true"></span>
 </li>
 <li>
 <a data-toggle="tab" href="#checks"> Checks <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
-</a>
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -403,13 +403,13 @@ class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-02-23
+<strong>Last updated:</strong> 2026-02-24
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
-aria-hidden="true"></span> 0
+aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>fiberseq/</code> <span
@@ -432,18 +432,21 @@ versions</em> tab lists the development history.
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
-<span class="glyphicon glyphicon-ok text-success"
-aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
-</a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate"
+<div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git
-repository, you know the exact version of the code that produced these
-results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
@@ -534,15 +537,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree88584111af633100de20c9dc48db1c6538201c47targetblank8858411a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreebcab4c0b860b85a2a67e168f00aa3b23d2bd78d6targetblankbcab4c0a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/xsun1229/fiberseq/tree/88584111af633100de20c9dc48db1c6538201c47" target="_blank">8858411</a>
+<a href="https://github.com/xsun1229/fiberseq/tree/bcab4c0b860b85a2a67e168f00aa3b23d2bd78d6" target="_blank">bcab4c0</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree88584111af633100de20c9dc48db1c6538201c47targetblank8858411a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreebcab4c0b860b85a2a67e168f00aa3b23d2bd78d6targetblankbcab4c0a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -552,7 +555,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/xsun1229/fiberseq/tree/88584111af633100de20c9dc48db1c6538201c47" target="_blank">8858411</a>.
+<a href="https://github.com/xsun1229/fiberseq/tree/bcab4c0b860b85a2a67e168f00aa3b23d2bd78d6" target="_blank">bcab4c0</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -566,7 +569,9 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-working directory clean
+Unstaged changes:
+    Modified:   analysis/determine_footprint_cutoffs.Rmd
+
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not
@@ -612,6 +617,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/bcab4c0b860b85a2a67e168f00aa3b23d2bd78d6/docs/determine_footprint_cutoffs.html" target="_blank">bcab4c0</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-23
+</td>
+<td>
+update
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1191,6 +1213,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/xsun1229/fiberseq/blob/bcab4c0b860b85a2a67e168f00aa3b23d2bd78d6/docs/figure/determine_footprint_cutoffs.Rmd/unnamed-chunk-6-1.png" target="_blank">bcab4c0</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-02-23
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/xsun1229/fiberseq/blob/88584111af633100de20c9dc48db1c6538201c47/docs/figure/determine_footprint_cutoffs.Rmd/unnamed-chunk-6-1.png" target="_blank">8858411</a>
 </td>
 <td>
@@ -1204,6 +1237,36 @@ XSun
 </table>
 </div>
 </div>
+<pre class="r"><code>summary_joint &lt;- summary_joint[summary_joint$fp_length != &quot;60-80bp&quot;,]
+
+
+dt_nfp &lt;- unique(summary_joint[, .(fp_length, n_fp)])
+
+p_n_fp &lt;- ggplot(dt_nfp, aes(x = fp_length, y = n_fp, fill = fp_length)) +
+  geom_col() +
+  theme_classic(base_size = 13) +
+  labs(x = &quot;Footprint bin&quot;,
+       y = &quot;Number of peaks retained&quot;) +
+  theme(legend.position = &quot;none&quot;)
+
+
+p_enrich_q &lt;- ggplot(summary_joint,
+       aes(x = fp_length, y = enrichment,
+           color = factor(state_id),
+           group = state_id)) +
+  geom_hline(yintercept = 1, linetype = &quot;dashed&quot;) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_color_manual(values = col_map, labels = label_map) +
+  theme_classic(base_size = 13) +
+  labs(x = &quot;Footprint bin&quot;,
+       y = &quot;Enrichment over genome background&quot;,
+       color = &quot;ChromHMM state&quot;) +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+p_n_fp + p_enrich_q +
+  plot_layout(widths = c(1, 2.4))</code></pre>
+<p><img src="figure/determine_footprint_cutoffs.Rmd/unnamed-chunk-7-1.png" width="1248" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
