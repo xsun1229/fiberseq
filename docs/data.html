@@ -9,9 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="XSun" />
 
+<meta name="date" content="2026-02-24" />
 
-<title>Fiber-seq Analysis</title>
+<title>Data</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,6 +31,9 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -231,6 +236,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -238,6 +306,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -281,7 +359,9 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Fiber-seq Analysis</h1>
+<h1 class="title toc-ignore">Data</h1>
+<h4 class="author">XSun</h4>
+<h4 class="date">2026-02-24</h4>
 
 </div>
 
@@ -348,10 +428,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -393,7 +473,6 @@ were generated:
 </p>
 <pre><code>
 Untracked files:
-    Untracked:  analysis/DNase_coverage_ChromHMM.Rmd
     Untracked:  analysis/data.Rmd
 
 Unstaged changes:
@@ -412,509 +491,281 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
-
 <p>
-These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
-(<code>docs/index.html</code>) files. If you’ve configured a remote Git
-repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
-in the table below to view the files as they were in that past version.
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
 </p>
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-File
-</th>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-<th>
-Message
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/bcab4c0b860b85a2a67e168f00aa3b23d2bd78d6/docs/index.html" target="_blank">bcab4c0</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-23
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/88584111af633100de20c9dc48db1c6538201c47/analysis/index.Rmd" target="_blank">8858411</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-23
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/88584111af633100de20c9dc48db1c6538201c47/docs/index.html" target="_blank">8858411</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-23
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/49bb49d8f2908865edf42b964425b962d91ec29d/analysis/index.Rmd" target="_blank">49bb49d</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-19
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/49bb49d8f2908865edf42b964425b962d91ec29d/docs/index.html" target="_blank">49bb49d</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-19
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/c2cdd38825c4aedbb52ec3700cb94de80525edd8/analysis/index.Rmd" target="_blank">c2cdd38</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-19
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/c2cdd38825c4aedbb52ec3700cb94de80525edd8/docs/index.html" target="_blank">c2cdd38</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-19
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/ac951a2bb50bb5daf2901901673232e5074305c9/analysis/index.Rmd" target="_blank">ac951a2</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-19
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/ac951a2bb50bb5daf2901901673232e5074305c9/docs/index.html" target="_blank">ac951a2</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-19
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0/analysis/index.Rmd" target="_blank">31a3c60</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-17
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/31a3c60f5fc4e1a1ed79e6df038ce49956aff8c0/docs/index.html" target="_blank">31a3c60</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-17
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/04f191acec30e032ed472af770085136c23a1c35/analysis/index.Rmd" target="_blank">04f191a</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-09-18
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/04f191acec30e032ed472af770085136c23a1c35/docs/index.html" target="_blank">04f191a</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-09-18
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/f4865afd3157cdd81c0fa651ba53118e33e14e85/analysis/index.Rmd" target="_blank">f4865af</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-09-12
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/f4865afd3157cdd81c0fa651ba53118e33e14e85/docs/index.html" target="_blank">f4865af</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-09-12
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/427886e029d0571428a35f6d6fe9eab1f77da9af/analysis/index.Rmd" target="_blank">427886e</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-09-10
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/427886e029d0571428a35f6d6fe9eab1f77da9af/docs/index.html" target="_blank">427886e</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-09-10
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/8cee84087f95aa13f09bb1fbdba447d04bbe9287/analysis/index.Rmd" target="_blank">8cee840</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-09-05
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/8cee84087f95aa13f09bb1fbdba447d04bbe9287/docs/index.html" target="_blank">8cee840</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-09-05
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/cb3361cf5581d1737d73e80e1d512d85ffa40c74/analysis/index.Rmd" target="_blank">cb3361c</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-09-01
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/cb3361cf5581d1737d73e80e1d512d85ffa40c74/docs/index.html" target="_blank">cb3361c</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-09-01
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/083f41c9bb62da0ac953c25e5cf34dfc1cd2dfb2/analysis/index.Rmd" target="_blank">083f41c</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-08-31
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/083f41c9bb62da0ac953c25e5cf34dfc1cd2dfb2/docs/index.html" target="_blank">083f41c</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-08-31
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/1d3da6d7f02a3e1888eaa0126fdeffb5715f7e67/docs/index.html" target="_blank">1d3da6d</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-08-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/7c0293f4cb8fbe8b614fb923c2345cd8b2e801ec/analysis/index.Rmd" target="_blank">7c0293f</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2025-08-31
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
-</tbody>
-</table>
-</div>
 <hr>
 </div>
 </div>
 </div>
-<div id="data" class="section level1">
-<h1>Data</h1>
+<div id="our-own-data" class="section level1">
+<h1>Our own data</h1>
+<div id="fire-peaks" class="section level2">
+<h2>FIRE peaks</h2>
+<p><code>/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz</code></p>
+<p>these are open chromatin regions called by FIRE using our Fiber-seq
+data</p>
+</div>
+<div id="macs3-peak-calling-on-footprints" class="section level2">
+<h2>MACS3 Peak Calling on Footprints</h2>
+<p>Using the FiberHMM-derived footprints, peaks of different footprint
+size ranges were called with <strong>MACS3</strong>. The results are
+located at:
+<code>/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM/merged/combined/joint_trained_peaks</code></p>
+<p>Example files:</p>
+<pre><code>combined_all_chrs_10-30bp_macs3_q0.1_maxgap1_peaks.narrowPeak.gz
+combined_all_chrs_10-30bp_macs3_q0.1_maxgap1_peaks.xls</code></pre>
 <ul>
-<li><a href="data.html">Link</a></li>
+<li><strong><code>.narrowPeak.gz</code></strong>
+<ul>
+<li>UCSC narrowPeak format<br />
+</li>
+<li>0-based coordinate system</li>
+</ul></li>
+<li><strong><code>.xls</code></strong>
+<ul>
+<li>Standard MACS3 peak output table<br />
+</li>
+<li>1-based coordinate system</li>
+</ul></li>
+</ul>
+<p>These files can serve as the starting point for downstream
+footprint-based analyses.</p>
+</div>
+</div>
+<div id="data-downloaded" class="section level1">
+<h1>Data downloaded</h1>
+<div id="roadmap-epigenomics-chromhmm-core-15-state-segmentation"
+class="section level2">
+<h2>Roadmap Epigenomics ChromHMM core 15-state segmentation</h2>
+<p>ChromHMM segmentations were downloaded from the Roadmap Epigenomics
+portal: <a
+href="https://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/"
+class="uri">https://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/</a></p>
+<p>We used: <code>E116_15_coreMarks_hg38lift_mnemonics.bed.gz</code></p>
+<p><strong>E116 corresponds to GM12878 (lymphoblastoid cells)</strong>,
+which is the closest Roadmap epigenome match to our LCL cell line (based
+on the Roadmap epigenome metadata table: <a
+href="https://docs.google.com/spreadsheets/d/1yikGx4MsO9Ei36b64yOy9Vb6oPC5IBGlFbYEt-N6gOM/edit?gid=15#gid=15"
+class="uri">https://docs.google.com/spreadsheets/d/1yikGx4MsO9Ei36b64yOy9Vb6oPC5IBGlFbYEt-N6gOM/edit?gid=15#gid=15</a>).</p>
+<p><a href="https://egg2.wustl.edu/roadmap/web_portal/meta.html"
+class="uri">https://egg2.wustl.edu/roadmap/web_portal/meta.html</a></p>
+<table>
+<thead>
+<tr class="header">
+<th>STATE NO.</th>
+<th>MNEMONIC</th>
+<th>DESCRIPTION</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>TssA</td>
+<td>Active TSS</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>TssAFlnk</td>
+<td>Flanking Active TSS</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>TxFlnk</td>
+<td>Transcription at gene 5’ and 3’</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Tx</td>
+<td>Strong transcription</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>TxWk</td>
+<td>Weak transcription</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>EnhG</td>
+<td>Genic enhancers</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Enh</td>
+<td>Enhancers</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>ZNF/Rpts</td>
+<td>ZNF genes &amp; repeats</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>Het</td>
+<td>Heterochromatin</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>TssBiv</td>
+<td>Bivalent/Poised TSS</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>BivFlnk</td>
+<td>Flanking Bivalent TSS/Enh</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>EnhBiv</td>
+<td>Bivalent Enhancer</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>ReprPC</td>
+<td>Repressed PolyComb</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>ReprPCWk</td>
+<td>Weak Repressed PolyComb</td>
+</tr>
+<tr class="odd">
+<td>15</td>
+<td>Quies</td>
+<td>Quiescent/Low</td>
+</tr>
+</tbody>
+</table>
+<p>The data is storaged in
+<code>/project/spott/xsun/fiberseq/2.annotating_footprints/data/E116_15_coreMarks_hg38lift_mnemonics.bed.gz</code></p>
+</div>
+<div id="encode-dnase-seq" class="section level2">
+<h2>ENCODE DNase-seq</h2>
+<p>Processed DNase-seq peak files (BED format, <code>.bed.gz</code>)
+were downloaded from the ENCODE Consortium by Kevin and stored locally
+at: <code>/project/spott/kevinluo/Fiber_seq/data/DNaseseq/</code></p>
+<p>Cell lines included: currently include four lymphoblastoid cell lines
+(LCLs):</p>
+<ul>
+<li>GM12865</li>
+<li>GM12878</li>
+<li>GM12891</li>
+<li>GM19238</li>
+</ul>
+<p>Example file: <code>DNaseseq_peaks_GM12865_ENCFF754VPH.bed.gz</code>
+(0-based bed file)</p>
+</div>
+<div id="encode-ccres" class="section level2">
+<h2>ENCODE cCREs</h2>
+<p>ENCODE cCREs from SCREEN <a
+href="https://screen.wenglab.org/downloads"
+class="uri">https://screen.wenglab.org/downloads</a></p>
+<p><code>/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4</code></p>
+<p><code>GRCh38-cCREs.bed</code> : includes everything and has a column
+with the type of cCREs</p>
+<p>A subdirectory named <code>LCLs/</code> contains cCRE annotations
+specific to several lymphoblastoid cell lines (LCLs): Some cell lines
+(e.g., GM12878) integrate multiple data types (DNase, ATAC, histone
+marks, CTCF), whereas others (e.g., GM19238) are primarily supported by
+DNase data.</p>
+</div>
+<div id="promoter" class="section level2">
+<h2>Promoter</h2>
+<p>Promoter regions were defined using the <a
+href="https://www.gencodegenes.org/human/">GENCODE v49 basic gene
+annotation (GRCh38.p14)</a>. TSSs were extracted from the GTF file
+<code>/project/spott/xsun/fiberseq/2.annotating_footprints/data/gencode.v49.basic.annotation.gtf.gz</code>.</p>
+<p>The genomic annotations were built using Kevin’s code: <a
+href="https://github.com/xinhe-lab/mapgen/blob/main/R/annots.R"
+class="uri">https://github.com/xinhe-lab/mapgen/blob/main/R/annots.R</a></p>
+<p>The promoter is defined as the resion <strong>2kb</strong> upstream
+and <strong>500bp</strong> downstream the TSS</p>
+<p>The processed data is storaged in
+<code>/project/spott/xsun/fiberseq/2.annotating_footprints/data/genomic.annots.v49.TSS-2kb+500bp.allgenes.RDS</code></p>
+<p><strong>Step-by-step logic</strong></p>
+<ol style="list-style-type: decimal">
+<li>Load the GTF and restrict chromosomes</li>
+</ol>
+<ul>
+<li>Imports the GTF into a <code>GRanges</code> object
+(<code>gtf.gr</code>)</li>
+<li>Drops everything not on autosomes
+<code>chr1</code>–<code>chr22</code> using
+<code>seqlevels(..., pruning.mode="coarse")</code></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Keep only protein-coding genes (Optional)</li>
+</ol>
+<ul>
+<li>Filters the full GTF down to entries with
+<code>gene_type == "protein_coding"</code></li>
+<li>Extracts <strong>gene-level</strong> ranges
+(<code>type == "gene"</code>) into <code>genes.gr</code></li>
+</ul>
+<ol start="3" style="list-style-type: decimal">
+<li>Choose one canonical transcript per gene (longest transcript)</li>
+</ol>
+<ul>
+<li>Converts the GTF to a tibble, keeps only
+<code>type == "transcript"</code></li>
+<li>Groups by <code>gene_id</code></li>
+<li>Computes transcript length as <code>abs(end - start)</code></li>
+<li>Sorts by decreasing length and keeps the top transcript
+(<code>slice(1)</code>)</li>
+</ul>
+<p>This produces a table (<code>canonical.transcripts</code>) containing
+<strong>one transcript_id per gene</strong>.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Build canonical transcript annotation tracks</li>
+</ol>
+<ul>
+<li>Keeps only GTF records whose <code>transcript_id</code> is in the
+chosen canonical set:
+<ul>
+<li><code>gtf.canonical.gr</code></li>
+</ul></li>
+<li>Extracts:
+<ul>
+<li><code>exons.gr</code> where <code>type == "exon"</code></li>
+<li><code>UTRs.gr</code> where <code>type == "UTR"</code></li>
+</ul></li>
+</ul>
+<ol start="5" style="list-style-type: decimal">
+<li>Infer introns (gene minus exon intervals)</li>
+</ol>
+<ul>
+<li>Computes introns as:<br />
+<code>introns.gr &lt;- setdiff(genes.gr, exons.gr)</code></li>
+<li>Uses <code>findOverlaps(genes.gr, introns.gr)</code> to map each
+intron interval back to its gene</li>
+<li>Adds a <code>gene_name</code> metadata column to introns based on
+the overlapping gene</li>
+</ul>
+<ol start="6" style="list-style-type: decimal">
+<li>Define promoters (TSS - 2 kb, strand-aware)</li>
+</ol>
+<p>Promoters are built from <strong>gene coordinates</strong> using
+strand:</p>
+<ul>
+<li>For <code>+</code> strand genes: promoter =
+<code>[gene_start - 2000, gene_start]</code></li>
+<li>For <code>-</code> strand genes: promoter =
+<code>[gene_end, gene_end + 2000]</code></li>
+</ul>
+<p>Then assigns <code>gene_name</code> to each promoter interval.</p>
+<ol start="7" style="list-style-type: decimal">
+<li>Save outputs</li>
+</ol>
+<p>Creates a named list of <code>GRanges</code> objects:</p>
+<ul>
+<li><code>exons</code></li>
+<li><code>introns</code></li>
+<li><code>UTRs</code></li>
+<li><code>promoters</code></li>
+<li><code>genes</code></li>
 </ul>
 </div>
-<div id="co-accessibility-of-tfs" class="section level1">
-<h1>Co-accessibility of TFs</h1>
-<p>TF examples</p>
-<ul>
-<li><a href="TF_examples_NRF1.html">NRF1</a></li>
-</ul>
-<p>TF Co-accessibility</p>
-<ul>
-<li><a href="TF_co-acc_NRF1_pairs.html">NRF1 pairs</a></li>
-<li><a href="TF_co-acc_NRF1_SP1.html">NRF1 &amp; SP1</a></li>
-</ul>
-<p>CpG methylation and TF binding</p>
-<ul>
-<li><a href="TF_co-acc_NRF1_cpg2.html">NRF1</a></li>
-</ul>
-</div>
-<div id="annotation-for-the-footprints" class="section level1">
-<h1>Annotation for the footprints</h1>
-<p>Annotate footprints(q &lt; 0.1) by location</p>
-<ul>
-<li><a href="annotation_by_location_prompolocr.html">Promoters, Pol2,
-OCR</a></li>
-<li><a href="annotation_by_location_ChromHMM.html">15 states from
-ChromHMM</a></li>
-</ul>
-<p>Determine the footprint cutoffs (p-value, q-value, fold-enrichment,
-pileup)</p>
-<ul>
-<li><a href="determine_footprint_cutoffs.html">Link</a></li>
-</ul>
-<p>Checking the OCR coverage for 15 states from ChromHMM</p>
-<ul>
-<li><a href="fire_coverage_ChromHMM.html">FIRE peaks</a></li>
-<li><a href="DNase_coverage_ChromHMM.html">DNase peak</a></li>
-</ul>
 </div>
 
 
@@ -933,6 +784,8 @@ footer is added to webpages before the MathJax javascript. -->
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -965,6 +818,35 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

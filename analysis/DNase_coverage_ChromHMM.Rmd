@@ -1,0 +1,142 @@
+---
+title: "Checking the DNase peak coverage for 15 states from ChromHMM"
+author: "XSun"
+date: "2026-02-24"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+
+# Introduction
+
+We checked DNase peak overlap with 15 states from ChromHMM, to calibrate the FIRE calling
+
+The results for FIRE peak is here: https://xsun1229.github.io/fiberseq/fire_coverage_ChromHMM.html
+
+Processed DNase-seq peak files (BED format, `.bed.gz`) were downloaded from the ENCODE Consortium by Kevin and stored locally at: `/project/spott/kevinluo/Fiber_seq/data/DNaseseq/`
+
+Cell lines included: currently include four LCLs:
+
+- GM12865
+- GM12878
+- GM12891
+- GM19238
+
+GM19238 is in our Fiber-seq sample list
+
+
+```{r}
+suppressPackageStartupMessages({
+  library(GenomicRanges)
+  library(IRanges)
+  library(data.table)
+  library(ggplot2)
+})
+```
+
+
+# Results
+
+
+```{r fig.height=6, fig.width=7}
+
+cellines <- c("GM19238","GM12865", "GM12878", "GM12891")
+
+folder_results <- "/project/spott/xsun/fiberseq/2.annotating_footprints/results/DNase/"
+
+for (celline in cellines){
+  
+  res <- readRDS(paste0(folder_results,"any_overlap_with_ChromHMM_", celline, ".RDS"))
+  
+  res <- res[,-c("total_bp_state","peak_overlap_bp")]
+  res <- res[,c("state_id","description","total_state_Mb","peak_overlap_Mb","frac_state_covered_by_peak","frac_of_peak_bp_in_state","hex")]
+  res$frac_state_covered_by_peak <- res$frac_state_covered_by_peak*100
+  res$frac_of_peak_bp_in_state <- res$frac_of_peak_bp_in_state *100
+  colnames(res)[5:6] <- c("%state_covered_by_peak","%peak_in_state")
+  
+  
+  plot_df <- copy(res)
+  
+  plot_long <- melt(
+    plot_df,
+    id.vars = c("state_id", "description", "hex"),
+    measure.vars = c("%state_covered_by_peak", "%peak_in_state"),
+    variable.name = "metric",
+    value.name = "value"
+  )
+  
+  # Simple labels
+  plot_long[, metric := fifelse(
+    metric == "%state_covered_by_peak",
+    "% of state covered by peak",
+    "% of peak in state"
+  )]
+  
+  plot <- ggplot(plot_long, aes(x = state_id, y = value, fill = hex)) +
+    geom_col() +
+    facet_wrap(~ metric, ncol = 1, scales = "free_y") +
+    scale_fill_identity() +
+    scale_x_continuous(
+      breaks = plot_df$state_id,
+      labels = plot_df$description
+    ) +
+    labs(
+      x = "ChromHMM state",
+      y = "Percent (%)",
+      title = paste0(celline,": DNase peak & ChromHMM Overlap")
+    ) +
+    theme_classic(base_size = 14) +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      strip.text = element_text(face = "bold"),
+      legend.position = "none"
+    )
+  
+  print(plot)
+  
+  
+  pie_df <- copy(res)
+  
+  # Ensure ordering by state_id
+  setorder(pie_df, state_id)
+  
+  # Create numeric labels (1–15)
+  pie_df[, state_label := as.character(state_id)]
+  
+  # Create legend labels: "1: Active TSS"
+  pie_df[, legend_label := paste0(state_id, ": ", description)]
+  pie_df$legend_label <- factor(pie_df$legend_label)
+  
+  pie <- ggplot(pie_df,
+         aes(x = "", 
+             y = `%peak_in_state`,
+             fill = legend_label)) +
+    geom_col(width = 1, color = "white") +
+    coord_polar(theta = "y") +
+    scale_fill_manual(values = setNames(pie_df$hex,
+                                        pie_df$legend_label)) +
+    theme_void(base_size = 14) +
+    labs(
+      title = paste0(celline,": % of peak in each ChromHMM state"),
+      fill = "ChromHMM States"
+    ) +
+    geom_text(
+      aes(label = state_label),
+      position = position_stack(vjust = 0.5),
+      size = 4,
+      color = "black"
+    )
+  
+  print(pie)
+  
+}
+
+
+```
+
+
+
+
+
+

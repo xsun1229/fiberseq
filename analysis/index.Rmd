@@ -8,6 +8,11 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Data 
+
+* [Link](data.html)
+
+
 # Co-accessibility of TFs
 
 TF examples 
@@ -34,6 +39,14 @@ Determine the footprint cutoffs (p-value, q-value, fold-enrichment, pileup)
 
 * [Link](determine_footprint_cutoffs.html)
 
-Checking the FIRE coverage for 15 states from ChromHMM
+Checking the OCR coverage for 15 states from ChromHMM
 
-* [Link](fire_coverage_ChromHMM.html)
+* [FIRE peaks](fire_coverage_ChromHMM.html)
+* [DNase peak](DNase_coverage_ChromHMM.html)
+
+
+
+
+
+
+

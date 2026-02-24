@@ -1,0 +1,171 @@
+---
+title: "Data"
+author: "XSun"
+date: "2026-02-24"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+# Our own data
+
+## FIRE peaks 
+
+`/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz`
+
+these are open chromatin regions called by FIRE using our Fiber-seq data
+
+## MACS3 Peak Calling on Footprints
+
+Using the FiberHMM-derived footprints, peaks of different footprint size ranges were called with **MACS3**. The results are located at: `/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM/merged/combined/joint_trained_peaks`
+
+Example files:
+
+```
+combined_all_chrs_10-30bp_macs3_q0.1_maxgap1_peaks.narrowPeak.gz
+combined_all_chrs_10-30bp_macs3_q0.1_maxgap1_peaks.xls
+```
+
+- **`.narrowPeak.gz`**
+  - UCSC narrowPeak format  
+  - 0-based coordinate system  
+
+- **`.xls`**
+  - Standard MACS3 peak output table  
+  - 1-based coordinate system  
+
+These files can serve as the starting point for downstream footprint-based analyses.
+
+
+
+
+# Data downloaded 
+
+## Roadmap Epigenomics ChromHMM core 15-state segmentation
+
+ChromHMM segmentations were downloaded from the Roadmap Epigenomics portal: https://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/
+
+We used: `E116_15_coreMarks_hg38lift_mnemonics.bed.gz`
+
+**E116 corresponds to GM12878 (lymphoblastoid cells)**, which is the closest Roadmap epigenome match to our LCL cell line (based on the Roadmap epigenome metadata table: https://docs.google.com/spreadsheets/d/1yikGx4MsO9Ei36b64yOy9Vb6oPC5IBGlFbYEt-N6gOM/edit?gid=15#gid=15).
+
+https://egg2.wustl.edu/roadmap/web_portal/meta.html
+
+
+| STATE NO. | MNEMONIC | DESCRIPTION |
+|-----------|----------|-------------|
+| 1  | TssA      | Active TSS |
+| 2  | TssAFlnk  | Flanking Active TSS |
+| 3  | TxFlnk    | Transcription at gene 5' and 3' |
+| 4  | Tx        | Strong transcription |
+| 5  | TxWk      | Weak transcription |
+| 6  | EnhG      | Genic enhancers |
+| 7  | Enh       | Enhancers |
+| 8  | ZNF/Rpts  | ZNF genes & repeats |
+| 9  | Het       | Heterochromatin |
+| 10 | TssBiv    | Bivalent/Poised TSS |
+| 11 | BivFlnk   | Flanking Bivalent TSS/Enh |
+| 12 | EnhBiv    | Bivalent Enhancer |
+| 13 | ReprPC    | Repressed PolyComb |
+| 14 | ReprPCWk  | Weak Repressed PolyComb |
+| 15 | Quies     | Quiescent/Low |
+
+The data is storaged in `/project/spott/xsun/fiberseq/2.annotating_footprints/data/E116_15_coreMarks_hg38lift_mnemonics.bed.gz`
+
+
+## ENCODE DNase-seq
+
+Processed DNase-seq peak files (BED format, `.bed.gz`) were downloaded from the ENCODE Consortium by Kevin and stored locally at: `/project/spott/kevinluo/Fiber_seq/data/DNaseseq/`
+
+Cell lines included: currently include four lymphoblastoid cell lines (LCLs):
+
+- GM12865
+- GM12878
+- GM12891
+- GM19238
+
+Example file: `DNaseseq_peaks_GM12865_ENCFF754VPH.bed.gz` (0-based bed file)
+
+
+## ENCODE cCREs
+
+ENCODE cCREs from SCREEN https://screen.wenglab.org/downloads
+
+`/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4`
+
+`GRCh38-cCREs.bed` : includes everything and has a column with the type of cCREs
+
+A subdirectory named `LCLs/` contains cCRE annotations specific to several lymphoblastoid cell lines (LCLs):  Some cell lines (e.g., GM12878) integrate multiple data types (DNase, ATAC, histone marks, CTCF), whereas others (e.g., GM19238) are primarily supported by DNase data.
+
+
+
+## Promoter
+
+Promoter regions were defined using the [GENCODE v49 basic gene annotation (GRCh38.p14)](https://www.gencodegenes.org/human/). 
+TSSs were extracted from the GTF file `/project/spott/xsun/fiberseq/2.annotating_footprints/data/gencode.v49.basic.annotation.gtf.gz`. 
+
+The genomic annotations were built using Kevin's code: https://github.com/xinhe-lab/mapgen/blob/main/R/annots.R 
+
+The promoter is defined as the resion **2kb** upstream and **500bp** downstream the TSS
+
+The processed data is storaged in `/project/spott/xsun/fiberseq/2.annotating_footprints/data/genomic.annots.v49.TSS-2kb+500bp.allgenes.RDS`
+
+**Step-by-step logic**
+
+(1) Load the GTF and restrict chromosomes
+
+- Imports the GTF into a `GRanges` object (`gtf.gr`)
+- Drops everything not on autosomes `chr1`–`chr22` using `seqlevels(..., pruning.mode="coarse")`
+
+(2) Keep only protein-coding genes (Optional)
+
+- Filters the full GTF down to entries with `gene_type == "protein_coding"`
+- Extracts **gene-level** ranges (`type == "gene"`) into `genes.gr`
+
+(3) Choose one canonical transcript per gene (longest transcript)
+
+- Converts the GTF to a tibble, keeps only `type == "transcript"`
+- Groups by `gene_id`
+- Computes transcript length as `abs(end - start)`
+- Sorts by decreasing length and keeps the top transcript (`slice(1)`)
+
+This produces a table (`canonical.transcripts`) containing **one transcript_id per gene**.
+
+(4) Build canonical transcript annotation tracks
+
+- Keeps only GTF records whose `transcript_id` is in the chosen canonical set:
+  - `gtf.canonical.gr`
+- Extracts:
+  - `exons.gr` where `type == "exon"`
+  - `UTRs.gr` where `type == "UTR"`
+
+(5) Infer introns (gene minus exon intervals)
+
+- Computes introns as:  
+  `introns.gr <- setdiff(genes.gr, exons.gr)`
+- Uses `findOverlaps(genes.gr, introns.gr)` to map each intron interval back to its gene
+- Adds a `gene_name` metadata column to introns based on the overlapping gene
+
+(6) Define promoters (TSS - 2 kb, strand-aware)
+
+Promoters are built from **gene coordinates** using strand:
+
+- For `+` strand genes: promoter = `[gene_start - 2000, gene_start]`
+- For `-` strand genes: promoter = `[gene_end, gene_end + 2000]`
+
+Then assigns `gene_name` to each promoter interval.
+
+(7) Save outputs
+
+Creates a named list of `GRanges` objects:
+
+- `exons`
+- `introns`
+- `UTRs`
+- `promoters`
+- `genes`
+
+
+
+
