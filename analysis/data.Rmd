@@ -90,6 +90,8 @@ Example file: `DNaseseq_peaks_GM12865_ENCFF754VPH.bed.gz` (0-based bed file)
 
 ## ENCODE cCREs
 
+paper: https://www.nature.com/articles/s41586-025-09909-9
+
 ENCODE cCREs from SCREEN https://screen.wenglab.org/downloads
 
 `/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4`
@@ -98,6 +100,12 @@ ENCODE cCREs from SCREEN https://screen.wenglab.org/downloads
 
 A subdirectory named `LCLs/` contains cCRE annotations specific to several lymphoblastoid cell lines (LCLs):  Some cell lines (e.g., GM12878) integrate multiple data types (DNase, ATAC, histone marks, CTCF), whereas others (e.g., GM19238) are primarily supported by DNase data.
 
+
+## ENCODE ATAC-seq peaks
+
+`/project/spott/kevinluo/Fiber_seq/data/ATACseq`
+
+ATAC-seq peaks in ENCODE have different versions. Default are pseudoreplicated peaks and also IDR peaks that fewer false positivies.
 
 
 ## Promoter

@@ -1,0 +1,129 @@
+---
+title: "Checking the ATAC-seq peak coverage for 15 states from ChromHMM"
+author: "XSun"
+date: "2026-02-26"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+
+# Introduction
+
+We checked ATAC-seq peak overlap with 15 states from ChromHMM, to calibrate the FIRE calling
+
+The results for FIRE peak is here: https://xsun1229.github.io/fiberseq/fire_coverage_ChromHMM.html
+
+The ATAC-seq peak data is stroaged here:  `/project/spott/kevinluo/Fiber_seq/data/ATACseq` . The ATAC-seq peaks in ENCODE have different versions. Default are pseudoreplicated peaks and also IDR peaks that fewer false positivies.
+
+There are 4 cell lines: 
+
+- GM12878
+- GM18505
+- GM18508
+- GM18858
+
+**We sum the total number of base pairs of DNase peaks inside each of the 15 ChromHMM states , and then divided by the total number of base pairs for each states.**
+
+```{r}
+suppressPackageStartupMessages({
+  library(GenomicRanges)
+  library(IRanges)
+  library(data.table)
+  library(ggplot2)
+})
+```
+
+# Results
+
+
+```{r fig.height=6, fig.width=7}
+
+cellines <- c("GM12878","GM18505","GM18508","GM18858")
+settings <- c("IDR", "pseudoreplicated")
+
+for (celline in cellines){
+  
+  for (setting in settings){
+    
+    file <- paste0("/project/spott/xsun/fiberseq/2.annotating_footprints/results/atac_ChromHMM/", paste0("ChromHMM_overlap_", celline, "_", setting,".rds"))
+    res <- readRDS(file)
+    
+    plot_df <- copy(res)[, .(
+      state_id,
+      description,
+      total_state_Mb,
+      peak_overlap_Mb,
+      `%state_covered_by_peak` = 100 * frac_state_covered_by_peak,
+      `%peak_in_state`         = 100 * frac_of_peak_bp_in_state,
+      hex
+    )]
+    
+    plot_long <- melt(
+      plot_df,
+      id.vars = c("state_id", "description", "hex"),
+      measure.vars = c("%state_covered_by_peak", "%peak_in_state"),
+      variable.name = "metric",
+      value.name = "value"
+    )
+    
+    plot_long[, metric := fifelse(
+      metric == "%state_covered_by_peak",
+      "% of state covered by peak",
+      "% of peak in state"
+    )]
+    
+    p_bar <- ggplot(plot_long, aes(x = state_id, y = value, fill = hex)) +
+      geom_col() +
+      facet_wrap(~ metric, ncol = 1, scales = "free_y") +
+      scale_fill_identity() +
+      scale_x_continuous(breaks = plot_df$state_id, labels = plot_df$description) +
+      labs(
+        x = "ChromHMM state",
+        y = "Percent (%)",
+        title = paste0(celline, " (", setting, "): Peaks & ChromHMM overlap")
+      ) +
+      theme_classic(base_size = 14) +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text = element_text(face = "bold"),
+        legend.position = "none"
+      )
+    
+    print(p_bar)
+    
+    pie_df <- copy(plot_df)
+    setorder(pie_df, state_id)
+    
+    pie_df[, state_label  := as.character(state_id)]
+    pie_df[, legend_label := factor(paste0(state_id, ": ", description),
+                                    levels = paste0(state_id, ": ", description))]
+    
+    p_pie <- ggplot(pie_df, aes(x = "", y = `%peak_in_state`, fill = legend_label)) +
+      geom_col(width = 1, color = "white") +
+      coord_polar(theta = "y") +
+      scale_fill_manual(values = setNames(pie_df$hex, pie_df$legend_label)) +
+      theme_void(base_size = 14) +
+      labs(
+        title = paste0(celline, " (", setting, "): % of peak in each ChromHMM state"),
+        fill = "ChromHMM States"
+      ) +
+      geom_text(
+        aes(label = state_label),
+        position = position_stack(vjust = 0.5),
+        size = 4,
+        color = "black"
+      )
+    
+    
+    print(p_pie)
+    
+    
+  }
+  
+  
+  
+}
+
+```
+

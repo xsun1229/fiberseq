@@ -43,6 +43,8 @@ Checking the OCR coverage for 15 states from ChromHMM
 
 * [FIRE peaks](fire_coverage_ChromHMM.html)
 * [DNase peak](DNase_coverage_ChromHMM.html)
+* [cCRE peak](cCRE_coverage_ChromHMM.html)
+* [ATAC-seq peak](atac_coverage_ChromHMM.html)
 
 
 

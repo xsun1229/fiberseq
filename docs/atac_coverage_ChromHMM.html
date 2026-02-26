@@ -11,9 +11,9 @@
 
 <meta name="author" content="XSun" />
 
-<meta name="date" content="2026-02-24" />
+<meta name="date" content="2026-02-26" />
 
-<title>Data</title>
+<title>Checking the ATAC-seq peak coverage for 15 states from ChromHMM</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -35,6 +35,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
@@ -233,6 +234,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -357,11 +361,20 @@ div.tocify {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
 
 
-<h1 class="title toc-ignore">Data</h1>
+
+<h1 class="title toc-ignore">Checking the ATAC-seq peak coverage for 15
+states from ChromHMM</h1>
 <h4 class="author">XSun</h4>
-<h4 class="date">2026-02-24</h4>
+<h4 class="date">2026-02-26</h4>
 
 </div>
 
@@ -394,7 +407,7 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span> 1
 </p>
@@ -428,12 +441,96 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250831code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250831)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250831code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250831)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
@@ -493,352 +590,179 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
-
 <p>
-These are the previous versions of the repository in which changes were
-made to the R Markdown (<code>analysis/data.Rmd</code>) and HTML
-(<code>docs/data.html</code>) files. If you’ve configured a remote Git
-repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
-in the table below to view the files as they were in that past version.
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
 </p>
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-File
-</th>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-<th>
-Message
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/analysis/data.Rmd" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/data.html" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-<td>
-update
-</td>
-</tr>
-</tbody>
-</table>
-</div>
 <hr>
 </div>
 </div>
 </div>
-<div id="our-own-data" class="section level1">
-<h1>Our own data</h1>
-<div id="fire-peaks" class="section level2">
-<h2>FIRE peaks</h2>
-<p><code>/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz</code></p>
-<p>these are open chromatin regions called by FIRE using our Fiber-seq
-data</p>
-</div>
-<div id="macs3-peak-calling-on-footprints" class="section level2">
-<h2>MACS3 Peak Calling on Footprints</h2>
-<p>Using the FiberHMM-derived footprints, peaks of different footprint
-size ranges were called with <strong>MACS3</strong>. The results are
-located at:
-<code>/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM/merged/combined/joint_trained_peaks</code></p>
-<p>Example files:</p>
-<pre><code>combined_all_chrs_10-30bp_macs3_q0.1_maxgap1_peaks.narrowPeak.gz
-combined_all_chrs_10-30bp_macs3_q0.1_maxgap1_peaks.xls</code></pre>
-<ul>
-<li><strong><code>.narrowPeak.gz</code></strong>
-<ul>
-<li>UCSC narrowPeak format<br />
-</li>
-<li>0-based coordinate system</li>
-</ul></li>
-<li><strong><code>.xls</code></strong>
-<ul>
-<li>Standard MACS3 peak output table<br />
-</li>
-<li>1-based coordinate system</li>
-</ul></li>
-</ul>
-<p>These files can serve as the starting point for downstream
-footprint-based analyses.</p>
-</div>
-</div>
-<div id="data-downloaded" class="section level1">
-<h1>Data downloaded</h1>
-<div id="roadmap-epigenomics-chromhmm-core-15-state-segmentation"
-class="section level2">
-<h2>Roadmap Epigenomics ChromHMM core 15-state segmentation</h2>
-<p>ChromHMM segmentations were downloaded from the Roadmap Epigenomics
-portal: <a
-href="https://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/"
-class="uri">https://egg2.wustl.edu/roadmap/data/byFileType/chromhmmSegmentations/ChmmModels/coreMarks/jointModel/final/</a></p>
-<p>We used: <code>E116_15_coreMarks_hg38lift_mnemonics.bed.gz</code></p>
-<p><strong>E116 corresponds to GM12878 (lymphoblastoid cells)</strong>,
-which is the closest Roadmap epigenome match to our LCL cell line (based
-on the Roadmap epigenome metadata table: <a
-href="https://docs.google.com/spreadsheets/d/1yikGx4MsO9Ei36b64yOy9Vb6oPC5IBGlFbYEt-N6gOM/edit?gid=15#gid=15"
-class="uri">https://docs.google.com/spreadsheets/d/1yikGx4MsO9Ei36b64yOy9Vb6oPC5IBGlFbYEt-N6gOM/edit?gid=15#gid=15</a>).</p>
-<p><a href="https://egg2.wustl.edu/roadmap/web_portal/meta.html"
-class="uri">https://egg2.wustl.edu/roadmap/web_portal/meta.html</a></p>
-<table>
-<thead>
-<tr class="header">
-<th>STATE NO.</th>
-<th>MNEMONIC</th>
-<th>DESCRIPTION</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>1</td>
-<td>TssA</td>
-<td>Active TSS</td>
-</tr>
-<tr class="even">
-<td>2</td>
-<td>TssAFlnk</td>
-<td>Flanking Active TSS</td>
-</tr>
-<tr class="odd">
-<td>3</td>
-<td>TxFlnk</td>
-<td>Transcription at gene 5’ and 3’</td>
-</tr>
-<tr class="even">
-<td>4</td>
-<td>Tx</td>
-<td>Strong transcription</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>TxWk</td>
-<td>Weak transcription</td>
-</tr>
-<tr class="even">
-<td>6</td>
-<td>EnhG</td>
-<td>Genic enhancers</td>
-</tr>
-<tr class="odd">
-<td>7</td>
-<td>Enh</td>
-<td>Enhancers</td>
-</tr>
-<tr class="even">
-<td>8</td>
-<td>ZNF/Rpts</td>
-<td>ZNF genes &amp; repeats</td>
-</tr>
-<tr class="odd">
-<td>9</td>
-<td>Het</td>
-<td>Heterochromatin</td>
-</tr>
-<tr class="even">
-<td>10</td>
-<td>TssBiv</td>
-<td>Bivalent/Poised TSS</td>
-</tr>
-<tr class="odd">
-<td>11</td>
-<td>BivFlnk</td>
-<td>Flanking Bivalent TSS/Enh</td>
-</tr>
-<tr class="even">
-<td>12</td>
-<td>EnhBiv</td>
-<td>Bivalent Enhancer</td>
-</tr>
-<tr class="odd">
-<td>13</td>
-<td>ReprPC</td>
-<td>Repressed PolyComb</td>
-</tr>
-<tr class="even">
-<td>14</td>
-<td>ReprPCWk</td>
-<td>Weak Repressed PolyComb</td>
-</tr>
-<tr class="odd">
-<td>15</td>
-<td>Quies</td>
-<td>Quiescent/Low</td>
-</tr>
-</tbody>
-</table>
-<p>The data is storaged in
-<code>/project/spott/xsun/fiberseq/2.annotating_footprints/data/E116_15_coreMarks_hg38lift_mnemonics.bed.gz</code></p>
-</div>
-<div id="encode-dnase-seq" class="section level2">
-<h2>ENCODE DNase-seq</h2>
-<p>Processed DNase-seq peak files (BED format, <code>.bed.gz</code>)
-were downloaded from the ENCODE Consortium by Kevin and stored locally
-at: <code>/project/spott/kevinluo/Fiber_seq/data/DNaseseq/</code></p>
-<p>Cell lines included: currently include four lymphoblastoid cell lines
-(LCLs):</p>
-<ul>
-<li>GM12865</li>
-<li>GM12878</li>
-<li>GM12891</li>
-<li>GM19238</li>
-</ul>
-<p>Example file: <code>DNaseseq_peaks_GM12865_ENCFF754VPH.bed.gz</code>
-(0-based bed file)</p>
-</div>
-<div id="encode-ccres" class="section level2">
-<h2>ENCODE cCREs</h2>
-<p>paper: <a href="https://www.nature.com/articles/s41586-025-09909-9"
-class="uri">https://www.nature.com/articles/s41586-025-09909-9</a></p>
-<p>ENCODE cCREs from SCREEN <a
-href="https://screen.wenglab.org/downloads"
-class="uri">https://screen.wenglab.org/downloads</a></p>
-<p><code>/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4</code></p>
-<p><code>GRCh38-cCREs.bed</code> : includes everything and has a column
-with the type of cCREs</p>
-<p>A subdirectory named <code>LCLs/</code> contains cCRE annotations
-specific to several lymphoblastoid cell lines (LCLs): Some cell lines
-(e.g., GM12878) integrate multiple data types (DNase, ATAC, histone
-marks, CTCF), whereas others (e.g., GM19238) are primarily supported by
-DNase data.</p>
-</div>
-<div id="encode-atac-seq-peaks" class="section level2">
-<h2>ENCODE ATAC-seq peaks</h2>
-<p><code>/project/spott/kevinluo/Fiber_seq/data/ATACseq</code></p>
-<p>ATAC-seq peaks in ENCODE have different versions. Default are
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>We checked ATAC-seq peak overlap with 15 states from ChromHMM, to
+calibrate the FIRE calling</p>
+<p>The results for FIRE peak is here: <a
+href="https://xsun1229.github.io/fiberseq/fire_coverage_ChromHMM.html"
+class="uri">https://xsun1229.github.io/fiberseq/fire_coverage_ChromHMM.html</a></p>
+<p>The ATAC-seq peak data is stroaged here:
+<code>/project/spott/kevinluo/Fiber_seq/data/ATACseq</code> . The
+ATAC-seq peaks in ENCODE have different versions. Default are
 pseudoreplicated peaks and also IDR peaks that fewer false
 positivies.</p>
+<p>There are 4 cell lines:</p>
+<ul>
+<li>GM12878</li>
+<li>GM18505</li>
+<li>GM18508</li>
+<li>GM18858</li>
+</ul>
+<p><strong>We sum the total number of base pairs of DNase peaks inside
+each of the 15 ChromHMM states , and then divided by the total number of
+base pairs for each states.</strong></p>
+<pre class="r"><code>suppressPackageStartupMessages({
+  library(GenomicRanges)
+  library(IRanges)
+  library(data.table)
+  library(ggplot2)
+})</code></pre>
 </div>
-<div id="promoter" class="section level2">
-<h2>Promoter</h2>
-<p>Promoter regions were defined using the <a
-href="https://www.gencodegenes.org/human/">GENCODE v49 basic gene
-annotation (GRCh38.p14)</a>. TSSs were extracted from the GTF file
-<code>/project/spott/xsun/fiberseq/2.annotating_footprints/data/gencode.v49.basic.annotation.gtf.gz</code>.</p>
-<p>The genomic annotations were built using Kevin’s code: <a
-href="https://github.com/xinhe-lab/mapgen/blob/main/R/annots.R"
-class="uri">https://github.com/xinhe-lab/mapgen/blob/main/R/annots.R</a></p>
-<p>The promoter is defined as the resion <strong>2kb</strong> upstream
-and <strong>500bp</strong> downstream the TSS</p>
-<p>The processed data is storaged in
-<code>/project/spott/xsun/fiberseq/2.annotating_footprints/data/genomic.annots.v49.TSS-2kb+500bp.allgenes.RDS</code></p>
-<p><strong>Step-by-step logic</strong></p>
-<ol style="list-style-type: decimal">
-<li>Load the GTF and restrict chromosomes</li>
-</ol>
-<ul>
-<li>Imports the GTF into a <code>GRanges</code> object
-(<code>gtf.gr</code>)</li>
-<li>Drops everything not on autosomes
-<code>chr1</code>–<code>chr22</code> using
-<code>seqlevels(..., pruning.mode="coarse")</code></li>
-</ul>
-<ol start="2" style="list-style-type: decimal">
-<li>Keep only protein-coding genes (Optional)</li>
-</ol>
-<ul>
-<li>Filters the full GTF down to entries with
-<code>gene_type == "protein_coding"</code></li>
-<li>Extracts <strong>gene-level</strong> ranges
-(<code>type == "gene"</code>) into <code>genes.gr</code></li>
-</ul>
-<ol start="3" style="list-style-type: decimal">
-<li>Choose one canonical transcript per gene (longest transcript)</li>
-</ol>
-<ul>
-<li>Converts the GTF to a tibble, keeps only
-<code>type == "transcript"</code></li>
-<li>Groups by <code>gene_id</code></li>
-<li>Computes transcript length as <code>abs(end - start)</code></li>
-<li>Sorts by decreasing length and keeps the top transcript
-(<code>slice(1)</code>)</li>
-</ul>
-<p>This produces a table (<code>canonical.transcripts</code>) containing
-<strong>one transcript_id per gene</strong>.</p>
-<ol start="4" style="list-style-type: decimal">
-<li>Build canonical transcript annotation tracks</li>
-</ol>
-<ul>
-<li>Keeps only GTF records whose <code>transcript_id</code> is in the
-chosen canonical set:
-<ul>
-<li><code>gtf.canonical.gr</code></li>
-</ul></li>
-<li>Extracts:
-<ul>
-<li><code>exons.gr</code> where <code>type == "exon"</code></li>
-<li><code>UTRs.gr</code> where <code>type == "UTR"</code></li>
-</ul></li>
-</ul>
-<ol start="5" style="list-style-type: decimal">
-<li>Infer introns (gene minus exon intervals)</li>
-</ol>
-<ul>
-<li>Computes introns as:<br />
-<code>introns.gr &lt;- setdiff(genes.gr, exons.gr)</code></li>
-<li>Uses <code>findOverlaps(genes.gr, introns.gr)</code> to map each
-intron interval back to its gene</li>
-<li>Adds a <code>gene_name</code> metadata column to introns based on
-the overlapping gene</li>
-</ul>
-<ol start="6" style="list-style-type: decimal">
-<li>Define promoters (TSS - 2 kb, strand-aware)</li>
-</ol>
-<p>Promoters are built from <strong>gene coordinates</strong> using
-strand:</p>
-<ul>
-<li>For <code>+</code> strand genes: promoter =
-<code>[gene_start - 2000, gene_start]</code></li>
-<li>For <code>-</code> strand genes: promoter =
-<code>[gene_end, gene_end + 2000]</code></li>
-</ul>
-<p>Then assigns <code>gene_name</code> to each promoter interval.</p>
-<ol start="7" style="list-style-type: decimal">
-<li>Save outputs</li>
-</ol>
-<p>Creates a named list of <code>GRanges</code> objects:</p>
-<ul>
-<li><code>exons</code></li>
-<li><code>introns</code></li>
-<li><code>UTRs</code></li>
-<li><code>promoters</code></li>
-<li><code>genes</code></li>
-</ul>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<pre class="r"><code>cellines &lt;- c(&quot;GM12878&quot;,&quot;GM18505&quot;,&quot;GM18508&quot;,&quot;GM18858&quot;)
+settings &lt;- c(&quot;IDR&quot;, &quot;pseudoreplicated&quot;)
+
+for (celline in cellines){
+  
+  for (setting in settings){
+    
+    file &lt;- paste0(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/atac_ChromHMM/&quot;, paste0(&quot;ChromHMM_overlap_&quot;, celline, &quot;_&quot;, setting,&quot;.rds&quot;))
+    res &lt;- readRDS(file)
+    
+    plot_df &lt;- copy(res)[, .(
+      state_id,
+      description,
+      total_state_Mb,
+      peak_overlap_Mb,
+      `%state_covered_by_peak` = 100 * frac_state_covered_by_peak,
+      `%peak_in_state`         = 100 * frac_of_peak_bp_in_state,
+      hex
+    )]
+    
+    plot_long &lt;- melt(
+      plot_df,
+      id.vars = c(&quot;state_id&quot;, &quot;description&quot;, &quot;hex&quot;),
+      measure.vars = c(&quot;%state_covered_by_peak&quot;, &quot;%peak_in_state&quot;),
+      variable.name = &quot;metric&quot;,
+      value.name = &quot;value&quot;
+    )
+    
+    plot_long[, metric := fifelse(
+      metric == &quot;%state_covered_by_peak&quot;,
+      &quot;% of state covered by peak&quot;,
+      &quot;% of peak in state&quot;
+    )]
+    
+    p_bar &lt;- ggplot(plot_long, aes(x = state_id, y = value, fill = hex)) +
+      geom_col() +
+      facet_wrap(~ metric, ncol = 1, scales = &quot;free_y&quot;) +
+      scale_fill_identity() +
+      scale_x_continuous(breaks = plot_df$state_id, labels = plot_df$description) +
+      labs(
+        x = &quot;ChromHMM state&quot;,
+        y = &quot;Percent (%)&quot;,
+        title = paste0(celline, &quot; (&quot;, setting, &quot;): Peaks &amp; ChromHMM overlap&quot;)
+      ) +
+      theme_classic(base_size = 14) +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        strip.text = element_text(face = &quot;bold&quot;),
+        legend.position = &quot;none&quot;
+      )
+    
+    print(p_bar)
+    
+    pie_df &lt;- copy(plot_df)
+    setorder(pie_df, state_id)
+    
+    pie_df[, state_label  := as.character(state_id)]
+    pie_df[, legend_label := factor(paste0(state_id, &quot;: &quot;, description),
+                                    levels = paste0(state_id, &quot;: &quot;, description))]
+    
+    p_pie &lt;- ggplot(pie_df, aes(x = &quot;&quot;, y = `%peak_in_state`, fill = legend_label)) +
+      geom_col(width = 1, color = &quot;white&quot;) +
+      coord_polar(theta = &quot;y&quot;) +
+      scale_fill_manual(values = setNames(pie_df$hex, pie_df$legend_label)) +
+      theme_void(base_size = 14) +
+      labs(
+        title = paste0(celline, &quot; (&quot;, setting, &quot;): % of peak in each ChromHMM state&quot;),
+        fill = &quot;ChromHMM States&quot;
+      ) +
+      geom_text(
+        aes(label = state_label),
+        position = position_stack(vjust = 0.5),
+        size = 4,
+        color = &quot;black&quot;
+      )
+    
+    
+    print(p_pie)
+    
+    
+  }
+  
+  
+  
+}</code></pre>
+<p><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/atac_coverage_ChromHMM.Rmd/unnamed-chunk-2-16.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /software/openblas-0.3.13-el7-x86_64/lib/libopenblas_haswellp-r0.3.13.so
+
+locale:
+[1] C
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+[1] ggplot2_4.0.0        data.table_1.14.2    GenomicRanges_1.48.0
+[4] GenomeInfoDb_1.39.9  IRanges_2.30.0       S4Vectors_0.34.0    
+[7] BiocGenerics_0.42.0 
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.2.0       xfun_0.41              bslib_0.3.1           
+ [4] vctrs_0.6.5            generics_0.1.4         htmltools_0.5.2       
+ [7] yaml_2.3.5             utf8_1.2.2             rlang_1.1.2           
+[10] jquerylib_0.1.4        later_1.3.0            pillar_1.9.0          
+[13] withr_2.5.0            glue_1.6.2             RColorBrewer_1.1-3    
+[16] S7_0.2.0               GenomeInfoDbData_1.2.8 lifecycle_1.0.4       
+[19] stringr_1.5.1          zlibbioc_1.42.0        gtable_0.3.6          
+[22] workflowr_1.7.0        evaluate_0.15          labeling_0.4.2        
+[25] knitr_1.39             fastmap_1.1.0          httpuv_1.6.5          
+[28] fansi_1.0.3            highr_0.9              Rcpp_1.0.12           
+[31] promises_1.2.0.1       scales_1.4.0           jsonlite_1.8.0        
+[34] XVector_0.36.0         farver_2.1.0           fs_1.5.2              
+[37] digest_0.6.29          stringi_1.7.6          dplyr_1.1.4           
+[40] rprojroot_2.0.3        grid_4.2.0             cli_3.6.1             
+[43] tools_4.2.0            bitops_1.0-7           magrittr_2.0.3        
+[46] sass_0.4.1             RCurl_1.98-1.7         tibble_3.2.1          
+[49] dichromat_2.0-0.1      pkgconfig_2.0.3        rmarkdown_2.25        
+[52] rstudioapi_0.13        R6_2.5.1               git2r_0.30.1          
+[55] compiler_4.2.0        </code></pre>
 </div>
 </div>
 
@@ -891,6 +815,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {
