@@ -41,6 +41,7 @@ A subdirectory named `LCLs/` contains cCRE annotations specific to several lymph
 
 We use the data from GM12878 here.
 
+The peaks annotated as "Low-DNase" are removed from the comparison.
 
 ```{r}
 
