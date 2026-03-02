@@ -37,6 +37,14 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.22/datatables.js"></script>
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -394,7 +402,7 @@ aria-hidden="true"></span> </a>
 </p>
 <p>
 <strong>Checks:</strong> <span
-class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
 <span class="glyphicon glyphicon-exclamation-sign text-danger"
 aria-hidden="true"></span> 1
 </p>
@@ -440,15 +448,99 @@ HTML.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree34e98087fb57e21bcc56f84ce7f0ebf7584da0bctargetblank34e9808a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250831code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250831)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250831code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250831)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree4d9469660eb05e62a6e7dbe957b5a3a8f995eb06targetblank4d94696a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/xsun1229/fiberseq/tree/34e98087fb57e21bcc56f84ce7f0ebf7584da0bc" target="_blank">34e9808</a>
+<a href="https://github.com/xsun1229/fiberseq/tree/4d9469660eb05e62a6e7dbe957b5a3a8f995eb06" target="_blank">4d94696</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree34e98087fb57e21bcc56f84ce7f0ebf7584da0bctargetblank34e9808a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree4d9469660eb05e62a6e7dbe957b5a3a8f995eb06targetblank4d94696a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -458,7 +550,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/xsun1229/fiberseq/tree/34e98087fb57e21bcc56f84ce7f0ebf7584da0bc" target="_blank">34e9808</a>.
+<a href="https://github.com/xsun1229/fiberseq/tree/4d9469660eb05e62a6e7dbe957b5a3a8f995eb06" target="_blank">4d94696</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -472,13 +564,8 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-Untracked files:
-    Untracked:  analysis/cCRE_coverage_ChromHMM_GM12878.Rmd
-
 Unstaged changes:
-    Modified:   analysis/DNase_coverage_ChromHMM.Rmd
     Modified:   analysis/data.Rmd
-    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -523,6 +610,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/4d9469660eb05e62a6e7dbe957b5a3a8f995eb06/analysis/data.Rmd" target="_blank">4d94696</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-02
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/4d9469660eb05e62a6e7dbe957b5a3a8f995eb06/docs/data.html" target="_blank">4d94696</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-02
+</td>
+<td>
+update
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -600,6 +721,14 @@ update
 </div>
 <div id="our-own-data" class="section level1">
 <h1>Our own data</h1>
+<div id="samples" class="section level2">
+<h2>Samples</h2>
+<pre class="r"><code>samples &lt;- data.table::fread(&quot;/project/spott/xsun/fiberseq/data/LCL_sample_metatable_merged_samples.csv&quot;,fill = T)
+
+DT::datatable(samples,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Samples&#39;),options = list(pageLength = 10) )</code></pre>
+<div id="htmlwidget-55d484e2ce688c3024c2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Samples<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34"],["AL6_bc2162_19093","AL8_bc2170_19151","AL10_bc2178_19130","AL16_bc2114_18508","AL18_bc2130_18504","AL19_bc2138_18861","AL20_bc2146_19209","AL27_bc2155_18913","AL28_bc2163_19153","AL29_bc2171_18916","AL30_bc2179_18510","AL38_bc2125_18499","AL39_bc2133_19207","AL40_bc2141_18916","AL43_bc2149_18511","AL44_bc2157_19138","AL45_bc2110_19201","AL46_bc2118_19194","AL47_bc2126_19222","AL48_bc2134_18505","AL49_bc2142_19103","AL50_bc2111_18858","AL51_bc2119_19223","AL53_bc2132_18916","AL54_bc2143_19192","AL55_bc2112_19238","AL56_bc2120_18489","AL57_bc2128_19132","AL58_bc2136_19129","AL59_bc2144_19143","AL60_bc2152_18519","AL61_bc2160_18498","AL62_bc2168_19140","AL29AL40AL53_bc2171bc2141bc2132_18916"],["AL-6","AL-8","AL-10","AL-16","AL-18","AL-19","AL-20","AL-27","AL-28","AL-29","AL-30","AL-38","AL-39","AL-40","AL-43","AL-44","AL-45","AL-46","AL-47","AL-48","AL-49","AL-50","AL-51","AL-53","AL-54","AL-55","AL-56","AL-57","AL-58","AL-59","AL-60 (AL-4)","AL-61 (AL-36)","AL-62 (AL-17)","AL29AL40AL53"],["bc2162","bc2170","bc2178","bc2114","bc2130","bc2138","bc2146","bc2155","bc2163","bc2171","bc2179","bc2125","bc2133","bc2141","bc2149","bc2157","bc2110","bc2118","bc2126","bc2134","bc2142","bc2111","bc2119","bc2132","bc2143","bc2112","bc2120","bc2128","bc2136","bc2144","bc2152","bc2160","bc2168","bc2171bc2141bc2132"],["NA19093","NA19151","NA19130","NA18508","NA18504","NA18861","NA19209","NA18913","NA19153","NA18916","NA18510","NA18499","NA19207","NA18916","NA18511","NA19138","NA19201","NA19194","NA19222","NA18505","NA19103","NA18858","NA19223","NA18916","NA19192","NA19238","NA18489","NA19132","NA19129","NA19143","NA18519","NA18498","NA19140","NA18916"],["Yes","No","Yes","Yes","Yes","Yes","Yes","Yes","Yes","Yes","Yes","Yes","Yes","Yes","Yes","Yes","Yes","No","Yes","Yes","No","Yes","Yes","Yes","Yes","Yes","Yes","No","Yes","Yes","Yes","Yes","Yes","Yes"],["/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL6_bc2162_19093.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL8_bc2170_19151.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL10_bc2178_19130.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL16_bc2114_18508.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL18_bc2130_18504.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL19_bc2138_18861.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL20_bc2146_19209.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL27_bc2155_18913.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL28_bc2163_19153.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL29_bc2171_18916.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL30_bc2179_18510.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL38_bc2125_18499.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL39_bc2133_19207.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL40_bc2141_18916.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL43_bc2149_18511.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL44_bc2157_19138.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL45_bc2110_19201.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL46_bc2118_19194.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL47_bc2126_19222.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL48_bc2134_18505.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL49_bc2142_19103.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL50_bc2111_18858.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL51_bc2119_19223.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL53_bc2132_18916.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL54_bc2143_19192.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL55_bc2112_19238.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL56_bc2120_18489.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL57_bc2128_19132.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL58_bc2136_19129.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL59_bc2144_19143.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL60_bc2152_18519.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL61_bc2160_18498.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/AL62_bc2168_19140.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/final_merged_samples/18916_AL40AL53AL29.5mC.6mA.nuc.aligned.bam"],["/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples"],["/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL6_bc2162_19093.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL8_bc2170_19151.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL10_bc2178_19130.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL16_bc2114_18508.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL18_bc2130_18504.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL19_bc2138_18861.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL20_bc2146_19209.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL27_bc2155_18913.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL28_bc2163_19153.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL29_bc2171_18916.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL30_bc2179_18510.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL38_bc2125_18499.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL39_bc2133_19207.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL40_bc2141_18916.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL43_bc2149_18511.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL44_bc2157_19138.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL45_bc2110_19201.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL46_bc2118_19194.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL47_bc2126_19222.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL48_bc2134_18505.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL49_bc2142_19103.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL50_bc2111_18858.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL51_bc2119_19223.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL53_bc2132_18916.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL54_bc2143_19192.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL55_bc2112_19238.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL56_bc2120_18489.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL57_bc2128_19132.5mC.6mA.nuc.aligned.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL58_bc2136_19129.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL59_bc2144_19143.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL60_bc2152_18519.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL61_bc2160_18498.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL62_bc2168_19140.5mC.6mA.aligned.phased.bam","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL29AL40AL53_bc2171bc2141bc2132_18916.5mC.6mA.aligned.phased.bam"],["/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL6_bc2162_19093","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL8_bc2170_19151","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL10_bc2178_19130","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL16_bc2114_18508","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL18_bc2130_18504","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL19_bc2138_18861","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL20_bc2146_19209","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL27_bc2155_18913","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL28_bc2163_19153","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL29_bc2171_18916","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL30_bc2179_18510","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL38_bc2125_18499","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL39_bc2133_19207","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL40_bc2141_18916","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL43_bc2149_18511","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL44_bc2157_19138","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL45_bc2110_19201","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL46_bc2118_19194","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL47_bc2126_19222","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL48_bc2134_18505","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL49_bc2142_19103","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL50_bc2111_18858","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL51_bc2119_19223","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL53_bc2132_18916","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL54_bc2143_19192","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL55_bc2112_19238","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL56_bc2120_18489","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL57_bc2128_19132","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL58_bc2136_19129","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL59_bc2144_19143","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL60_bc2152_18519","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL61_bc2160_18498","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL62_bc2168_19140","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL29AL40AL53_bc2171bc2141bc2132_18916"],["/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL6_bc2162_19093/AL6_bc2162_19093.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL8_bc2170_19151/AL8_bc2170_19151.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL10_bc2178_19130/AL10_bc2178_19130.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL16_bc2114_18508/AL16_bc2114_18508.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL18_bc2130_18504/AL18_bc2130_18504.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL19_bc2138_18861/AL19_bc2138_18861.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL20_bc2146_19209/AL20_bc2146_19209.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL27_bc2155_18913/AL27_bc2155_18913.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL28_bc2163_19153/AL28_bc2163_19153.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL29_bc2171_18916/AL29_bc2171_18916.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL30_bc2179_18510/AL30_bc2179_18510.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL38_bc2125_18499/AL38_bc2125_18499.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL39_bc2133_19207/AL39_bc2133_19207.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL40_bc2141_18916/AL40_bc2141_18916.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL43_bc2149_18511/AL43_bc2149_18511.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL44_bc2157_19138/AL44_bc2157_19138.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL45_bc2110_19201/AL45_bc2110_19201.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL46_bc2118_19194/AL46_bc2118_19194.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL47_bc2126_19222/AL47_bc2126_19222.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL48_bc2134_18505/AL48_bc2134_18505.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL49_bc2142_19103/AL49_bc2142_19103.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL50_bc2111_18858/AL50_bc2111_18858.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL51_bc2119_19223/AL51_bc2119_19223.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL53_bc2132_18916/AL53_bc2132_18916.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL54_bc2143_19192/AL54_bc2143_19192.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL55_bc2112_19238/AL55_bc2112_19238.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL56_bc2120_18489/AL56_bc2120_18489.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL57_bc2128_19132/AL57_bc2128_19132.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL58_bc2136_19129/AL58_bc2136_19129.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL59_bc2144_19143/AL59_bc2144_19143.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL60_bc2152_18519/AL60_bc2152_18519.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL61_bc2160_18498/AL61_bc2160_18498.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL62_bc2168_19140/AL62_bc2168_19140.5mC.6mA.aligned.phased.vcf.gz","/project/spott/1_Shared_projects/LCL_Fiber_seq/preprocess_final_merged_samples/AL29AL40AL53_bc2171bc2141bc2132_18916/AL29AL40AL53_bc2171bc2141bc2132_18916.5mC.6mA.aligned.phased.vcf.gz"],["/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL6_bc2162_19093","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL8_bc2170_19151","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL10_bc2178_19130","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL16_bc2114_18508","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL18_bc2130_18504","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL19_bc2138_18861","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL20_bc2146_19209","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL27_bc2155_18913","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL28_bc2163_19153","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL29_bc2171_18916","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL30_bc2179_18510","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL38_bc2125_18499","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL39_bc2133_19207","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL40_bc2141_18916","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL43_bc2149_18511","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL44_bc2157_19138","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL45_bc2110_19201","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL46_bc2118_19194","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL47_bc2126_19222","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL48_bc2134_18505","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL49_bc2142_19103","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL50_bc2111_18858","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL51_bc2119_19223","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL53_bc2132_18916","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL54_bc2143_19192","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL55_bc2112_19238","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL56_bc2120_18489","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL57_bc2128_19132","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL58_bc2136_19129","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL59_bc2144_19143","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL60_bc2152_18519","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL61_bc2160_18498","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL62_bc2168_19140","/project/spott/1_Shared_projects/LCL_Fiber_seq/FIRE/results/AL29AL40AL53_bc2171bc2141bc2132_18916"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>sample_name<\/th>\n      <th>sample<\/th>\n      <th>barcode<\/th>\n      <th>cell_line<\/th>\n      <th>with_genotype<\/th>\n      <th>merged_bam_file<\/th>\n      <th>preprocess_dir<\/th>\n      <th>bam_file<\/th>\n      <th>phasing_dir<\/th>\n      <th>phased_vcf_file<\/th>\n      <th>fire_dir<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
 <div id="fire-peaks" class="section level2">
 <h2>FIRE peaks</h2>
 <p><code>/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz</code></p>
@@ -879,6 +1008,41 @@ strand:</p>
 <li><code>promoters</code></li>
 <li><code>genes</code></li>
 </ul>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /software/openblas-0.3.13-el7-x86_64/lib/libopenblas_haswellp-r0.3.13.so
+
+locale:
+[1] C
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.12       pillar_1.9.0      compiler_4.2.0    bslib_0.3.1      
+ [5] later_1.3.0       jquerylib_0.1.4   git2r_0.30.1      workflowr_1.7.0  
+ [9] tools_4.2.0       digest_0.6.29     jsonlite_1.8.0    evaluate_0.15    
+[13] lifecycle_1.0.4   tibble_3.2.1      pkgconfig_2.0.3   rlang_1.1.2      
+[17] cli_3.6.1         rstudioapi_0.13   crosstalk_1.2.0   yaml_2.3.5       
+[21] xfun_0.41         fastmap_1.1.0     stringr_1.5.1     knitr_1.39       
+[25] fs_1.5.2          vctrs_0.6.5       sass_0.4.1        htmlwidgets_1.5.4
+[29] rprojroot_2.0.3   DT_0.22           glue_1.6.2        data.table_1.14.2
+[33] R6_2.5.1          fansi_1.0.3       rmarkdown_2.25    magrittr_2.0.3   
+[37] whisker_0.4       promises_1.2.0.1  htmltools_0.5.2   httpuv_1.6.5     
+[41] utf8_1.2.2        stringi_1.7.6    </code></pre>
+</div>
 </div>
 </div>
 

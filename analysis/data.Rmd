@@ -10,6 +10,17 @@ editor_options:
 
 # Our own data
 
+## Samples 
+
+
+```{r}
+
+samples <- data.table::fread("/project/spott/xsun/fiberseq/data/LCL_sample_metatable_merged_samples.csv",fill = T)
+
+DT::datatable(samples,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Samples'),options = list(pageLength = 10) )
+
+```
+
 ## FIRE peaks 
 
 `/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz`
