@@ -44,7 +44,7 @@ suppressPackageStartupMessages({
 
 ```{r fig.height=6, fig.width=7}
 
-cellines <- c("GM19238","GM12865", "GM12878", "GM12891")
+cellines <- c("GM19238","GM12878", "GM12865", "GM12891")
 
 folder_results <- "/project/spott/xsun/fiberseq/2.annotating_footprints/results/DNase/"
 

@@ -1,0 +1,197 @@
+---
+title: "Checking the cCRE peak coverage for 15 states from ChromHMM, GM12878"
+author: "XSun"
+date: "2026-02-25"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+
+```{r}
+
+suppressPackageStartupMessages({
+  library(data.table)
+  library(ggplot2)
+})
+
+```
+
+
+# Introduction
+
+We checked cCREs peak from GM12878 overlap with 15 states from ChromHMM, to calibrate the FIRE calling
+
+# Data overview
+
+paper: https://www.nature.com/articles/s41586-025-09909-9
+
+ENCODE cCREs from SCREEN https://screen.wenglab.org/downloads
+
+`/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4`
+
+`GRCh38-cCREs.bed` : includes everything and has a column with the type of cCREs, it is a union set of 1,888 cell types
+
+A subdirectory named `LCLs/` contains cCRE annotations specific to several lymphoblastoid cell lines (LCLs):  Some cell lines (e.g., GM12878) integrate multiple data types (DNase, ATAC, histone marks, CTCF), whereas others (e.g., GM19238) are primarily supported by DNase data.
+
+- GM12865
+- GM12878
+- GM12891
+- GM19238
+
+We use the data from GM12878 here.
+
+
+```{r}
+
+peak_file <- "/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4/LCLs/GM12878_cCREs_ENCFF428XFI_ENCFF280PUF_ENCFF469WVA_ENCFF644EEX.bed"
+peak_df <- fread(peak_file, showProgress = FALSE)
+
+DT::datatable(head(peak_df),caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','cCRE data structure, GM12878'),options = list(pageLength = 10) )
+
+peak_df[, width := as.numeric(V3 - V2)]
+
+# -----------------------------
+# Detailed category + description
+# -----------------------------
+peak_df[, `:=`(
+  cCRE_group = fcase(
+    V10 == "PLS",         "PLS",
+    V10 == "pELS",        "pELS",
+    V10 == "dELS",        "dELS",
+    V10 == "CA-only",     "CA-only",
+    V10 == "TF",          "TF",
+    V10 == "CA-TF",       "CA-TF",
+    V10 == "CA-CTCF",     "CA-CTCF",
+    V10 == "CA-H3K4me3",  "CA-H3K4me3",
+    V10 == "Low-DNase", "Low-DNase", 
+    default = "Other"
+  ),
+  cCRE_desc = fcase(
+    V10 == "PLS",         "Promoter-like signature",
+    V10 == "pELS",        "Proximal enhancer-like signature",
+    V10 == "dELS",        "Distal enhancer-like signature",
+    V10 == "CA-only",     "Chromatin accessible only",
+    V10 == "TF",          "TF only",
+    V10 == "CA-TF",       "Chromatin accessible with TF",
+    V10 == "CA-CTCF",     "Chromatin accessible with CTCF",
+    V10 == "CA-H3K4me3",  "Chromatin accessible with H3K4me3",
+    V10 == "Low-DNase", "Low-DNase", 
+    default = "Other / unknown"
+  )
+)]
+
+# -----------------------------
+# Summary table (by detailed category)
+# -----------------------------
+summary_table <- peak_df[, .(
+  n_peaks        = .N,
+  mean_width     = round(mean(width), 1),
+  median_width   = round(median(width), 1),
+  total_bp       = sum(width)
+), by = .(cCRE_group, cCRE_desc)][order(-n_peaks)]
+
+
+
+DT::datatable(summary_table,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','cCRE overview, GM12878 '),options = list(pageLength = 10) )
+
+```
+
+
+
+
+# Overlap with ChromHMM 
+
+
+```{r fig.height=6, fig.width=7}
+
+res_allcat <- readRDS("/project/spott/xsun/fiberseq/2.annotating_footprints/results/cCRE_ChromHMM_GM12878/cCRE_all_and_byCategory_vs_ChromHMM.rds")
+
+for (label in unique(res_allcat$peak_label)) {
+  
+  res <- as.data.table(copy(res_allcat[res_allcat$peak_label == label]))
+  
+  # Keep/standardize columns
+  res <- res[, .(state_id, description, hex,
+                 frac_state_covered_by_peak, frac_of_peak_bp_in_state)]
+  
+  # Convert to percent
+  res[, `%state_covered_by_peak` := frac_state_covered_by_peak * 100]
+  res[, `%peak_in_state` := frac_of_peak_bp_in_state * 100]
+  
+  # Ensure ordering by state_id
+  setorder(res, state_id)
+  
+  # -------------------------
+  # Bar plot (two metrics stacked)
+  # -------------------------
+  plot_long <- melt(
+    res[, .(state_id, description, hex, `%state_covered_by_peak`, `%peak_in_state`)],
+    id.vars = c("state_id", "description", "hex"),
+    measure.vars = c("%state_covered_by_peak", "%peak_in_state"),
+    variable.name = "metric",
+    value.name = "value"
+  )
+  
+  plot_long[, metric := fifelse(
+    metric == "%state_covered_by_peak",
+    "% of state covered by peak",
+    "% of peak in state"
+  )]
+  
+  p_bar <- ggplot(plot_long, aes(x = state_id, y = value, fill = hex)) +
+    geom_col() +
+    facet_wrap(~ metric, ncol = 1, scales = "free_y") +
+    scale_fill_identity() +
+    scale_x_continuous(
+      breaks = res$state_id,
+      labels = res$description
+    ) +
+    labs(
+      x = "ChromHMM state",
+      y = "Percent (%)",
+      title = paste0(label, ": cCRE & ChromHMM overlap")
+    ) +
+    theme_classic(base_size = 14) +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      strip.text = element_text(face = "bold"),
+      legend.position = "none"
+    )
+  
+  # -------------------------
+  # Pie chart (%peak in state)
+  # -------------------------
+  pie_df <- copy(res)
+  
+  # If no overlap at all, `%peak_in_state` can be NA -> set to 0 to avoid errors
+  pie_df[is.na(`%peak_in_state`), `%peak_in_state` := 0]
+  
+  pie_df[, state_label := as.character(state_id)]
+  pie_df[, legend_label := paste0(state_id, ": ", description)]
+  pie_df[, legend_label := factor(legend_label, levels = legend_label)]
+  
+  p_pie <- ggplot(pie_df,
+                  aes(x = "", y = `%peak_in_state`, fill = legend_label)) +
+    geom_col(width = 1, color = "white") +
+    coord_polar(theta = "y") +
+    scale_fill_manual(values = setNames(pie_df$hex, pie_df$legend_label)) +
+    theme_void(base_size = 14) +
+    labs(
+      title = paste0(label, ": % of peak in each ChromHMM state"),
+      fill = "ChromHMM States"
+    ) +
+    geom_text(
+      aes(label = state_label),
+      position = position_stack(vjust = 0.5),
+      size = 4,
+      color = "black"
+    )
+
+  print(p_bar)
+  print(p_pie)
+}
+
+
+
+```

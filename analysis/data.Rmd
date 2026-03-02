@@ -96,10 +96,14 @@ ENCODE cCREs from SCREEN https://screen.wenglab.org/downloads
 
 `/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4`
 
-`GRCh38-cCREs.bed` : includes everything and has a column with the type of cCREs
+`GRCh38-cCREs.bed` : includes everything and has a column with the type of cCREs, it is a union set of 1,888 cell types
 
 A subdirectory named `LCLs/` contains cCRE annotations specific to several lymphoblastoid cell lines (LCLs):  Some cell lines (e.g., GM12878) integrate multiple data types (DNase, ATAC, histone marks, CTCF), whereas others (e.g., GM19238) are primarily supported by DNase data.
 
+- GM12865
+- GM12878
+- GM12891
+- GM19238
 
 ## ENCODE ATAC-seq peaks
 

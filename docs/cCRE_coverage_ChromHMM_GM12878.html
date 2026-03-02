@@ -11,9 +11,9 @@
 
 <meta name="author" content="XSun" />
 
-<meta name="date" content="2026-02-24" />
+<meta name="date" content="2026-02-25" />
 
-<title>Checking the DNase peak coverage for 15 states from ChromHMM</title>
+<title>Checking the cCRE peak coverage for 15 states from ChromHMM, GM12878</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -38,6 +38,14 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.22/datatables.js"></script>
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -371,10 +379,10 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Checking the DNase peak coverage for 15
-states from ChromHMM</h1>
+<h1 class="title toc-ignore">Checking the cCRE peak coverage for 15
+states from ChromHMM, GM12878</h1>
 <h4 class="author">XSun</h4>
-<h4 class="date">2026-02-24</h4>
+<h4 class="date">2026-02-25</h4>
 
 </div>
 
@@ -441,10 +449,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -573,7 +581,6 @@ Untracked files:
     Untracked:  analysis/cCRE_coverage_ChromHMM_GM12878.Rmd
 
 Unstaged changes:
-    Modified:   analysis/DNase_coverage_ChromHMM.Rmd
     Modified:   analysis/data.Rmd
     Modified:   analysis/index.Rmd
 
@@ -590,187 +597,147 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
-
 <p>
-These are the previous versions of the repository in which changes were
-made to the R Markdown
-(<code>analysis/DNase_coverage_ChromHMM.Rmd</code>) and HTML
-(<code>docs/DNase_coverage_ChromHMM.html</code>) files. If you’ve
-configured a remote Git repository (see <code>?wflow_git_remote</code>),
-click on the hyperlinks in the table below to view the files as they
-were in that past version.
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
 </p>
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-File
-</th>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-<th>
-Message
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/a11a10b6849d21ca2244cc1943f668db74a4e299/analysis/DNase_coverage_ChromHMM.Rmd" target="_blank">a11a10b</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/a11a10b6849d21ca2244cc1943f668db74a4e299/docs/DNase_coverage_ChromHMM.html" target="_blank">a11a10b</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/analysis/DNase_coverage_ChromHMM.Rmd" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-<td>
-update
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/xsun1229/fiberseq/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/DNase_coverage_ChromHMM.html" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-<td>
-update
-</td>
-</tr>
-</tbody>
-</table>
-</div>
 <hr>
 </div>
 </div>
 </div>
+<pre class="r"><code>suppressPackageStartupMessages({
+  library(data.table)
+  library(ggplot2)
+})</code></pre>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>We checked DNase peak overlap with 15 states from ChromHMM, to
-calibrate the FIRE calling</p>
-<p>The results for FIRE peak is here: <a
-href="https://xsun1229.github.io/fiberseq/fire_coverage_ChromHMM.html"
-class="uri">https://xsun1229.github.io/fiberseq/fire_coverage_ChromHMM.html</a></p>
-<p>Processed DNase-seq peak files (BED format, <code>.bed.gz</code>)
-were downloaded from the ENCODE Consortium by Kevin and stored locally
-at: <code>/project/spott/kevinluo/Fiber_seq/data/DNaseseq/</code></p>
-<p>Cell lines included: currently include four LCLs:</p>
+<p>We checked cCREs peak from GM12878 overlap with 15 states from
+ChromHMM, to calibrate the FIRE calling</p>
+</div>
+<div id="data-overview" class="section level1">
+<h1>Data overview</h1>
+<p>paper: <a href="https://www.nature.com/articles/s41586-025-09909-9"
+class="uri">https://www.nature.com/articles/s41586-025-09909-9</a></p>
+<p>ENCODE cCREs from SCREEN <a
+href="https://screen.wenglab.org/downloads"
+class="uri">https://screen.wenglab.org/downloads</a></p>
+<p><code>/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4</code></p>
+<p><code>GRCh38-cCREs.bed</code> : includes everything and has a column
+with the type of cCREs, it is a union set of 1,888 cell types</p>
+<p>A subdirectory named <code>LCLs/</code> contains cCRE annotations
+specific to several lymphoblastoid cell lines (LCLs): Some cell lines
+(e.g., GM12878) integrate multiple data types (DNase, ATAC, histone
+marks, CTCF), whereas others (e.g., GM19238) are primarily supported by
+DNase data.</p>
 <ul>
 <li>GM12865</li>
 <li>GM12878</li>
 <li>GM12891</li>
 <li>GM19238</li>
 </ul>
-<p>GM19238 is in our Fiber-seq sample list</p>
-<p><strong>We sum the total number of base pairs of DNase peaks inside
-each of the 15 ChromHMM states , and then divided by the total number of
-base pairs for each states.</strong></p>
-<pre class="r"><code>suppressPackageStartupMessages({
-  library(GenomicRanges)
-  library(IRanges)
-  library(data.table)
-  library(ggplot2)
-})</code></pre>
+<p>We use the data from GM12878 here.</p>
+<pre class="r"><code>peak_file &lt;- &quot;/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4/LCLs/GM12878_cCREs_ENCFF428XFI_ENCFF280PUF_ENCFF469WVA_ENCFF644EEX.bed&quot;
+peak_df &lt;- fread(peak_file, showProgress = FALSE)
+
+DT::datatable(head(peak_df),caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;cCRE data structure, GM12878&#39;),options = list(pageLength = 10) )</code></pre>
+<div id="htmlwidget-55d484e2ce688c3024c2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">cCRE data structure, GM12878<\/caption>","data":[["1","2","3","4","5","6"],["chr1","chr1","chr1","chr1","chr1","chr1"],[10033,10385,16097,17343,29320,66350],[10250,10713,16381,17642,29517,66509],["EH38E2776516","EH38E2776517","EH38E3951272","EH38E3951273","EH38E3951274","EH38E3951275"],[0,0,0,0,0,0],[".",".",".",".",".","."],[10033,10385,16097,17343,29320,66350],[10250,10713,16381,17642,29517,66509],["225,225,225","225,225,225","225,225,225","225,225,225","225,225,225","225,225,225"],["Low-DNase","Low-DNase","Low-DNase","Low-DNase","Low-DNase","Low-DNase"],["All-data/Full-classification","All-data/Full-classification","All-data/Full-classification","All-data/Full-classification","All-data/Full-classification","All-data/Full-classification"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>V1<\/th>\n      <th>V2<\/th>\n      <th>V3<\/th>\n      <th>V4<\/th>\n      <th>V5<\/th>\n      <th>V6<\/th>\n      <th>V7<\/th>\n      <th>V8<\/th>\n      <th>V9<\/th>\n      <th>V10<\/th>\n      <th>V11<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[2,3,5,7,8]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>peak_df[, width := as.numeric(V3 - V2)]
+
+# -----------------------------
+# Detailed category + description
+# -----------------------------
+peak_df[, `:=`(
+  cCRE_group = fcase(
+    V10 == &quot;PLS&quot;,         &quot;PLS&quot;,
+    V10 == &quot;pELS&quot;,        &quot;pELS&quot;,
+    V10 == &quot;dELS&quot;,        &quot;dELS&quot;,
+    V10 == &quot;CA_only&quot;,     &quot;CA_only&quot;,
+    V10 == &quot;TF&quot;,          &quot;TF&quot;,
+    V10 == &quot;CA-TF&quot;,       &quot;CA-TF&quot;,
+    V10 == &quot;CA-CTCF&quot;,     &quot;CA-CTCF&quot;,
+    V10 == &quot;CA-H3K4me3&quot;,  &quot;CA-H3K4me3&quot;,
+    V10 == &quot;Low-DNase&quot;, &quot;Low-DNase&quot;, 
+    default = &quot;Other&quot;
+  ),
+  cCRE_desc = fcase(
+    V10 == &quot;PLS&quot;,         &quot;Promoter-like signature&quot;,
+    V10 == &quot;pELS&quot;,        &quot;Proximal enhancer-like signature&quot;,
+    V10 == &quot;dELS&quot;,        &quot;Distal enhancer-like signature&quot;,
+    V10 == &quot;CA_only&quot;,     &quot;Chromatin accessible only&quot;,
+    V10 == &quot;TF&quot;,          &quot;TF only&quot;,
+    V10 == &quot;CA-TF&quot;,       &quot;Chromatin accessible with TF&quot;,
+    V10 == &quot;CA-CTCF&quot;,     &quot;Chromatin accessible with CTCF&quot;,
+    V10 == &quot;CA-H3K4me3&quot;,  &quot;Chromatin accessible with H3K4me3&quot;,
+    V10 == &quot;Low-DNase&quot;, &quot;Low-DNase&quot;, 
+    default = &quot;Other / unknown&quot;
+  )
+)]
+
+# -----------------------------
+# Summary table (by detailed category)
+# -----------------------------
+summary_table &lt;- peak_df[, .(
+  n_peaks        = .N,
+  mean_width     = round(mean(width), 1),
+  median_width   = round(median(width), 1),
+  total_bp       = sum(width)
+), by = .(cCRE_group, cCRE_desc)][order(-n_peaks)]
+
+
+
+DT::datatable(summary_table,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;cCRE overview &#39;),options = list(pageLength = 10) )</code></pre>
+<div id="htmlwidget-0c375f72d786c94bb27a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0c375f72d786c94bb27a">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">cCRE overview <\/caption>","data":[["1","2","3","4","5","6","7","8"],["Low-DNase","pELS","dELS","PLS","CA-TF","CA-CTCF","CA-H3K4me3","Other"],["Low-DNase","Proximal enhancer-like signature","Distal enhancer-like signature","Promoter-like signature","Chromatin accessible with TF","Chromatin accessible with CTCF","Chromatin accessible with H3K4me3","Other / unknown"],[2219588,35508,34888,19452,14221,12662,8908,3627],[266.7,247.8,282,290.9,298.2,296,265.5,250],[272,230,313,342,335,314.5,271,237],[591888080,8799348,9839920,5659366,4241163,3748557,2365419,906876]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>cCRE_group<\/th>\n      <th>cCRE_desc<\/th>\n      <th>n_peaks<\/th>\n      <th>mean_width<\/th>\n      <th>median_width<\/th>\n      <th>total_bp<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[3,4,5,6]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
-<div id="results" class="section level1">
-<h1>Results</h1>
-<pre class="r"><code>cellines &lt;- c(&quot;GM19238&quot;,&quot;GM12878&quot;, &quot;GM12865&quot;, &quot;GM12891&quot;)
+<div id="overlap-with-chromhmm" class="section level1">
+<h1>Overlap with ChromHMM</h1>
+<pre class="r"><code>res_allcat &lt;- readRDS(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/cCRE_ChromHMM_GM12878/cCRE_all_and_byCategory_vs_ChromHMM.rds&quot;)
 
-folder_results &lt;- &quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/DNase/&quot;
-
-for (celline in cellines){
+for (label in unique(res_allcat$peak_label)) {
   
-  res &lt;- readRDS(paste0(folder_results,&quot;any_overlap_with_ChromHMM_&quot;, celline, &quot;.RDS&quot;))
+  res &lt;- as.data.table(copy(res_allcat[res_allcat$peak_label == label]))
   
-  res &lt;- res[,-c(&quot;total_bp_state&quot;,&quot;peak_overlap_bp&quot;)]
-  res &lt;- res[,c(&quot;state_id&quot;,&quot;description&quot;,&quot;total_state_Mb&quot;,&quot;peak_overlap_Mb&quot;,&quot;frac_state_covered_by_peak&quot;,&quot;frac_of_peak_bp_in_state&quot;,&quot;hex&quot;)]
-  res$frac_state_covered_by_peak &lt;- res$frac_state_covered_by_peak*100
-  res$frac_of_peak_bp_in_state &lt;- res$frac_of_peak_bp_in_state *100
-  colnames(res)[5:6] &lt;- c(&quot;%state_covered_by_peak&quot;,&quot;%peak_in_state&quot;)
+  # Keep/standardize columns
+  res &lt;- res[, .(state_id, description, hex,
+                 frac_state_covered_by_peak, frac_of_peak_bp_in_state)]
   
+  # Convert to percent
+  res[, `%state_covered_by_peak` := frac_state_covered_by_peak * 100]
+  res[, `%peak_in_state` := frac_of_peak_bp_in_state * 100]
   
-  plot_df &lt;- copy(res)
+  # Ensure ordering by state_id
+  setorder(res, state_id)
   
+  # -------------------------
+  # Bar plot (two metrics stacked)
+  # -------------------------
   plot_long &lt;- melt(
-    plot_df,
+    res[, .(state_id, description, hex, `%state_covered_by_peak`, `%peak_in_state`)],
     id.vars = c(&quot;state_id&quot;, &quot;description&quot;, &quot;hex&quot;),
     measure.vars = c(&quot;%state_covered_by_peak&quot;, &quot;%peak_in_state&quot;),
     variable.name = &quot;metric&quot;,
     value.name = &quot;value&quot;
   )
   
-  # Simple labels
   plot_long[, metric := fifelse(
     metric == &quot;%state_covered_by_peak&quot;,
     &quot;% of state covered by peak&quot;,
     &quot;% of peak in state&quot;
   )]
   
-  plot &lt;- ggplot(plot_long, aes(x = state_id, y = value, fill = hex)) +
+  p_bar &lt;- ggplot(plot_long, aes(x = state_id, y = value, fill = hex)) +
     geom_col() +
     facet_wrap(~ metric, ncol = 1, scales = &quot;free_y&quot;) +
     scale_fill_identity() +
     scale_x_continuous(
-      breaks = plot_df$state_id,
-      labels = plot_df$description
+      breaks = res$state_id,
+      labels = res$description
     ) +
     labs(
       x = &quot;ChromHMM state&quot;,
       y = &quot;Percent (%)&quot;,
-      title = paste0(celline,&quot;: DNase peak &amp; ChromHMM Overlap&quot;)
+      title = paste0(label, &quot;: cCRE &amp; ChromHMM overlap&quot;)
     ) +
     theme_classic(base_size = 14) +
     theme(
@@ -779,32 +746,26 @@ for (celline in cellines){
       legend.position = &quot;none&quot;
     )
   
-  print(plot)
-  
-  
+  # -------------------------
+  # Pie chart (%peak in state)
+  # -------------------------
   pie_df &lt;- copy(res)
   
-  # Ensure ordering by state_id
-  setorder(pie_df, state_id)
+  # If no overlap at all, `%peak_in_state` can be NA -&gt; set to 0 to avoid errors
+  pie_df[is.na(`%peak_in_state`), `%peak_in_state` := 0]
   
-  # Create numeric labels (1–15)
   pie_df[, state_label := as.character(state_id)]
-  
-  # Create legend labels: &quot;1: Active TSS&quot;
   pie_df[, legend_label := paste0(state_id, &quot;: &quot;, description)]
-  pie_df$legend_label &lt;- factor(pie_df$legend_label)
+  pie_df[, legend_label := factor(legend_label, levels = legend_label)]
   
-  pie &lt;- ggplot(pie_df,
-         aes(x = &quot;&quot;, 
-             y = `%peak_in_state`,
-             fill = legend_label)) +
+  p_pie &lt;- ggplot(pie_df,
+                  aes(x = &quot;&quot;, y = `%peak_in_state`, fill = legend_label)) +
     geom_col(width = 1, color = &quot;white&quot;) +
     coord_polar(theta = &quot;y&quot;) +
-    scale_fill_manual(values = setNames(pie_df$hex,
-                                        pie_df$legend_label)) +
+    scale_fill_manual(values = setNames(pie_df$hex, pie_df$legend_label)) +
     theme_void(base_size = 14) +
     labs(
-      title = paste0(celline,&quot;: % of peak in each ChromHMM state&quot;),
+      title = paste0(label, &quot;: % of peak in each ChromHMM state&quot;),
       fill = &quot;ChromHMM States&quot;
     ) +
     geom_text(
@@ -813,314 +774,11 @@ for (celline in cellines){
       size = 4,
       color = &quot;black&quot;
     )
-  
-  print(pie)
-  
+
+  print(p_bar)
+  print(p_pie)
 }</code></pre>
-<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
-Past versions of unnamed-chunk-2-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-1.png" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-2">
-Past versions of unnamed-chunk-2-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-2.png" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-3">
-Past versions of unnamed-chunk-2-3.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-3.png" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-4.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-4">
-Past versions of unnamed-chunk-2-4.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-4" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-4.png" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-5.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-5">
-Past versions of unnamed-chunk-2-5.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-5" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-5.png" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-6.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-6">
-Past versions of unnamed-chunk-2-6.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-6" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-6.png" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-7.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-7">
-Past versions of unnamed-chunk-2-7.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-7" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-7.png" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-8.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-8">
-Past versions of unnamed-chunk-2-8.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-8" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/xsun1229/fiberseq/blob/0155d449347dd7d14a7443cd83a0d53487e2b53e/docs/figure/DNase_coverage_ChromHMM.Rmd/unnamed-chunk-2-8.png" target="_blank">0155d44</a>
-</td>
-<td>
-XSun
-</td>
-<td>
-2026-02-24
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-16.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-17.png" width="672" style="display: block; margin: auto;" /><img src="figure/cCRE_coverage_ChromHMM_GM12878.Rmd/unnamed-chunk-3-18.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1141,34 +799,26 @@ locale:
 [1] C
 
 attached base packages:
-[1] stats4    stats     graphics  grDevices utils     datasets  methods  
-[8] base     
+[1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] ggplot2_4.0.0        data.table_1.14.2    GenomicRanges_1.48.0
-[4] GenomeInfoDb_1.39.9  IRanges_2.30.0       S4Vectors_0.34.0    
-[7] BiocGenerics_0.42.0 
+[1] ggplot2_4.0.0     data.table_1.14.2
 
 loaded via a namespace (and not attached):
- [1] tidyselect_1.2.0       xfun_0.41              bslib_0.3.1           
- [4] vctrs_0.6.5            generics_0.1.4         htmltools_0.5.2       
- [7] yaml_2.3.5             utf8_1.2.2             rlang_1.1.2           
-[10] jquerylib_0.1.4        later_1.3.0            pillar_1.9.0          
-[13] withr_2.5.0            glue_1.6.2             RColorBrewer_1.1-3    
-[16] S7_0.2.0               GenomeInfoDbData_1.2.8 lifecycle_1.0.4       
-[19] stringr_1.5.1          zlibbioc_1.42.0        gtable_0.3.6          
-[22] workflowr_1.7.0        evaluate_0.15          labeling_0.4.2        
-[25] knitr_1.39             fastmap_1.1.0          httpuv_1.6.5          
-[28] fansi_1.0.3            highr_0.9              Rcpp_1.0.12           
-[31] promises_1.2.0.1       scales_1.4.0           jsonlite_1.8.0        
-[34] XVector_0.36.0         farver_2.1.0           fs_1.5.2              
-[37] digest_0.6.29          stringi_1.7.6          dplyr_1.1.4           
-[40] rprojroot_2.0.3        grid_4.2.0             cli_3.6.1             
-[43] tools_4.2.0            bitops_1.0-7           magrittr_2.0.3        
-[46] sass_0.4.1             RCurl_1.98-1.7         tibble_3.2.1          
-[49] dichromat_2.0-0.1      whisker_0.4            pkgconfig_2.0.3       
-[52] rmarkdown_2.25         rstudioapi_0.13        R6_2.5.1              
-[55] git2r_0.30.1           compiler_4.2.0        </code></pre>
+ [1] Rcpp_1.0.12        highr_0.9          RColorBrewer_1.1-3 pillar_1.9.0      
+ [5] compiler_4.2.0     bslib_0.3.1        later_1.3.0        jquerylib_0.1.4   
+ [9] git2r_0.30.1       workflowr_1.7.0    tools_4.2.0        digest_0.6.29     
+[13] gtable_0.3.6       jsonlite_1.8.0     evaluate_0.15      lifecycle_1.0.4   
+[17] tibble_3.2.1       pkgconfig_2.0.3    rlang_1.1.2        cli_3.6.1         
+[21] rstudioapi_0.13    crosstalk_1.2.0    yaml_2.3.5         xfun_0.41         
+[25] fastmap_1.1.0      withr_2.5.0        dplyr_1.1.4        stringr_1.5.1     
+[29] knitr_1.39         htmlwidgets_1.5.4  generics_0.1.4     fs_1.5.2          
+[33] vctrs_0.6.5        sass_0.4.1         DT_0.22            tidyselect_1.2.0  
+[37] rprojroot_2.0.3    grid_4.2.0         glue_1.6.2         R6_2.5.1          
+[41] fansi_1.0.3        rmarkdown_2.25     farver_2.1.0       magrittr_2.0.3    
+[45] scales_1.4.0       promises_1.2.0.1   htmltools_0.5.2    dichromat_2.0-0.1 
+[49] httpuv_1.6.5       labeling_0.4.2     S7_0.2.0           utf8_1.2.2        
+[53] stringi_1.7.6     </code></pre>
 </div>
 </div>
 
