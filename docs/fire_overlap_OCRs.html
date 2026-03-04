@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="XSun" />
+
+<meta name="date" content="2026-03-04" />
+
+<title>FIRE peak overlap with DNase/ ATAC-seq/ cCREs</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.22/datatables.js"></script>
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">fiberseq</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/xsun1229/fiberseq">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">FIRE peak overlap with DNase/ ATAC-seq/
+cCREs</h1>
+<h4 class="author">XSun</h4>
+<h4 class="date">2026-03-04</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-03-04
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>fiberseq/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250831code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250831)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250831code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250831)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree7fb55546451bb9e2ad7bcf1043637907ef737d7dtargetblank7fb5554a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/xsun1229/fiberseq/tree/7fb55546451bb9e2ad7bcf1043637907ef737d7d" target="_blank">7fb5554</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree7fb55546451bb9e2ad7bcf1043637907ef737d7dtargetblank7fb5554a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/xsun1229/fiberseq/tree/7fb55546451bb9e2ad7bcf1043637907ef737d7d" target="_blank">7fb5554</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Untracked files:
+    Untracked:  FIRE_vs_cCRE_Venn_byV10_minoverlap100.pdf
+    Untracked:  analysis/fire_overlap_OCRs.Rmd
+
+Unstaged changes:
+    Modified:   analysis/index.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>suppressPackageStartupMessages({
+  library(data.table)
+  library(GenomicRanges)
+  library(IRanges)
+  library(VennDiagram)
+  library(ggplot2)
+  library(patchwork)
+  library(gridExtra)
+})
+
+keep_chr &lt;- paste0(&quot;chr&quot;, 1:22)
+min_ov_bp &lt;- 100L  # &lt;-- overlap definition for &quot;peak overlap&quot;
+
+#-----------------------------
+# Helper: BED (0-based start, end exclusive or inclusive doesn&#39;t matter much if consistent)
+# We convert to 1-based inclusive GRanges: start = start0+1, end = end
+#-----------------------------
+bed_to_gr &lt;- function(dt, keep_chr = NULL) {
+  stopifnot(ncol(dt) &gt;= 3)
+  dt &lt;- copy(dt)
+  setnames(dt, 1:3, c(&quot;chr&quot;,&quot;start0&quot;,&quot;end&quot;))
+  gr &lt;- GRanges(
+    seqnames = dt$chr,
+    ranges   = IRanges(start = dt$start0 + 1L, end = dt$end)
+  )
+  if (!is.null(keep_chr)) gr &lt;- gr[seqnames(gr) %in% keep_chr]
+  gr
+}</code></pre>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>To evaluate how <strong>FIRE peaks relate to other OCR peaks
+()</strong>, we performed two overlap analyses: <strong>base-pair
+overlap</strong> and <strong>peak-level overlap</strong>.</p>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>Data: <a href="https://xsun1229.github.io/fiberseq/data.html"
+class="uri">https://xsun1229.github.io/fiberseq/data.html</a></p>
+<p>For DNase/ ATAC-seq/ cCRE we used GM12878 cell line</p>
+</div>
+<div id="base-pair-bp-overlap" class="section level2">
+<h2>1. Base-pair (bp) overlap</h2>
+<p>FIRE peaks and the comparison peak set were first converted to
+<strong>GRanges objects</strong> using hg38 genomic coordinates (BED
+format converted from 0-based to 1-based indexing).</p>
+<p>To avoid double counting genomic coverage, overlapping peaks within
+each dataset were <strong>merged using <code>reduce()</code></strong>,
+producing non-overlapping genomic intervals.</p>
+<p>The <strong>shared genomic coverage</strong> between the two datasets
+was then calculated using:</p>
+<ul>
+<li><code>intersect()</code> to obtain overlapping genomic segments</li>
+<li><code>width()</code> to compute the number of overlapping base
+pairs</li>
+</ul>
+<p>From this analysis we report:</p>
+<ul>
+<li>total base pairs covered by <strong>FIRE peaks</strong></li>
+<li>total base pairs covered by the <strong>comparison peak
+set</strong></li>
+<li><strong>overlapping base pairs</strong></li>
+</ul>
+<p>This analysis measures <strong>how much genomic space is shared
+between the two peak sets</strong>.</p>
+</div>
+<div id="peak-level-overlap" class="section level2">
+<h2>2. Peak-level overlap</h2>
+<p>To assess overlap at the <strong>individual peak level</strong>, we
+performed overlap detection using the <strong>original (non-merged)
+peaks</strong>.</p>
+<p>Peak overlaps were identified using <code>findOverlaps()</code> with
+a <strong>minimum overlap threshold of 100 bp</strong>, meaning two
+peaks were considered overlapping only if they shared <strong>≥100
+bp</strong>.</p>
+<p>From this analysis we report:</p>
+<ul>
+<li>total number of <strong>FIRE peaks</strong></li>
+<li>total number of <strong>comparison peaks</strong></li>
+<li>number of <strong>FIRE peaks overlapping comparison
+peaks</strong></li>
+<li>number of <strong>comparison peaks overlapping FIRE
+peaks</strong></li>
+<li>total number of <strong>overlapping peak pairs</strong></li>
+</ul>
+<p>Peak-level overlap was summarized using a <strong>two-set Venn
+diagram</strong>, showing:</p>
+<ul>
+<li>FIRE peaks only</li>
+<li>comparison peaks only</li>
+<li>overlapping peaks</li>
+</ul>
+<p>Because genomic intervals can overlap in a <strong>many-to-many
+manner</strong>, the Venn intersection was defined as <strong>the number
+of FIRE peaks that overlap the comparison peak set by ≥100
+bp</strong>.</p>
+</div>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<div id="data-overview-peak-length-distribution" class="section level2">
+<h2>Data overview – peak length distribution</h2>
+<div id="fire-peaks" class="section level3">
+<h3>FIRE peaks</h3>
+<pre class="r"><code>#-----------------------------
+# 1) Load FIRE peaks
+#-----------------------------
+FIREpeak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz&quot;,
+  showProgress = FALSE
+)
+
+FIREpeak_df[, peak_length := V3 - V2]
+
+FIRE_gr_raw &lt;- bed_to_gr(FIREpeak_df, keep_chr)
+
+# Raw counts (peak-based)
+n_FIRE_raw &lt;- length(FIRE_gr_raw)
+
+# Reduced counts (bp-based; avoids double-counting bp)
+FIRE_gr_red &lt;- reduce(FIRE_gr_raw, ignore.strand = TRUE)
+n_FIRE_red  &lt;- length(FIRE_gr_red)
+
+p1 &lt;- ggplot(FIREpeak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = &quot;steelblue&quot;, color = &quot;black&quot;) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Peak length (bp)&quot;,
+    y = &quot;Number of peaks&quot;,
+    title = &quot;All peaks&quot;
+  )
+
+p2 &lt;- ggplot(FIREpeak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = &quot;steelblue&quot;, color = &quot;black&quot;) +
+  coord_cartesian(xlim = c(0, 2000)) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Peak length (bp)&quot;,
+    y = &quot;Number of peaks&quot;,
+    title = &quot;Zooming in to 2000 bp&quot;
+  )
+
+(p1 + p2) +
+  plot_annotation(
+    title = &quot;Peak length distribution of FIRE peaks&quot;
+  )</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-2-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dnase-peaks" class="section level3">
+<h3>DNase peaks</h3>
+<pre class="r"><code>peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/DNaseseq/GM12878/DNaseseq_GM12878_peaks_ENCFF759OLD.bed.gz&quot;,
+  showProgress = FALSE
+)
+
+peak_df[, peak_length := V3 - V2]
+
+p1 &lt;- ggplot(peak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = &quot;steelblue&quot;, color = &quot;black&quot;) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Peak length (bp)&quot;,
+    y = &quot;Number of peaks&quot;,
+    title = &quot;Peak length distribution of DNase&quot;
+  )
+
+print(p1)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-3-1.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
+<div id="atac-seq-peaks" class="section level3">
+<h3>ATAC-seq peaks</h3>
+<pre class="r"><code>peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_IDR_peaks_ENCFF429WTW.bed.gz&quot;,
+  showProgress = FALSE
+)
+
+peak_df[, peak_length := V3 - V2]
+
+p1 &lt;- ggplot(peak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = &quot;steelblue&quot;, color = &quot;black&quot;) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Peak length (bp)&quot;,
+    y = &quot;Number of peaks&quot;,
+    title = &quot;IDR&quot;
+  )
+
+peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_pseudoreplicated_peaks_ENCFF748UZH.bed.gz&quot;,
+  showProgress = FALSE
+)
+
+peak_df[, peak_length := V3 - V2]
+
+p2 &lt;- ggplot(peak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = &quot;steelblue&quot;, color = &quot;black&quot;) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Peak length (bp)&quot;,
+    y = &quot;Number of peaks&quot;,
+    title = &quot;pseudoreplicated&quot;
+  )
+
+
+(p1 + p2) +
+  plot_annotation(
+    title = &quot;Peak length distribution of ATAC-seq peaks&quot;
+  )</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-4-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="ccre-peaks" class="section level3">
+<h3>cCRE peaks</h3>
+<pre class="r"><code>peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4/LCLs/GM12878_cCREs_ENCFF428XFI_ENCFF280PUF_ENCFF469WVA_ENCFF644EEX.bed&quot;,
+  showProgress = FALSE
+)
+
+peak_df[, peak_length := V3 - V2]
+peak_df &lt;- peak_df[peak_df$V10 != &quot;Low-DNase&quot;,]
+
+peak_df[, `:=`(
+  cCRE_group = fcase(
+    V10 == &quot;PLS&quot;,         &quot;PLS&quot;,
+    V10 == &quot;pELS&quot;,        &quot;pELS&quot;,
+    V10 == &quot;dELS&quot;,        &quot;dELS&quot;,
+    V10 == &quot;CA-only&quot;,     &quot;CA-only&quot;,
+    V10 == &quot;TF&quot;,          &quot;TF&quot;,
+    V10 == &quot;CA-TF&quot;,       &quot;CA-TF&quot;,
+    V10 == &quot;CA-CTCF&quot;,     &quot;CA-CTCF&quot;,
+    V10 == &quot;CA-H3K4me3&quot;,  &quot;CA-H3K4me3&quot;,
+    default = &quot;Other&quot;
+  ),
+  cCRE_desc = fcase(
+    V10 == &quot;PLS&quot;,         &quot;Promoter-like signature&quot;,
+    V10 == &quot;pELS&quot;,        &quot;Proximal enhancer-like signature&quot;,
+    V10 == &quot;dELS&quot;,        &quot;Distal enhancer-like signature&quot;,
+    V10 == &quot;CA-only&quot;,     &quot;Chromatin accessible only&quot;,
+    V10 == &quot;TF&quot;,          &quot;TF only&quot;,
+    V10 == &quot;CA-TF&quot;,       &quot;Chromatin accessible with TF&quot;,
+    V10 == &quot;CA-CTCF&quot;,     &quot;Chromatin accessible with CTCF&quot;,
+    V10 == &quot;CA-H3K4me3&quot;,  &quot;Chromatin accessible with H3K4me3&quot;,
+    default = &quot;Other / unknown&quot;
+  )
+)]
+
+# -----------------------------
+# Summary table (by detailed category)
+# -----------------------------
+summary_table &lt;- peak_df[, .(
+  n_peaks        = .N,
+  mean_width     = round(mean(peak_length), 1),
+  median_width   = round(median(peak_length), 1),
+  total_bp       = sum(peak_length)
+), by = .(cCRE_group, cCRE_desc)][order(-n_peaks)]
+
+
+
+DT::datatable(summary_table,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;cCRE overview &#39;),options = list(pageLength = 10) )</code></pre>
+<div id="htmlwidget-55d484e2ce688c3024c2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">cCRE overview <\/caption>","data":[["1","2","3","4","5","6","7"],["pELS","dELS","PLS","CA-TF","CA-CTCF","CA-H3K4me3","CA-only"],["Proximal enhancer-like signature","Distal enhancer-like signature","Promoter-like signature","Chromatin accessible with TF","Chromatin accessible with CTCF","Chromatin accessible with H3K4me3","Chromatin accessible only"],[35508,34888,19452,14221,12662,8908,3627],[247.8,282,290.9,298.2,296,265.5,250],[230,313,342,335,314.5,271,237],[8799348,9839920,5659366,4241163,3748557,2365419,906876]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>cCRE_group<\/th>\n      <th>cCRE_desc<\/th>\n      <th>n_peaks<\/th>\n      <th>mean_width<\/th>\n      <th>median_width<\/th>\n      <th>total_bp<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[3,4,5,6]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>p1 &lt;- ggplot(peak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = &quot;steelblue&quot;, color = &quot;black&quot;) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Peak length (bp)&quot;,
+    y = &quot;Number of peaks&quot;,
+    title = &quot;Peak length distribution of cCRE peaks&quot;
+  )
+
+
+print(p1)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-5-2.png" width="384" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ggplot(peak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = &quot;steelblue&quot;, color = &quot;black&quot;) +
+  facet_wrap(~V10) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Peak length (bp)&quot;,
+    y = &quot;Number of peaks&quot;,
+    title = &quot;Peak length distribution across cCRE categories&quot;
+  )</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="overlaps" class="section level2">
+<h2>Overlaps</h2>
+<div id="with-dnase-gm12878" class="section level3">
+<h3>With DNase – GM12878</h3>
+<div id="base-pair-bp-overlap-1" class="section level4">
+<h4>1. Base-pair (bp) overlap</h4>
+<pre class="r"><code>#-----------------------------
+# 2) Load Other peaks (possibly multiple .bed.gz files)
+#-----------------------------
+peak_folder &lt;- &quot;/project/spott/kevinluo/Fiber_seq/data/DNaseseq/GM12878/&quot;
+
+peak_files &lt;- list.files(
+  path = peak_folder,
+  pattern = &quot;_peaks_.*\\.bed\\.gz$&quot;,
+  full.names = TRUE
+)
+stopifnot(length(peak_files) &gt;= 1)
+
+other_list &lt;- lapply(peak_files, fread, showProgress = FALSE)
+peak_df &lt;- rbindlist(other_list, use.names = FALSE, fill = TRUE)</code></pre>
+<pre><code>Warning in rbindlist(other_list, use.names = FALSE, fill = TRUE): use.names=
+cannot be FALSE when fill is TRUE. Setting use.names=TRUE.</code></pre>
+<pre class="r"><code>peak_gr_raw &lt;- bed_to_gr(peak_df, keep_chr)
+
+n_other_raw &lt;- length(peak_gr_raw)
+peak_gr_red &lt;- reduce(peak_gr_raw, ignore.strand = TRUE)
+n_other_red &lt;- length(peak_gr_red)
+
+#-----------------------------
+# A) BP overlap (on reduced ranges)
+#-----------------------------
+ov_red &lt;- intersect(FIRE_gr_red, peak_gr_red, ignore.strand = TRUE)
+
+bp_FIRE_total  &lt;- sum(width(FIRE_gr_red))
+bp_other_total &lt;- sum(width(peak_gr_red))
+bp_overlap     &lt;- sum(width(ov_red))
+
+cat(&quot;\n=== BP overlap (reduced ranges) ===\n&quot;)</code></pre>
+<pre><code>
+=== BP overlap (reduced ranges) ===</code></pre>
+<pre class="r"><code>cat(&quot;FIRE total bp (reduced):  &quot;, bp_FIRE_total,  &quot;\n&quot;)</code></pre>
+<pre><code>FIRE total bp (reduced):   58608900 </code></pre>
+<pre class="r"><code>cat(&quot;DNase total bp (reduced): &quot;, bp_other_total, &quot;\n&quot;)</code></pre>
+<pre><code>DNase total bp (reduced):  9938966 </code></pre>
+<pre class="r"><code>cat(&quot;Overlap bp:               &quot;, bp_overlap,     &quot;\n&quot;)</code></pre>
+<pre><code>Overlap bp:                9324304 </code></pre>
+<pre class="r"><code>cat(&quot;% FIRE bp in DNase:       &quot;, bp_overlap/bp_FIRE_total*100,       &quot;\n&quot;)</code></pre>
+<pre><code>% FIRE bp in DNase:        15.90937 </code></pre>
+<pre class="r"><code>cat(&quot;% DNase bp in FIRE:       &quot;, bp_overlap/bp_other_total*100,       &quot;\n&quot;)</code></pre>
+<pre><code>% DNase bp in FIRE:        93.81563 </code></pre>
+<pre class="r"><code>overlap_summary &lt;- data.table(
+  metric = c(&quot;FIRE bp in DNase&quot;, &quot;DNase bp in FIRE&quot;),
+  percent = c(
+    bp_overlap / bp_FIRE_total * 100,
+    bp_overlap / bp_other_total * 100
+  )
+)
+
+# Plot percentage barplot
+ggplot(overlap_summary, aes(x = metric, y = percent, fill = metric)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, percent)),
+            vjust = -0.5, size = 5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Percentage (%)&quot;,
+    #title = &quot;Genomic overlap between FIRE and DNase peaks&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-7-1.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
+<div id="peak-level-overlap-1" class="section level4">
+<h4>2. Peak-level overlap</h4>
+<pre class="r"><code>#-----------------------------
+# B) Peak overlap counts (min overlap = min_ov_bp) on RAW peaks
+#    This answers: how many FIRE peaks overlap ANY other peak by &gt;=100bp (and vice versa)
+#-----------------------------
+hitsoverlap &lt;- findOverlaps(
+  FIRE_gr_raw, peak_gr_raw,
+  ignore.strand = TRUE,
+  minoverlap = min_ov_bp
+)
+
+FIRE_hit_idx  &lt;- unique(queryHits(hitsoverlap))
+other_hit_idx &lt;- unique(subjectHits(hitsoverlap))
+
+n_FIRE_with_overlap  &lt;- length(FIRE_hit_idx)
+n_other_with_overlap &lt;- length(other_hit_idx)
+n_pairs_overlap      &lt;- length(hitsoverlap)
+
+cat(&quot;\n=== Peak overlap (RAW peaks; minoverlap =&quot;, min_ov_bp, &quot;bp) ===\n&quot;)</code></pre>
+<pre><code>
+=== Peak overlap (RAW peaks; minoverlap = 100 bp) ===</code></pre>
+<pre class="r"><code>cat(&quot;FIRE peaks (raw):                    &quot;, n_FIRE_raw, &quot;\n&quot;)</code></pre>
+<pre><code>FIRE peaks (raw):                     193798 </code></pre>
+<pre class="r"><code>cat(&quot;DNase peaks (raw):                   &quot;, n_other_raw, &quot;\n&quot;)</code></pre>
+<pre><code>DNase peaks (raw):                    48805 </code></pre>
+<pre class="r"><code>cat(&quot;Number of overlapping peak pairs:    &quot;, n_pairs_overlap, &quot;\n&quot;)</code></pre>
+<pre><code>Number of overlapping peak pairs:     41191 </code></pre>
+<pre class="r"><code>#-----------------------------
+# C) 2-set Venn (peak overlap)
+# NOTE: With genomic intervals, overlap is not 1-to-1, so &quot;intersection size&quot; is asymmetric.
+# Here we define intersection = number of FIRE peaks that overlap Other by &gt;=min_ov_bp.
+# We also print the &quot;Other peaks that overlap FIRE&quot; separately above.
+#-----------------------------
+venn_a_only &lt;- n_FIRE_raw - n_FIRE_with_overlap
+venn_b_only &lt;- n_other_raw - n_other_with_overlap
+venn_inter  &lt;- n_FIRE_with_overlap  # definition for the Venn plot below
+
+grid::grid.newpage()
+VennDiagram::draw.pairwise.venn(
+  area1 = n_FIRE_raw,
+  area2 = n_other_raw,
+  cross.area = venn_inter,
+  category = c(&quot;FIRE&quot;, &quot;DNase&quot;),
+  scaled = T
+)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-8-1.png" width="384" style="display: block; margin: auto;" /></p>
+<pre><code>(polygon[GRID.polygon.605], polygon[GRID.polygon.606], polygon[GRID.polygon.607], polygon[GRID.polygon.608], text[GRID.text.609], text[GRID.text.610], text[GRID.text.611], text[GRID.text.612], text[GRID.text.613]) </code></pre>
+</div>
+</div>
+<div id="with-atac-seq-idr-gm12878" class="section level3">
+<h3>With ATAC-seq – IDR – GM12878</h3>
+<div id="base-pair-bp-overlap-2" class="section level4">
+<h4>1. Base-pair (bp) overlap</h4>
+<pre class="r"><code>#-----------------------------
+# 2) Load Other peaks (possibly multiple .bed.gz files)
+#-----------------------------
+peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_IDR_peaks_ENCFF429WTW.bed.gz&quot;,
+  showProgress = FALSE
+)
+
+peak_gr_raw &lt;- bed_to_gr(peak_df, keep_chr)
+
+n_other_raw &lt;- length(peak_gr_raw)
+peak_gr_red &lt;- reduce(peak_gr_raw, ignore.strand = TRUE)
+n_other_red &lt;- length(peak_gr_red)
+
+#-----------------------------
+# A) BP overlap (on reduced ranges)
+#-----------------------------
+ov_red &lt;- intersect(FIRE_gr_red, peak_gr_red, ignore.strand = TRUE)
+
+bp_FIRE_total  &lt;- sum(width(FIRE_gr_red))
+bp_other_total &lt;- sum(width(peak_gr_red))
+bp_overlap     &lt;- sum(width(ov_red))
+
+cat(&quot;\n=== BP overlap (reduced ranges) ===\n&quot;)</code></pre>
+<pre><code>
+=== BP overlap (reduced ranges) ===</code></pre>
+<pre class="r"><code>cat(&quot;FIRE total bp (reduced):  &quot;, bp_FIRE_total,  &quot;\n&quot;)</code></pre>
+<pre><code>FIRE total bp (reduced):   58608900 </code></pre>
+<pre class="r"><code>cat(&quot;Other total bp (reduced): &quot;, bp_other_total, &quot;\n&quot;)</code></pre>
+<pre><code>Other total bp (reduced):  76106539 </code></pre>
+<pre class="r"><code>cat(&quot;Overlap bp:               &quot;, bp_overlap,     &quot;\n&quot;)</code></pre>
+<pre><code>Overlap bp:                38604936 </code></pre>
+<pre class="r"><code>cat(&quot;% FIRE bp in ATAC-seq:       &quot;, bp_overlap/bp_FIRE_total*100,       &quot;\n&quot;)</code></pre>
+<pre><code>% FIRE bp in ATAC-seq:        65.86873 </code></pre>
+<pre class="r"><code>cat(&quot;% ATAC-seq bp in FIRE:       &quot;, bp_overlap/bp_other_total*100,       &quot;\n&quot;)</code></pre>
+<pre><code>% ATAC-seq bp in FIRE:        50.72486 </code></pre>
+<pre class="r"><code>overlap_summary &lt;- data.table(
+  metric = c(&quot;FIRE bp in ATAC-seq&quot;, &quot;ATAC-seq bp in FIRE&quot;),
+  percent = c(
+    bp_overlap / bp_FIRE_total * 100,
+    bp_overlap / bp_other_total * 100
+  )
+)
+
+# Plot percentage barplot
+ggplot(overlap_summary, aes(x = metric, y = percent, fill = metric)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, percent)),
+            vjust = -0.5, size = 5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Percentage (%)&quot;,
+    #title = &quot;Genomic overlap between FIRE and DNase peaks&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-9-1.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
+<div id="peak-level-overlap-2" class="section level4">
+<h4>2. Peak-level overlap</h4>
+<pre class="r"><code>#-----------------------------
+# B) Peak overlap counts (min overlap = min_ov_bp) on RAW peaks
+#    This answers: how many FIRE peaks overlap ANY other peak by &gt;=100bp (and vice versa)
+#-----------------------------
+hitsoverlap &lt;- findOverlaps(
+  FIRE_gr_raw, peak_gr_raw,
+  ignore.strand = TRUE,
+  minoverlap = min_ov_bp
+)
+
+FIRE_hit_idx  &lt;- unique(queryHits(hitsoverlap))
+other_hit_idx &lt;- unique(subjectHits(hitsoverlap))
+
+n_FIRE_with_overlap  &lt;- length(FIRE_hit_idx)
+n_other_with_overlap &lt;- length(other_hit_idx)
+n_pairs_overlap      &lt;- length(hitsoverlap)
+
+cat(&quot;\n=== Peak overlap (RAW peaks; minoverlap =&quot;, min_ov_bp, &quot;bp) ===\n&quot;)</code></pre>
+<pre><code>
+=== Peak overlap (RAW peaks; minoverlap = 100 bp) ===</code></pre>
+<pre class="r"><code>cat(&quot;FIRE peaks (raw):                    &quot;, n_FIRE_raw, &quot;\n&quot;)</code></pre>
+<pre><code>FIRE peaks (raw):                     193798 </code></pre>
+<pre class="r"><code>cat(&quot;ATAC-seq peaks (raw):                   &quot;, n_other_raw, &quot;\n&quot;)</code></pre>
+<pre><code>ATAC-seq peaks (raw):                    201527 </code></pre>
+<pre class="r"><code>cat(&quot;Number of overlapping peak pairs:    &quot;, n_pairs_overlap, &quot;\n&quot;)</code></pre>
+<pre><code>Number of overlapping peak pairs:     250698 </code></pre>
+<pre class="r"><code>#-----------------------------
+# C) 2-set Venn (peak overlap)
+# NOTE: With genomic intervals, overlap is not 1-to-1, so &quot;intersection size&quot; is asymmetric.
+# Here we define intersection = number of FIRE peaks that overlap Other by &gt;=min_ov_bp.
+# We also print the &quot;Other peaks that overlap FIRE&quot; separately above.
+#-----------------------------
+venn_a_only &lt;- n_FIRE_raw - n_FIRE_with_overlap
+venn_b_only &lt;- n_other_raw - n_other_with_overlap
+venn_inter  &lt;- n_FIRE_with_overlap  # definition for the Venn plot below
+
+grid::grid.newpage()
+VennDiagram::draw.pairwise.venn(
+  area1 = n_FIRE_raw,
+  area2 = n_other_raw,
+  cross.area = venn_inter,
+  category = c(&quot;FIRE&quot;, &quot;ATAC-seq - IDR&quot;),
+  scaled = T
+)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-10-1.png" width="384" style="display: block; margin: auto;" /></p>
+<pre><code>(polygon[GRID.polygon.648], polygon[GRID.polygon.649], polygon[GRID.polygon.650], polygon[GRID.polygon.651], text[GRID.text.652], text[GRID.text.653], text[GRID.text.654], text[GRID.text.655], text[GRID.text.656]) </code></pre>
+</div>
+</div>
+<div id="with-atac-seq-pseudoreplicated-gm12878" class="section level3">
+<h3>With ATAC-seq – pseudoreplicated – GM12878</h3>
+<div id="base-pair-bp-overlap-3" class="section level4">
+<h4>1. Base-pair (bp) overlap</h4>
+<pre class="r"><code>#-----------------------------
+# 2) Load Other peaks (possibly multiple .bed.gz files)
+#-----------------------------
+peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_pseudoreplicated_peaks_ENCFF748UZH.bed.gz&quot;,
+  showProgress = FALSE
+)
+
+peak_gr_raw &lt;- bed_to_gr(peak_df, keep_chr)
+
+n_other_raw &lt;- length(peak_gr_raw)
+peak_gr_red &lt;- reduce(peak_gr_raw, ignore.strand = TRUE)
+n_other_red &lt;- length(peak_gr_red)
+
+#-----------------------------
+# A) BP overlap (on reduced ranges)
+#-----------------------------
+ov_red &lt;- intersect(FIRE_gr_red, peak_gr_red, ignore.strand = TRUE)
+
+bp_FIRE_total  &lt;- sum(width(FIRE_gr_red))
+bp_other_total &lt;- sum(width(peak_gr_red))
+bp_overlap     &lt;- sum(width(ov_red))
+
+cat(&quot;\n=== BP overlap (reduced ranges) ===\n&quot;)</code></pre>
+<pre><code>
+=== BP overlap (reduced ranges) ===</code></pre>
+<pre class="r"><code>cat(&quot;FIRE total bp (reduced):  &quot;, bp_FIRE_total,  &quot;\n&quot;)</code></pre>
+<pre><code>FIRE total bp (reduced):   58608900 </code></pre>
+<pre class="r"><code>cat(&quot;Other total bp (reduced): &quot;, bp_other_total, &quot;\n&quot;)</code></pre>
+<pre><code>Other total bp (reduced):  97571293 </code></pre>
+<pre class="r"><code>cat(&quot;Overlap bp:               &quot;, bp_overlap,     &quot;\n&quot;)</code></pre>
+<pre><code>Overlap bp:                44449323 </code></pre>
+<pre class="r"><code>cat(&quot;% FIRE bp in ATAC-seq:       &quot;, bp_overlap/bp_FIRE_total*100,       &quot;\n&quot;)</code></pre>
+<pre><code>% FIRE bp in ATAC-seq:        75.84057 </code></pre>
+<pre class="r"><code>cat(&quot;% ATAC-seq bp in FIRE:       &quot;, bp_overlap/bp_other_total*100,       &quot;\n&quot;)</code></pre>
+<pre><code>% ATAC-seq bp in FIRE:        45.55574 </code></pre>
+<pre class="r"><code>overlap_summary &lt;- data.table(
+  metric = c(&quot;FIRE bp in ATAC-seq&quot;, &quot;ATAC-seq bp in FIRE&quot;),
+  percent = c(
+    bp_overlap / bp_FIRE_total * 100,
+    bp_overlap / bp_other_total * 100
+  )
+)
+
+# Plot percentage barplot
+ggplot(overlap_summary, aes(x = metric, y = percent, fill = metric)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, percent)),
+            vjust = -0.5, size = 5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Percentage (%)&quot;,
+    #title = &quot;Genomic overlap between FIRE and DNase peaks&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-11-1.png" width="384" style="display: block; margin: auto;" /></p>
+</div>
+<div id="peak-level-overlap-3" class="section level4">
+<h4>2. Peak-level overlap</h4>
+<pre class="r"><code>#-----------------------------
+# B) Peak overlap counts (min overlap = min_ov_bp) on RAW peaks
+#    This answers: how many FIRE peaks overlap ANY other peak by &gt;=100bp (and vice versa)
+#-----------------------------
+hitsoverlap &lt;- findOverlaps(
+  FIRE_gr_raw, peak_gr_raw,
+  ignore.strand = TRUE,
+  minoverlap = min_ov_bp
+)
+
+FIRE_hit_idx  &lt;- unique(queryHits(hitsoverlap))
+other_hit_idx &lt;- unique(subjectHits(hitsoverlap))
+
+n_FIRE_with_overlap  &lt;- length(FIRE_hit_idx)
+n_other_with_overlap &lt;- length(other_hit_idx)
+n_pairs_overlap      &lt;- length(hitsoverlap)
+
+cat(&quot;\n=== Peak overlap (RAW peaks; minoverlap =&quot;, min_ov_bp, &quot;bp) ===\n&quot;)</code></pre>
+<pre><code>
+=== Peak overlap (RAW peaks; minoverlap = 100 bp) ===</code></pre>
+<pre class="r"><code>cat(&quot;FIRE peaks (raw):                    &quot;, n_FIRE_raw, &quot;\n&quot;)</code></pre>
+<pre><code>FIRE peaks (raw):                     193798 </code></pre>
+<pre class="r"><code>cat(&quot;ATAC-seq peaks (raw):                   &quot;, n_other_raw, &quot;\n&quot;)</code></pre>
+<pre><code>ATAC-seq peaks (raw):                    269492 </code></pre>
+<pre class="r"><code>cat(&quot;Number of overlapping peak pairs:    &quot;, n_pairs_overlap, &quot;\n&quot;)</code></pre>
+<pre><code>Number of overlapping peak pairs:     282025 </code></pre>
+<pre class="r"><code>#-----------------------------
+# C) 2-set Venn (peak overlap)
+# NOTE: With genomic intervals, overlap is not 1-to-1, so &quot;intersection size&quot; is asymmetric.
+# Here we define intersection = number of FIRE peaks that overlap Other by &gt;=min_ov_bp.
+# We also print the &quot;Other peaks that overlap FIRE&quot; separately above.
+#-----------------------------
+venn_a_only &lt;- n_FIRE_raw - n_FIRE_with_overlap
+venn_b_only &lt;- n_other_raw - n_other_with_overlap
+venn_inter  &lt;- n_FIRE_with_overlap  # definition for the Venn plot below
+
+grid::grid.newpage()
+VennDiagram::draw.pairwise.venn(
+  area1 = n_FIRE_raw,
+  area2 = n_other_raw,
+  cross.area = venn_inter,
+  category = c(&quot;FIRE&quot;, &quot;ATAC-seq - pseudoreplicated&quot;),
+  scaled = T
+)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-12-1.png" width="384" style="display: block; margin: auto;" /></p>
+<pre><code>(polygon[GRID.polygon.691], polygon[GRID.polygon.692], polygon[GRID.polygon.693], polygon[GRID.polygon.694], text[GRID.text.695], text[GRID.text.696], text[GRID.text.697], text[GRID.text.698], text[GRID.text.699]) </code></pre>
+</div>
+</div>
+<div id="with-ccre-gm12878" class="section level3">
+<h3>With cCRE – GM12878</h3>
+<div id="base-pair-bp-overlap-4" class="section level4">
+<h4>1. Base-pair (bp) overlap</h4>
+<pre class="r"><code>#-----------------------------
+# 2) Load Other peaks (possibly multiple .bed.gz files)
+#-----------------------------
+peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4/LCLs/GM12878_cCREs_ENCFF428XFI_ENCFF280PUF_ENCFF469WVA_ENCFF644EEX.bed&quot;,
+  showProgress = FALSE
+)
+peak_df &lt;- peak_df[peak_df$V10 !=&quot;Low-DNase&quot;,]
+peak_df &lt;- peak_df[peak_df$V1 %in% paste0(&quot;chr&quot;,1:22),]
+
+peak_gr_raw &lt;- bed_to_gr(peak_df, keep_chr)
+
+n_other_raw &lt;- length(peak_gr_raw)
+peak_gr_red &lt;- reduce(peak_gr_raw, ignore.strand = TRUE)
+n_other_red &lt;- length(peak_gr_red)
+
+#-----------------------------
+# A) BP overlap (on reduced ranges)
+#-----------------------------
+ov_red &lt;- intersect(FIRE_gr_red, peak_gr_red, ignore.strand = TRUE)
+
+bp_FIRE_total  &lt;- sum(width(FIRE_gr_red))
+bp_other_total &lt;- sum(width(peak_gr_red))
+bp_overlap     &lt;- sum(width(ov_red))
+
+cat(&quot;\n=== BP overlap (reduced ranges) ===\n&quot;)</code></pre>
+<pre><code>
+=== BP overlap (reduced ranges) ===</code></pre>
+<pre class="r"><code>cat(&quot;FIRE total bp (reduced):  &quot;, bp_FIRE_total,  &quot;\n&quot;)</code></pre>
+<pre><code>FIRE total bp (reduced):   58608900 </code></pre>
+<pre class="r"><code>cat(&quot;cCRE total bp (reduced): &quot;, bp_other_total, &quot;\n&quot;)</code></pre>
+<pre><code>cCRE total bp (reduced):  34726906 </code></pre>
+<pre class="r"><code>cat(&quot;Overlap bp:               &quot;, bp_overlap,     &quot;\n&quot;)</code></pre>
+<pre><code>Overlap bp:                22887619 </code></pre>
+<pre class="r"><code>cat(&quot;% FIRE bp in cCRE:       &quot;, bp_overlap/bp_FIRE_total*100,       &quot;\n&quot;)</code></pre>
+<pre><code>% FIRE bp in cCRE:        39.05144 </code></pre>
+<pre class="r"><code>cat(&quot;% cCRE bp in FIRE:       &quot;, bp_overlap/bp_other_total*100,       &quot;\n&quot;)</code></pre>
+<pre><code>% cCRE bp in FIRE:        65.90745 </code></pre>
+<pre class="r"><code>overlap_summary &lt;- data.table(
+  metric = c(&quot;cCRE bp in FIRE&quot;,&quot;FIRE bp in cCRE&quot;),
+  percent = c(
+    bp_overlap / bp_other_total * 100,
+    bp_overlap / bp_FIRE_total * 100
+  )
+)
+
+overlap_summary[, metric := factor(metric,
+                                   levels = c(&quot;cCRE bp in FIRE&quot;,
+                                              &quot;FIRE bp in cCRE&quot;))]
+
+# Plot percentage barplot
+ggplot(overlap_summary, aes(x = metric, y = percent, fill = metric)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, percent)),
+            vjust = -0.5, size = 5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Percentage (%)&quot;,
+    title = &quot;all cCRE peaks&quot;
+  ) +
+  theme(legend.position = &quot;none&quot;)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-13-1.png" width="384" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#-----------------------------
+# 1) Build cCRE GRanges with V10 labels + filter
+#-----------------------------
+peak_gr &lt;- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3),
+  V10      = peak_df$V10
+)
+peak_gr &lt;- peak_gr[
+  seqnames(peak_gr) %in% keep_chr &amp;
+    !is.na(peak_gr$V10) &amp; peak_gr$V10 != &quot;&quot;
+]
+
+#-----------------------------
+# 2) Reduce within each V10
+#-----------------------------
+peak_gr_by_v10 &lt;- split(peak_gr, peak_gr$V10)
+peak_gr_red_by_v10 &lt;- endoapply(peak_gr_by_v10, reduce, ignore.strand = TRUE)
+
+#-----------------------------
+# 3) Compute bp overlap per V10 (ONE pass)
+#-----------------------------
+overlap_by_v10 &lt;- rbindlist(lapply(names(peak_gr_red_by_v10), function(v) {
+  gr_v &lt;- peak_gr_red_by_v10[[v]]
+  
+  bp_v_total   &lt;- sum(width(gr_v))
+  bp_v_overlap &lt;- sum(width(intersect(FIRE_gr_red, gr_v, ignore.strand = TRUE)))
+  
+  data.table(
+    V10 = v,
+    bp_v_total = bp_v_total,
+    bp_overlap = bp_v_overlap,
+    pct_FIRE_in_V10 = if (bp_FIRE_total &gt; 0) 100 * bp_v_overlap / bp_FIRE_total else NA_real_,
+    pct_V10_covered_by_FIRE = if (bp_v_total &gt; 0) 100 * bp_v_overlap / bp_v_total else NA_real_
+  )
+}))
+
+# Define a consistent order (e.g., based on pct_FIRE_in_V10)
+v10_order &lt;- overlap_by_v10[order(-pct_FIRE_in_V10), V10]
+overlap_by_v10[, V10 := factor(V10, levels = v10_order)]
+
+#-----------------------------
+# 4) Plot A: composition of FIRE bp across V10
+#-----------------------------
+pA &lt;- ggplot(overlap_by_v10,
+             aes(x = V10, y = pct_FIRE_in_V10)) +
+  geom_col(width = 0.7) +
+  coord_flip() +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, pct_FIRE_in_V10)),
+            hjust = -0.05, size = 4) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;cCRE category&quot;,
+    y = &quot;% of FIRE bp overlapped&quot;
+  )
+
+#-----------------------------
+# 5) Plot B: coverage of each V10 by FIRE
+#-----------------------------
+pB &lt;- ggplot(overlap_by_v10,
+             aes(x = V10, y = pct_V10_covered_by_FIRE)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, pct_V10_covered_by_FIRE)),
+            hjust = -0.05, size = 4) +
+  coord_flip() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;cCRE category&quot;,
+    y = &quot;% bp of category covered by FIRE&quot;
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15)))
+
+#-----------------------------
+# 6) Combine into one figure (optional)
+#-----------------------------
+(pA | pB) +
+  plot_annotation(title = &quot;FIRE vs cCRE overlap by category (bp-based)&quot;)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-14-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="peak-level-overlap-4" class="section level4">
+<h4>2. Peak-level overlap</h4>
+<pre class="r"><code>#-----------------------------
+# B) Peak overlap counts (min overlap = min_ov_bp) on RAW peaks
+#    This answers: how many FIRE peaks overlap ANY other peak by &gt;=100bp (and vice versa)
+#-----------------------------
+hitsoverlap &lt;- findOverlaps(
+  FIRE_gr_raw, peak_gr_raw,
+  ignore.strand = TRUE,
+  minoverlap = min_ov_bp
+)
+
+FIRE_hit_idx  &lt;- unique(queryHits(hitsoverlap))
+other_hit_idx &lt;- unique(subjectHits(hitsoverlap))
+
+n_FIRE_with_overlap  &lt;- length(FIRE_hit_idx)
+n_other_with_overlap &lt;- length(other_hit_idx)
+n_pairs_overlap      &lt;- length(hitsoverlap)
+
+cat(&quot;\n=== Peak overlap (RAW peaks; minoverlap =&quot;, min_ov_bp, &quot;bp) ===\n&quot;)</code></pre>
+<pre><code>
+=== Peak overlap (RAW peaks; minoverlap = 100 bp) ===</code></pre>
+<pre class="r"><code>cat(&quot;FIRE peaks (raw):                    &quot;, n_FIRE_raw, &quot;\n&quot;)</code></pre>
+<pre><code>FIRE peaks (raw):                     193798 </code></pre>
+<pre class="r"><code>cat(&quot;cCRE peaks (raw):                   &quot;, n_other_raw, &quot;\n&quot;)</code></pre>
+<pre><code>cCRE peaks (raw):                    126220 </code></pre>
+<pre class="r"><code>cat(&quot;Number of overlapping peak pairs:    &quot;, n_pairs_overlap, &quot;\n&quot;)</code></pre>
+<pre><code>Number of overlapping peak pairs:     91974 </code></pre>
+<pre class="r"><code>#-----------------------------
+# C) 2-set Venn (peak overlap)
+# NOTE: With genomic intervals, overlap is not 1-to-1, so &quot;intersection size&quot; is asymmetric.
+# Here we define intersection = number of FIRE peaks that overlap Other by &gt;=min_ov_bp.
+# We also print the &quot;Other peaks that overlap FIRE&quot; separately above.
+#-----------------------------
+venn_a_only &lt;- n_FIRE_raw - n_FIRE_with_overlap
+venn_b_only &lt;- n_other_raw - n_other_with_overlap
+venn_inter  &lt;- n_FIRE_with_overlap  # definition for the Venn plot below
+
+grid::grid.newpage()
+VennDiagram::draw.pairwise.venn(
+  area1 = n_FIRE_raw,
+  area2 = n_other_raw,
+  cross.area = venn_inter,
+  category = c(&quot;FIRE&quot;, &quot;ALL_cCRE&quot;),
+  scaled = T
+)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-15-1.png" width="384" style="display: block; margin: auto;" /></p>
+<pre><code>(polygon[GRID.polygon.818], polygon[GRID.polygon.819], polygon[GRID.polygon.820], polygon[GRID.polygon.821], text[GRID.text.822], text[GRID.text.823], text[GRID.text.824], text[GRID.text.825], text[GRID.text.826]) </code></pre>
+<pre class="r"><code>if (is.null(mcols(peak_gr_raw)$V10)) {
+  peak_gr_raw$V10 &lt;- peak_df$V10
+}
+
+# Keep valid categories only
+peak_gr_raw &lt;- peak_gr_raw[!is.na(peak_gr_raw$V10) &amp; peak_gr_raw$V10 != &quot;&quot;]
+
+# Split cCRE peaks by V10 category
+peak_by_v10 &lt;- split(peak_gr_raw, peak_gr_raw$V10)
+
+
+venn_grobs &lt;- list()
+
+for (v in names(peak_by_v10)) {
+  
+  gr_v &lt;- peak_by_v10[[v]]
+  
+  hits &lt;- findOverlaps(
+    FIRE_gr_raw, gr_v,
+    ignore.strand = TRUE,
+    minoverlap = min_ov_bp
+  )
+  
+  n_FIRE_raw &lt;- length(FIRE_gr_raw)
+  n_cat_raw  &lt;- length(gr_v)
+  
+  n_FIRE_with_overlap &lt;- length(unique(queryHits(hits)))
+  n_cat_with_overlap  &lt;- length(unique(subjectHits(hits)))
+  
+  venn_inter &lt;- n_FIRE_with_overlap  # same convention as before
+  
+  title_grob &lt;- textGrob(
+    paste0(&quot;Overlap with &quot;, v),
+    gp = gpar(fontsize = 12, fontface = &quot;bold&quot;)
+  )
+  
+  # draw.pairwise.venn returns a LIST of grobs -&gt; convert to ONE grob via grobTree()
+  venn_parts &lt;- draw.pairwise.venn(
+    area1 = n_FIRE_raw,
+    area2 = n_cat_raw,
+    cross.area = venn_inter,
+    category = c(&quot;FIRE&quot;, paste0(&quot;cCRE: &quot;, v)),
+    scaled = TRUE,
+    cex = 0.9,
+    cat.cex = 0.9,
+    ind = FALSE
+  )
+
+  
+  venn_grobs[[v]] &lt;- arrangeGrob(
+    grobTree(venn_parts),
+    top = title_grob)
+}
+
+# Show all Venns in one figure
+grid.arrange(grobs = venn_grobs, ncol = 3)</code></pre>
+<p><img src="figure/fire_overlap_OCRs.Rmd/unnamed-chunk-16-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /software/openblas-0.3.13-el7-x86_64/lib/libopenblas_haswellp-r0.3.13.so
+
+locale:
+[1] C
+
+attached base packages:
+[1] grid      stats4    stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] gridExtra_2.3        patchwork_1.3.2.9000 ggplot2_4.0.0       
+ [4] VennDiagram_1.7.3    futile.logger_1.4.3  GenomicRanges_1.48.0
+ [7] GenomeInfoDb_1.39.9  IRanges_2.30.0       S4Vectors_0.34.0    
+[10] BiocGenerics_0.42.0  data.table_1.14.2   
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.12            rprojroot_2.0.3        digest_0.6.29         
+ [4] utf8_1.2.2             R6_2.5.1               futile.options_1.0.1  
+ [7] evaluate_0.15          highr_0.9              pillar_1.9.0          
+[10] zlibbioc_1.42.0        rlang_1.1.2            rstudioapi_0.13       
+[13] jquerylib_0.1.4        R.utils_2.11.0         R.oo_1.24.0           
+[16] DT_0.22                rmarkdown_2.25         labeling_0.4.2        
+[19] stringr_1.5.1          htmlwidgets_1.5.4      S7_0.2.0              
+[22] RCurl_1.98-1.7         compiler_4.2.0         httpuv_1.6.5          
+[25] xfun_0.41              pkgconfig_2.0.3        htmltools_0.5.2       
+[28] tidyselect_1.2.0       tibble_3.2.1           GenomeInfoDbData_1.2.8
+[31] workflowr_1.7.0        fansi_1.0.3            dplyr_1.1.4           
+[34] withr_2.5.0            later_1.3.0            bitops_1.0-7          
+[37] R.methodsS3_1.8.1      jsonlite_1.8.0         gtable_0.3.6          
+[40] lifecycle_1.0.4        git2r_0.30.1           magrittr_2.0.3        
+[43] formatR_1.12           scales_1.4.0           cli_3.6.1             
+[46] stringi_1.7.6          farver_2.1.0           XVector_0.36.0        
+[49] fs_1.5.2               promises_1.2.0.1       bslib_0.3.1           
+[52] vctrs_0.6.5            generics_0.1.4         lambda.r_1.2.4        
+[55] RColorBrewer_1.1-3     tools_4.2.0            dichromat_2.0-0.1     
+[58] glue_1.6.2             crosstalk_1.2.0        fastmap_1.1.0         
+[61] yaml_2.3.5             knitr_1.39             sass_0.4.1            </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
