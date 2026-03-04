@@ -48,7 +48,7 @@ Checking the OCR coverage for 15 states from ChromHMM
 
 Checking the overlap of FIRE peaks with DNase/ ATAC-seq/ cCREs
 
-* [Link](fire_overlap_other_OCRs.html)
+* [Link](fire_overlap_OCRs.html)
 
 
 
