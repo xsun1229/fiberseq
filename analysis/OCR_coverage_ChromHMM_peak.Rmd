@@ -1,0 +1,835 @@
+---
+title: "Checking the OCR coverage for 15 states from ChromHMM -- peak level coverage"
+author: "XSun"
+date: "2026-03-05"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+
+```{r}
+
+suppressPackageStartupMessages({
+  library(data.table)
+  library(GenomicRanges)
+  library(ggplot2)
+  library(patchwork)
+})
+
+source("/project/spott/xsun/fiberseq/2.annotating_footprints/0.functions.R")
+
+chromhmm_annot <- as.data.table(chromhmm_annot)
+chromhmm_annot[, state := paste0(state_id, "_", mnemonic)]
+state_titles <- chromhmm_annot[, .(state, title = description)]
+
+
+```
+
+# Introduction
+
+Here we check how the 15 ChromHMM states are covered by the FIRE/ ATAC-seq/ DNase-seq/ cCRE peaks. 
+
+To assess overlap at the **individual peak level**, we performed overlap detection using the **original (non-merged) peaks**.
+
+Peak overlaps were identified using `findOverlaps()` with a **minimum overlap threshold of 100 bp**, meaning two peaks were considered overlapping only if they shared **≥100 bp**.
+
+Peak-level overlap was summarized using a **two-set Venn diagram**,
+
+# Data
+
+Data: https://xsun1229.github.io/fiberseq/data.html
+
+For DNase/ ATAC-seq/ cCRE we used GM12878 cell line
+
+## ChromHMM peak length distribution
+
+```{r fig.height=12, fig.width=20}
+
+ChromHMM_df <- fread("/project/spott/xsun/fiberseq/2.annotating_footprints/data/E116_15_coreMarks_hg38lift_mnemonics.bed.gz", showProgress = FALSE)
+ChromHMM_df <- ChromHMM_df[!is.na(V4) & V4 != ""]
+setnames(ChromHMM_df, 1:4, c("chr","start0","end","state"))
+
+dt <- as.data.table(ChromHMM_df)
+dt[, len_bp := end - start0]
+dt[, state_id := as.integer(sub("_.*", "", state))]
+dt <- merge(dt, chromhmm_annot, by = "state_id", all.x = TRUE)
+dt[, facet_label := paste0(state_id, ": ", description)]
+dt[, facet_label := factor(
+  facet_label,
+  levels = unique(facet_label[order(state_id)])
+)]
+
+
+ggplot(dt, aes(x = len_bp)) +
+  geom_histogram(bins = 60) +
+  facet_wrap(~ facet_label, scales = "free_y", ncol = 5) +
+  scale_x_log10() +
+  labs(
+    x = "Segment length (bp, log10)",
+    y = "Count",
+    title = "ChromHMM segment length distribution"
+  ) +
+  theme_classic(base_size = 13)
+
+```
+
+
+
+## Peak length distribution for others 
+
+https://xsun1229.github.io/fiberseq/fire_overlap_OCRs.html#Data_overview_–_peak_length_distribution
+
+# Results
+
+```{r}
+
+min_bp <- 100
+
+gr_hmm <- GRanges(
+  seqnames = ChromHMM_df$chr,
+  ranges   = IRanges(start = ChromHMM_df$start0 + 1L, end = ChromHMM_df$end),
+  state    = ChromHMM_df$state
+)
+
+```
+
+
+## FIRE peak
+
+```{r fig.height=4, fig.width=6}
+
+peak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz",
+  showProgress = FALSE
+)
+
+gr_peaks <- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3)
+)
+
+all_states <- sort(unique(ChromHMM_df$state))
+
+min_bp <- 100L
+
+## --- 1) One overlap for ALL states (fast) ---
+hits <- findOverlaps(gr_peaks, gr_hmm, ignore.strand = TRUE)
+
+# overlap width for each hit
+ov_bp <- width(pintersect(gr_peaks[queryHits(hits)], gr_hmm[subjectHits(hits)]))
+
+# keep only >= min_bp
+keep <- ov_bp >= min_bp
+qh <- queryHits(hits)[keep]      # peak indices
+sh <- subjectHits(hits)[keep]    # chromhmm segment indices
+
+# state label for each kept hit
+st <- mcols(gr_hmm)$state[sh]
+
+## --- 2) Summarize per state (unique peak hits, unique segment hits) ---
+dt_hits <- data.table(
+  state = st,
+  peak_i = qh,
+  seg_i  = sh
+)
+
+sum_by_state <- dt_hits[, .(
+  OCRpeaks_overlap        = uniqueN(peak_i),
+  chromHMMstate_overlap   = uniqueN(seg_i)
+), by = state]
+
+## --- 3) Add totals for each state and compute proportions ---
+# totals
+n_OCRpeaks <- length(gr_peaks)
+
+dt_state_totals <- data.table(
+  state = names(table(mcols(gr_hmm)$state)),
+  n_chromHMMstate_peaks = as.integer(table(mcols(gr_hmm)$state))
+)
+
+summary_table <- merge(dt_state_totals, sum_by_state, by = "state", all.x = TRUE)
+
+# states with no overlap -> NA to 0
+for (col in c("OCRpeaks_overlap", "chromHMMstate_overlap")) {
+  summary_table[is.na(get(col)), (col) := 0L]
+}
+
+summary_table[, `:=`(
+  n_OCRpeaks = n_OCRpeaks,
+  OCRpeaks_overlap_prop = OCRpeaks_overlap / n_OCRpeaks,
+  chromHMMstate_overlap_prop = chromHMMstate_overlap / n_chromHMMstate_peaks
+)]
+
+## --- 4) Add annotation + select final columns ---
+setDT(chromhmm_annot)
+
+final_table <- merge(
+  chromhmm_annot[, .(state, state_id, mnemonic, description)],
+  summary_table[, .(
+    state,
+    n_OCRpeaks,
+    n_chromHMMstate_peaks,
+    OCRpeaks_overlap,
+    OCRpeaks_overlap_prop,
+    chromHMMstate_overlap,
+    chromHMMstate_overlap_prop
+  )],
+  by = "state",
+  all.x = TRUE
+)
+
+# if some states missing in summary_table (shouldn't), set to 0
+for (col in c("n_OCRpeaks","n_chromHMMstate_peaks","OCRpeaks_overlap","chromHMMstate_overlap",
+              "OCRpeaks_overlap_prop","chromHMMstate_overlap_prop")) {
+  final_table[is.na(get(col)), (col) := if (grepl("prop$", col)) 0 else 0L]
+}
+
+final_table <- final_table[, .(
+  state_id, mnemonic, description,
+  n_OCRpeaks,
+  n_chromHMMstate_peaks,
+  OCRpeaks_overlap,
+  OCRpeaks_overlap_prop,
+  chromHMMstate_overlap,
+  chromHMMstate_overlap_prop
+)]
+
+setorder(final_table, state_id)
+
+DT::datatable(final_table,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Overlap summary'),options = list(pageLength = 10) )
+
+final_table[, OCRpeaks_overlap_pct := OCRpeaks_overlap_prop * 100]
+final_table[, chromHMMstate_overlap_pct := chromHMMstate_overlap_prop * 100]
+
+
+
+final_table[, state_label := paste(state_id, mnemonic, sep = " ")]
+final_table[, state_label := factor(state_label,
+                                    levels = final_table[order(state_id), state_label])]
+
+final_table <- merge(
+  final_table,
+  chromhmm_annot[, .(state_id, hex)],
+  by = "state_id",
+  all.x = TRUE
+)
+
+p1 <- ggplot(final_table,
+       aes(x = state_label, y = OCRpeaks_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "ChromHMM state",
+    y = "OCR peaks overlapping (%)",
+    title = "Percentage of OCR peaks \noverlap with each ChromHMM state"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p2 <- ggplot(final_table, aes(x = state_label, y = chromHMMstate_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(x = "ChromHMM state", y = "ChromHMM segments overlapped (%)",
+       title = "Percentage of ChromHMM peaks \noverlap with OCR peaks") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p1)
+print(p2)
+
+```
+
+
+## DNase peaks
+
+```{r fig.height=4, fig.width=6}
+
+peak_folder <- "/project/spott/kevinluo/Fiber_seq/data/DNaseseq/GM12878/"
+
+peak_files <- list.files(
+  path = peak_folder,
+  pattern = "_peaks_.*\\.bed\\.gz$",
+  full.names = TRUE
+)
+stopifnot(length(peak_files) >= 1)
+
+other_list <- lapply(peak_files, fread, showProgress = FALSE)
+peak_df <- rbindlist(other_list, use.names = FALSE, fill = TRUE)
+
+gr_peaks <- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3)
+)
+
+all_states <- sort(unique(ChromHMM_df$state))
+
+min_bp <- 100L
+
+## --- 1) One overlap for ALL states (fast) ---
+hits <- findOverlaps(gr_peaks, gr_hmm, ignore.strand = TRUE)
+
+# overlap width for each hit
+ov_bp <- width(pintersect(gr_peaks[queryHits(hits)], gr_hmm[subjectHits(hits)]))
+
+# keep only >= min_bp
+keep <- ov_bp >= min_bp
+qh <- queryHits(hits)[keep]      # peak indices
+sh <- subjectHits(hits)[keep]    # chromhmm segment indices
+
+# state label for each kept hit
+st <- mcols(gr_hmm)$state[sh]
+
+## --- 2) Summarize per state (unique peak hits, unique segment hits) ---
+dt_hits <- data.table(
+  state = st,
+  peak_i = qh,
+  seg_i  = sh
+)
+
+sum_by_state <- dt_hits[, .(
+  OCRpeaks_overlap        = uniqueN(peak_i),
+  chromHMMstate_overlap   = uniqueN(seg_i)
+), by = state]
+
+## --- 3) Add totals for each state and compute proportions ---
+# totals
+n_OCRpeaks <- length(gr_peaks)
+
+dt_state_totals <- data.table(
+  state = names(table(mcols(gr_hmm)$state)),
+  n_chromHMMstate_peaks = as.integer(table(mcols(gr_hmm)$state))
+)
+
+summary_table <- merge(dt_state_totals, sum_by_state, by = "state", all.x = TRUE)
+
+# states with no overlap -> NA to 0
+for (col in c("OCRpeaks_overlap", "chromHMMstate_overlap")) {
+  summary_table[is.na(get(col)), (col) := 0L]
+}
+
+summary_table[, `:=`(
+  n_OCRpeaks = n_OCRpeaks,
+  OCRpeaks_overlap_prop = OCRpeaks_overlap / n_OCRpeaks,
+  chromHMMstate_overlap_prop = chromHMMstate_overlap / n_chromHMMstate_peaks
+)]
+
+## --- 4) Add annotation + select final columns ---
+setDT(chromhmm_annot)
+
+final_table <- merge(
+  chromhmm_annot[, .(state, state_id, mnemonic, description)],
+  summary_table[, .(
+    state,
+    n_OCRpeaks,
+    n_chromHMMstate_peaks,
+    OCRpeaks_overlap,
+    OCRpeaks_overlap_prop,
+    chromHMMstate_overlap,
+    chromHMMstate_overlap_prop
+  )],
+  by = "state",
+  all.x = TRUE
+)
+
+# if some states missing in summary_table (shouldn't), set to 0
+for (col in c("n_OCRpeaks","n_chromHMMstate_peaks","OCRpeaks_overlap","chromHMMstate_overlap",
+              "OCRpeaks_overlap_prop","chromHMMstate_overlap_prop")) {
+  final_table[is.na(get(col)), (col) := if (grepl("prop$", col)) 0 else 0L]
+}
+
+final_table <- final_table[, .(
+  state_id, mnemonic, description,
+  n_OCRpeaks,
+  n_chromHMMstate_peaks,
+  OCRpeaks_overlap,
+  OCRpeaks_overlap_prop,
+  chromHMMstate_overlap,
+  chromHMMstate_overlap_prop
+)]
+
+setorder(final_table, state_id)
+
+DT::datatable(final_table,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Overlap summary'),options = list(pageLength = 10) )
+
+final_table[, OCRpeaks_overlap_pct := OCRpeaks_overlap_prop * 100]
+final_table[, chromHMMstate_overlap_pct := chromHMMstate_overlap_prop * 100]
+
+
+
+final_table[, state_label := paste(state_id, mnemonic, sep = " ")]
+final_table[, state_label := factor(state_label,
+                                    levels = final_table[order(state_id), state_label])]
+
+final_table <- merge(
+  final_table,
+  chromhmm_annot[, .(state_id, hex)],
+  by = "state_id",
+  all.x = TRUE
+)
+
+p1 <- ggplot(final_table,
+       aes(x = state_label, y = OCRpeaks_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "ChromHMM state",
+    y = "OCR peaks overlapping (%)",
+    title = "Percentage of OCR peaks \noverlap with each ChromHMM state"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p2 <- ggplot(final_table, aes(x = state_label, y = chromHMMstate_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(x = "ChromHMM state", y = "ChromHMM segments overlapped (%)",
+       title = "Percentage of ChromHMM peaks \noverlap with OCR peaks") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p1)
+print(p2)
+
+```
+
+## ATAC-seq peaks -- IDR
+
+```{r fig.height=4, fig.width=6}
+
+peak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_IDR_peaks_ENCFF429WTW.bed.gz",
+  showProgress = FALSE
+)
+
+gr_peaks <- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3)
+)
+
+all_states <- sort(unique(ChromHMM_df$state))
+
+min_bp <- 100L
+
+## --- 1) One overlap for ALL states (fast) ---
+hits <- findOverlaps(gr_peaks, gr_hmm, ignore.strand = TRUE)
+
+# overlap width for each hit
+ov_bp <- width(pintersect(gr_peaks[queryHits(hits)], gr_hmm[subjectHits(hits)]))
+
+# keep only >= min_bp
+keep <- ov_bp >= min_bp
+qh <- queryHits(hits)[keep]      # peak indices
+sh <- subjectHits(hits)[keep]    # chromhmm segment indices
+
+# state label for each kept hit
+st <- mcols(gr_hmm)$state[sh]
+
+## --- 2) Summarize per state (unique peak hits, unique segment hits) ---
+dt_hits <- data.table(
+  state = st,
+  peak_i = qh,
+  seg_i  = sh
+)
+
+sum_by_state <- dt_hits[, .(
+  OCRpeaks_overlap        = uniqueN(peak_i),
+  chromHMMstate_overlap   = uniqueN(seg_i)
+), by = state]
+
+## --- 3) Add totals for each state and compute proportions ---
+# totals
+n_OCRpeaks <- length(gr_peaks)
+
+dt_state_totals <- data.table(
+  state = names(table(mcols(gr_hmm)$state)),
+  n_chromHMMstate_peaks = as.integer(table(mcols(gr_hmm)$state))
+)
+
+summary_table <- merge(dt_state_totals, sum_by_state, by = "state", all.x = TRUE)
+
+# states with no overlap -> NA to 0
+for (col in c("OCRpeaks_overlap", "chromHMMstate_overlap")) {
+  summary_table[is.na(get(col)), (col) := 0L]
+}
+
+summary_table[, `:=`(
+  n_OCRpeaks = n_OCRpeaks,
+  OCRpeaks_overlap_prop = OCRpeaks_overlap / n_OCRpeaks,
+  chromHMMstate_overlap_prop = chromHMMstate_overlap / n_chromHMMstate_peaks
+)]
+
+## --- 4) Add annotation + select final columns ---
+setDT(chromhmm_annot)
+
+final_table <- merge(
+  chromhmm_annot[, .(state, state_id, mnemonic, description)],
+  summary_table[, .(
+    state,
+    n_OCRpeaks,
+    n_chromHMMstate_peaks,
+    OCRpeaks_overlap,
+    OCRpeaks_overlap_prop,
+    chromHMMstate_overlap,
+    chromHMMstate_overlap_prop
+  )],
+  by = "state",
+  all.x = TRUE
+)
+
+# if some states missing in summary_table (shouldn't), set to 0
+for (col in c("n_OCRpeaks","n_chromHMMstate_peaks","OCRpeaks_overlap","chromHMMstate_overlap",
+              "OCRpeaks_overlap_prop","chromHMMstate_overlap_prop")) {
+  final_table[is.na(get(col)), (col) := if (grepl("prop$", col)) 0 else 0L]
+}
+
+final_table <- final_table[, .(
+  state_id, mnemonic, description,
+  n_OCRpeaks,
+  n_chromHMMstate_peaks,
+  OCRpeaks_overlap,
+  OCRpeaks_overlap_prop,
+  chromHMMstate_overlap,
+  chromHMMstate_overlap_prop
+)]
+
+setorder(final_table, state_id)
+
+DT::datatable(final_table,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Overlap summary'),options = list(pageLength = 10) )
+
+final_table[, OCRpeaks_overlap_pct := OCRpeaks_overlap_prop * 100]
+final_table[, chromHMMstate_overlap_pct := chromHMMstate_overlap_prop * 100]
+
+
+
+final_table[, state_label := paste(state_id, mnemonic, sep = " ")]
+final_table[, state_label := factor(state_label,
+                                    levels = final_table[order(state_id), state_label])]
+
+final_table <- merge(
+  final_table,
+  chromhmm_annot[, .(state_id, hex)],
+  by = "state_id",
+  all.x = TRUE
+)
+
+p1 <- ggplot(final_table,
+       aes(x = state_label, y = OCRpeaks_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "ChromHMM state",
+    y = "OCR peaks overlapping (%)",
+    title = "Percentage of OCR peaks \noverlap with each ChromHMM state"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p2 <- ggplot(final_table, aes(x = state_label, y = chromHMMstate_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(x = "ChromHMM state", y = "ChromHMM segments overlapped (%)",
+       title = "Percentage of ChromHMM peaks \noverlap with OCR peaks") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p1)
+print(p2)
+
+```
+
+## ATAC-seq peak -- pseudoreplicated
+
+```{r fig.height=4, fig.width=6}
+
+peak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_pseudoreplicated_peaks_ENCFF748UZH.bed.gz",
+  showProgress = FALSE
+)
+
+gr_peaks <- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3)
+)
+
+all_states <- sort(unique(ChromHMM_df$state))
+
+min_bp <- 100L
+
+## --- 1) One overlap for ALL states (fast) ---
+hits <- findOverlaps(gr_peaks, gr_hmm, ignore.strand = TRUE)
+
+# overlap width for each hit
+ov_bp <- width(pintersect(gr_peaks[queryHits(hits)], gr_hmm[subjectHits(hits)]))
+
+# keep only >= min_bp
+keep <- ov_bp >= min_bp
+qh <- queryHits(hits)[keep]      # peak indices
+sh <- subjectHits(hits)[keep]    # chromhmm segment indices
+
+# state label for each kept hit
+st <- mcols(gr_hmm)$state[sh]
+
+## --- 2) Summarize per state (unique peak hits, unique segment hits) ---
+dt_hits <- data.table(
+  state = st,
+  peak_i = qh,
+  seg_i  = sh
+)
+
+sum_by_state <- dt_hits[, .(
+  OCRpeaks_overlap        = uniqueN(peak_i),
+  chromHMMstate_overlap   = uniqueN(seg_i)
+), by = state]
+
+## --- 3) Add totals for each state and compute proportions ---
+# totals
+n_OCRpeaks <- length(gr_peaks)
+
+dt_state_totals <- data.table(
+  state = names(table(mcols(gr_hmm)$state)),
+  n_chromHMMstate_peaks = as.integer(table(mcols(gr_hmm)$state))
+)
+
+summary_table <- merge(dt_state_totals, sum_by_state, by = "state", all.x = TRUE)
+
+# states with no overlap -> NA to 0
+for (col in c("OCRpeaks_overlap", "chromHMMstate_overlap")) {
+  summary_table[is.na(get(col)), (col) := 0L]
+}
+
+summary_table[, `:=`(
+  n_OCRpeaks = n_OCRpeaks,
+  OCRpeaks_overlap_prop = OCRpeaks_overlap / n_OCRpeaks,
+  chromHMMstate_overlap_prop = chromHMMstate_overlap / n_chromHMMstate_peaks
+)]
+
+## --- 4) Add annotation + select final columns ---
+setDT(chromhmm_annot)
+
+final_table <- merge(
+  chromhmm_annot[, .(state, state_id, mnemonic, description)],
+  summary_table[, .(
+    state,
+    n_OCRpeaks,
+    n_chromHMMstate_peaks,
+    OCRpeaks_overlap,
+    OCRpeaks_overlap_prop,
+    chromHMMstate_overlap,
+    chromHMMstate_overlap_prop
+  )],
+  by = "state",
+  all.x = TRUE
+)
+
+# if some states missing in summary_table (shouldn't), set to 0
+for (col in c("n_OCRpeaks","n_chromHMMstate_peaks","OCRpeaks_overlap","chromHMMstate_overlap",
+              "OCRpeaks_overlap_prop","chromHMMstate_overlap_prop")) {
+  final_table[is.na(get(col)), (col) := if (grepl("prop$", col)) 0 else 0L]
+}
+
+final_table <- final_table[, .(
+  state_id, mnemonic, description,
+  n_OCRpeaks,
+  n_chromHMMstate_peaks,
+  OCRpeaks_overlap,
+  OCRpeaks_overlap_prop,
+  chromHMMstate_overlap,
+  chromHMMstate_overlap_prop
+)]
+
+setorder(final_table, state_id)
+
+DT::datatable(final_table,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Overlap summary'),options = list(pageLength = 10) )
+
+final_table[, OCRpeaks_overlap_pct := OCRpeaks_overlap_prop * 100]
+final_table[, chromHMMstate_overlap_pct := chromHMMstate_overlap_prop * 100]
+
+
+
+final_table[, state_label := paste(state_id, mnemonic, sep = " ")]
+final_table[, state_label := factor(state_label,
+                                    levels = final_table[order(state_id), state_label])]
+
+final_table <- merge(
+  final_table,
+  chromhmm_annot[, .(state_id, hex)],
+  by = "state_id",
+  all.x = TRUE
+)
+
+p1 <- ggplot(final_table,
+       aes(x = state_label, y = OCRpeaks_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "ChromHMM state",
+    y = "OCR peaks overlapping (%)",
+    title = "Percentage of OCR peaks \noverlap with each ChromHMM state"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p2 <- ggplot(final_table, aes(x = state_label, y = chromHMMstate_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(x = "ChromHMM state", y = "ChromHMM segments overlapped (%)",
+       title = "Percentage of ChromHMM peaks \noverlap with OCR peaks") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p1)
+print(p2)
+
+```
+
+## cCRE peak
+
+```{r fig.height=4, fig.width=6}
+
+peak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4/LCLs/GM12878_cCREs_ENCFF428XFI_ENCFF280PUF_ENCFF469WVA_ENCFF644EEX.bed",
+  showProgress = FALSE
+)
+peak_df <- peak_df[peak_df$V10 !="Low-DNase",]
+
+gr_peaks <- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3)
+)
+
+all_states <- sort(unique(ChromHMM_df$state))
+
+min_bp <- 100L
+
+## --- 1) One overlap for ALL states (fast) ---
+hits <- findOverlaps(gr_peaks, gr_hmm, ignore.strand = TRUE)
+
+# overlap width for each hit
+ov_bp <- width(pintersect(gr_peaks[queryHits(hits)], gr_hmm[subjectHits(hits)]))
+
+# keep only >= min_bp
+keep <- ov_bp >= min_bp
+qh <- queryHits(hits)[keep]      # peak indices
+sh <- subjectHits(hits)[keep]    # chromhmm segment indices
+
+# state label for each kept hit
+st <- mcols(gr_hmm)$state[sh]
+
+## --- 2) Summarize per state (unique peak hits, unique segment hits) ---
+dt_hits <- data.table(
+  state = st,
+  peak_i = qh,
+  seg_i  = sh
+)
+
+sum_by_state <- dt_hits[, .(
+  OCRpeaks_overlap        = uniqueN(peak_i),
+  chromHMMstate_overlap   = uniqueN(seg_i)
+), by = state]
+
+## --- 3) Add totals for each state and compute proportions ---
+# totals
+n_OCRpeaks <- length(gr_peaks)
+
+dt_state_totals <- data.table(
+  state = names(table(mcols(gr_hmm)$state)),
+  n_chromHMMstate_peaks = as.integer(table(mcols(gr_hmm)$state))
+)
+
+summary_table <- merge(dt_state_totals, sum_by_state, by = "state", all.x = TRUE)
+
+# states with no overlap -> NA to 0
+for (col in c("OCRpeaks_overlap", "chromHMMstate_overlap")) {
+  summary_table[is.na(get(col)), (col) := 0L]
+}
+
+summary_table[, `:=`(
+  n_OCRpeaks = n_OCRpeaks,
+  OCRpeaks_overlap_prop = OCRpeaks_overlap / n_OCRpeaks,
+  chromHMMstate_overlap_prop = chromHMMstate_overlap / n_chromHMMstate_peaks
+)]
+
+## --- 4) Add annotation + select final columns ---
+setDT(chromhmm_annot)
+
+final_table <- merge(
+  chromhmm_annot[, .(state, state_id, mnemonic, description)],
+  summary_table[, .(
+    state,
+    n_OCRpeaks,
+    n_chromHMMstate_peaks,
+    OCRpeaks_overlap,
+    OCRpeaks_overlap_prop,
+    chromHMMstate_overlap,
+    chromHMMstate_overlap_prop
+  )],
+  by = "state",
+  all.x = TRUE
+)
+
+# if some states missing in summary_table (shouldn't), set to 0
+for (col in c("n_OCRpeaks","n_chromHMMstate_peaks","OCRpeaks_overlap","chromHMMstate_overlap",
+              "OCRpeaks_overlap_prop","chromHMMstate_overlap_prop")) {
+  final_table[is.na(get(col)), (col) := if (grepl("prop$", col)) 0 else 0L]
+}
+
+final_table <- final_table[, .(
+  state_id, mnemonic, description,
+  n_OCRpeaks,
+  n_chromHMMstate_peaks,
+  OCRpeaks_overlap,
+  OCRpeaks_overlap_prop,
+  chromHMMstate_overlap,
+  chromHMMstate_overlap_prop
+)]
+
+setorder(final_table, state_id)
+
+DT::datatable(final_table,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Overlap summary'),options = list(pageLength = 10) )
+
+final_table[, OCRpeaks_overlap_pct := OCRpeaks_overlap_prop * 100]
+final_table[, chromHMMstate_overlap_pct := chromHMMstate_overlap_prop * 100]
+
+
+
+final_table[, state_label := paste(state_id, mnemonic, sep = " ")]
+final_table[, state_label := factor(state_label,
+                                    levels = final_table[order(state_id), state_label])]
+
+final_table <- merge(
+  final_table,
+  chromhmm_annot[, .(state_id, hex)],
+  by = "state_id",
+  all.x = TRUE
+)
+
+p1 <- ggplot(final_table,
+       aes(x = state_label, y = OCRpeaks_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "ChromHMM state",
+    y = "OCR peaks overlapping (%)",
+    title = "Percentage of OCR peaks \noverlap with each ChromHMM state"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p2 <- ggplot(final_table, aes(x = state_label, y = chromHMMstate_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(x = "ChromHMM state", y = "ChromHMM segments overlapped (%)",
+       title = "Percentage of ChromHMM peaks \noverlap with OCR peaks") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p1)
+print(p2)
+
+```

@@ -1,0 +1,1000 @@
+---
+title: "FIRE peak overlap with DNase/ ATAC-seq/ cCREs"
+author: "XSun"
+date: "2026-03-04"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+
+```{r}
+suppressPackageStartupMessages({
+  library(data.table)
+  library(GenomicRanges)
+  library(IRanges)
+  library(VennDiagram)
+  library(ggplot2)
+  library(patchwork)
+  library(gridExtra)
+})
+
+keep_chr <- paste0("chr", 1:22)
+min_ov_bp <- 100L  # <-- overlap definition for "peak overlap"
+
+#-----------------------------
+# Helper: BED (0-based start, end exclusive or inclusive doesn't matter much if consistent)
+# We convert to 1-based inclusive GRanges: start = start0+1, end = end
+#-----------------------------
+bed_to_gr <- function(dt, keep_chr = NULL) {
+  stopifnot(ncol(dt) >= 3)
+  dt <- copy(dt)
+  setnames(dt, 1:3, c("chr","start0","end"))
+  gr <- GRanges(
+    seqnames = dt$chr,
+    ranges   = IRanges(start = dt$start0 + 1L, end = dt$end)
+  )
+  if (!is.null(keep_chr)) gr <- gr[seqnames(gr) %in% keep_chr]
+  gr
+}
+
+```
+
+# Introduction
+
+To evaluate how **FIRE peaks relate to other OCR peaks ()**, we performed two overlap analyses: **base-pair overlap** and **peak-level overlap**.
+
+## Data
+
+Data: https://xsun1229.github.io/fiberseq/data.html
+
+For DNase/ ATAC-seq/ cCRE we used GM12878 cell line
+
+## 1. Base-pair (bp) overlap
+
+FIRE peaks and the comparison peak set were first converted to **GRanges objects** using hg38 genomic coordinates (BED format converted from 0-based to 1-based indexing).
+
+To avoid double counting genomic coverage, overlapping peaks within each dataset were **merged using `reduce()`**, producing non-overlapping genomic intervals.
+
+The **shared genomic coverage** between the two datasets was then calculated using:
+
+- `intersect()` to obtain overlapping genomic segments
+- `width()` to compute the number of overlapping base pairs
+
+From this analysis we report:
+
+- total base pairs covered by **FIRE peaks**
+- total base pairs covered by the **comparison peak set**
+- **overlapping base pairs**
+
+This analysis measures **how much genomic space is shared between the two peak sets**.
+
+## 2. Peak-level overlap
+
+To assess overlap at the **individual peak level**, we performed overlap detection using the **original (non-merged) peaks**.
+
+Peak overlaps were identified using `findOverlaps()` with a **minimum overlap threshold of 100 bp**, meaning two peaks were considered overlapping only if they shared **≥100 bp**.
+
+From this analysis we report:
+
+- total number of **FIRE peaks**
+- total number of **comparison peaks**
+- number of **FIRE peaks overlapping comparison peaks**
+- number of **comparison peaks overlapping FIRE peaks**
+- total number of **overlapping peak pairs**
+
+Peak-level overlap was summarized using a **two-set Venn diagram**, showing:
+
+- FIRE peaks only
+- comparison peaks only
+- overlapping peaks
+
+Because genomic intervals can overlap in a **many-to-many manner**, the Venn intersection was defined as **the number of FIRE peaks that overlap the comparison peak set by ≥100 bp**.
+
+# Results
+
+## Data overview -- peak length distribution
+
+### FIRE peaks
+
+```{r fig.height=4, fig.width=8}
+#-----------------------------
+# 1) Load FIRE peaks
+#-----------------------------
+FIREpeak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz",
+  showProgress = FALSE
+)
+
+FIREpeak_df[, peak_length := V3 - V2]
+
+FIRE_gr_raw <- bed_to_gr(FIREpeak_df, keep_chr)
+
+# Raw counts (peak-based)
+n_FIRE_raw <- length(FIRE_gr_raw)
+
+# Reduced counts (bp-based; avoids double-counting bp)
+FIRE_gr_red <- reduce(FIRE_gr_raw, ignore.strand = TRUE)
+n_FIRE_red  <- length(FIRE_gr_red)
+
+p1 <- ggplot(FIREpeak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = "steelblue", color = "black") +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "Peak length (bp)",
+    y = "Number of peaks",
+    title = "All peaks"
+  )
+
+p2 <- ggplot(FIREpeak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = "steelblue", color = "black") +
+  coord_cartesian(xlim = c(0, 2000)) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "Peak length (bp)",
+    y = "Number of peaks",
+    title = "Zooming in to 2000 bp"
+  )
+
+(p1 + p2) +
+  plot_annotation(
+    title = "Peak length distribution of FIRE peaks"
+  )
+```
+
+
+
+
+
+
+
+
+### DNase peaks
+
+```{r fig.height=4, fig.width=4}
+
+peak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/data/DNaseseq/GM12878/DNaseseq_GM12878_peaks_ENCFF759OLD.bed.gz",
+  showProgress = FALSE
+)
+
+peak_df[, peak_length := V3 - V2]
+
+p1 <- ggplot(peak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = "steelblue", color = "black") +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "Peak length (bp)",
+    y = "Number of peaks",
+    title = "Peak length distribution of DNase"
+  )
+
+print(p1)
+```
+
+
+### ATAC-seq peaks
+
+```{r fig.height=4, fig.width=8}
+
+peak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_IDR_peaks_ENCFF429WTW.bed.gz",
+  showProgress = FALSE
+)
+
+peak_df[, peak_length := V3 - V2]
+
+p1 <- ggplot(peak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = "steelblue", color = "black") +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "Peak length (bp)",
+    y = "Number of peaks",
+    title = "IDR"
+  )
+
+peak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_pseudoreplicated_peaks_ENCFF748UZH.bed.gz",
+  showProgress = FALSE
+)
+
+peak_df[, peak_length := V3 - V2]
+
+p2 <- ggplot(peak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = "steelblue", color = "black") +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "Peak length (bp)",
+    y = "Number of peaks",
+    title = "pseudoreplicated"
+  )
+
+
+(p1 + p2) +
+  plot_annotation(
+    title = "Peak length distribution of ATAC-seq peaks"
+  )
+```
+
+
+
+
+
+
+
+
+
+
+
+
+### cCRE peaks
+
+```{r fig.height=4, fig.width=4}
+
+peak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4/LCLs/GM12878_cCREs_ENCFF428XFI_ENCFF280PUF_ENCFF469WVA_ENCFF644EEX.bed",
+  showProgress = FALSE
+)
+
+peak_df[, peak_length := V3 - V2]
+peak_df <- peak_df[peak_df$V10 != "Low-DNase",]
+
+peak_df[, `:=`(
+  cCRE_group = fcase(
+    V10 == "PLS",         "PLS",
+    V10 == "pELS",        "pELS",
+    V10 == "dELS",        "dELS",
+    V10 == "CA-only",     "CA-only",
+    V10 == "TF",          "TF",
+    V10 == "CA-TF",       "CA-TF",
+    V10 == "CA-CTCF",     "CA-CTCF",
+    V10 == "CA-H3K4me3",  "CA-H3K4me3",
+    default = "Other"
+  ),
+  cCRE_desc = fcase(
+    V10 == "PLS",         "Promoter-like signature",
+    V10 == "pELS",        "Proximal enhancer-like signature",
+    V10 == "dELS",        "Distal enhancer-like signature",
+    V10 == "CA-only",     "Chromatin accessible only",
+    V10 == "TF",          "TF only",
+    V10 == "CA-TF",       "Chromatin accessible with TF",
+    V10 == "CA-CTCF",     "Chromatin accessible with CTCF",
+    V10 == "CA-H3K4me3",  "Chromatin accessible with H3K4me3",
+    default = "Other / unknown"
+  )
+)]
+
+# -----------------------------
+# Summary table (by detailed category)
+# -----------------------------
+summary_table <- peak_df[, .(
+  n_peaks        = .N,
+  mean_width     = round(mean(peak_length), 1),
+  median_width   = round(median(peak_length), 1),
+  total_bp       = sum(peak_length)
+), by = .(cCRE_group, cCRE_desc)][order(-n_peaks)]
+
+
+
+DT::datatable(summary_table,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','cCRE overview '),options = list(pageLength = 10) )
+
+p1 <- ggplot(peak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = "steelblue", color = "black") +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "Peak length (bp)",
+    y = "Number of peaks",
+    title = "Peak length distribution of cCRE peaks"
+  )
+
+
+print(p1)
+```
+
+
+```{r fig.height=8, fig.width=12}
+
+ggplot(peak_df, aes(x = peak_length)) +
+  geom_histogram(binwidth = 50, fill = "steelblue", color = "black") +
+  facet_wrap(~V10) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "Peak length (bp)",
+    y = "Number of peaks",
+    title = "Peak length distribution across cCRE categories"
+  )
+
+
+```
+
+
+
+## Overlaps
+
+### With DNase -- GM12878
+
+#### 1. Base-pair (bp) overlap
+
+```{r fig.height=4, fig.width=4}
+
+#-----------------------------
+# 2) Load Other peaks (possibly multiple .bed.gz files)
+#-----------------------------
+peak_folder <- "/project/spott/kevinluo/Fiber_seq/data/DNaseseq/GM12878/"
+
+peak_files <- list.files(
+  path = peak_folder,
+  pattern = "_peaks_.*\\.bed\\.gz$",
+  full.names = TRUE
+)
+stopifnot(length(peak_files) >= 1)
+
+other_list <- lapply(peak_files, fread, showProgress = FALSE)
+peak_df <- rbindlist(other_list, use.names = FALSE, fill = TRUE)
+
+peak_gr_raw <- bed_to_gr(peak_df, keep_chr)
+
+n_other_raw <- length(peak_gr_raw)
+peak_gr_red <- reduce(peak_gr_raw, ignore.strand = TRUE)
+n_other_red <- length(peak_gr_red)
+
+#-----------------------------
+# A) BP overlap (on reduced ranges)
+#-----------------------------
+ov_red <- intersect(FIRE_gr_red, peak_gr_red, ignore.strand = TRUE)
+
+bp_FIRE_total  <- sum(width(FIRE_gr_red))
+bp_other_total <- sum(width(peak_gr_red))
+bp_overlap     <- sum(width(ov_red))
+
+cat("\n=== BP overlap (reduced ranges) ===\n")
+cat("FIRE total bp (reduced):  ", bp_FIRE_total,  "\n")
+cat("DNase total bp (reduced): ", bp_other_total, "\n")
+cat("Overlap bp:               ", bp_overlap,     "\n")
+cat("% FIRE bp in DNase:       ", bp_overlap/bp_FIRE_total*100,       "\n")
+cat("% DNase bp in FIRE:       ", bp_overlap/bp_other_total*100,       "\n")
+
+overlap_summary <- data.table(
+  metric = c("FIRE bp in DNase", "DNase bp in FIRE"),
+  percent = c(
+    bp_overlap / bp_FIRE_total * 100,
+    bp_overlap / bp_other_total * 100
+  )
+)
+
+# Plot percentage barplot
+ggplot(overlap_summary, aes(x = metric, y = percent, fill = metric)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf("%.1f%%", percent)),
+            vjust = -0.5, size = 5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "",
+    y = "Percentage (%)",
+    #title = "Genomic overlap between FIRE and DNase peaks"
+  ) +
+  theme(legend.position = "none")
+```
+
+#### 2. Peak-level overlap
+
+```{r fig.height=4, fig.width=4}
+
+peak_folder <- "/project/spott/kevinluo/Fiber_seq/data/DNaseseq/GM12878/"
+
+peak_files <- list.files(
+  path = peak_folder,
+  pattern = "_peaks_.*\\.bed\\.gz$",
+  full.names = TRUE
+)
+stopifnot(length(peak_files) >= 1)
+
+other_list <- lapply(peak_files, fread, showProgress = FALSE)
+peak_df <- rbindlist(other_list, use.names = FALSE, fill = TRUE)
+
+gr_peaks <- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3)
+)
+
+
+min_bp <- 100L
+
+## --- 1) One overlap for ALL states (fast) ---
+hits <- findOverlaps(gr_peaks, FIRE_gr_raw, ignore.strand = TRUE)
+
+# overlap width for each hit
+ov_bp <- width(pintersect(gr_peaks[queryHits(hits)], FIRE_gr_raw[subjectHits(hits)]))
+
+# keep only >= min_bp
+keep <- ov_bp >= min_bp
+qh <- queryHits(hits)[keep]      # peak indices
+sh <- subjectHits(hits)[keep]    # chromhmm segment indices
+
+## --- 2) Summarize per state (unique peak hits, unique segment hits) ---
+dt_hits <- data.table(
+  peak_i = qh,
+  seg_i  = sh
+)
+
+sum_by_state <- dt_hits[, .(
+  OCRpeaks_overlap        = uniqueN(peak_i),
+  chromHMMstate_overlap   = uniqueN(seg_i)
+), by = state]
+
+## --- 3) Add totals for each state and compute proportions ---
+# totals
+n_OCRpeaks <- length(gr_peaks)
+
+dt_state_totals <- data.table(
+  state = names(table(mcols(gr_hmm)$state)),
+  n_chromHMMstate_peaks = as.integer(table(mcols(gr_hmm)$state))
+)
+
+summary_table <- merge(dt_state_totals, sum_by_state, by = "state", all.x = TRUE)
+
+# states with no overlap -> NA to 0
+for (col in c("OCRpeaks_overlap", "chromHMMstate_overlap")) {
+  summary_table[is.na(get(col)), (col) := 0L]
+}
+
+summary_table[, `:=`(
+  n_OCRpeaks = n_OCRpeaks,
+  OCRpeaks_overlap_prop = OCRpeaks_overlap / n_OCRpeaks,
+  chromHMMstate_overlap_prop = chromHMMstate_overlap / n_chromHMMstate_peaks
+)]
+
+## --- 4) Add annotation + select final columns ---
+setDT(chromhmm_annot)
+
+final_table <- merge(
+  chromhmm_annot[, .(state, state_id, mnemonic, description)],
+  summary_table[, .(
+    state,
+    n_OCRpeaks,
+    n_chromHMMstate_peaks,
+    OCRpeaks_overlap,
+    OCRpeaks_overlap_prop,
+    chromHMMstate_overlap,
+    chromHMMstate_overlap_prop
+  )],
+  by = "state",
+  all.x = TRUE
+)
+
+# if some states missing in summary_table (shouldn't), set to 0
+for (col in c("n_OCRpeaks","n_chromHMMstate_peaks","OCRpeaks_overlap","chromHMMstate_overlap",
+              "OCRpeaks_overlap_prop","chromHMMstate_overlap_prop")) {
+  final_table[is.na(get(col)), (col) := if (grepl("prop$", col)) 0 else 0L]
+}
+
+final_table <- final_table[, .(
+  state_id, mnemonic, description,
+  n_OCRpeaks,
+  n_chromHMMstate_peaks,
+  OCRpeaks_overlap,
+  OCRpeaks_overlap_prop,
+  chromHMMstate_overlap,
+  chromHMMstate_overlap_prop
+)]
+
+setorder(final_table, state_id)
+
+DT::datatable(final_table,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','Overlap summary'),options = list(pageLength = 10) )
+
+final_table[, OCRpeaks_overlap_pct := OCRpeaks_overlap_prop * 100]
+final_table[, chromHMMstate_overlap_pct := chromHMMstate_overlap_prop * 100]
+
+
+
+final_table[, state_label := paste(state_id, mnemonic, sep = " ")]
+final_table[, state_label := factor(state_label,
+                                    levels = final_table[order(state_id), state_label])]
+
+final_table <- merge(
+  final_table,
+  chromhmm_annot[, .(state_id, hex)],
+  by = "state_id",
+  all.x = TRUE
+)
+
+p1 <- ggplot(final_table,
+       aes(x = state_label, y = OCRpeaks_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "ChromHMM state",
+    y = "OCR peaks overlapping (%)",
+    title = "Percentage of OCR peaks \noverlap with each ChromHMM state"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p2 <- ggplot(final_table, aes(x = state_label, y = chromHMMstate_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(x = "ChromHMM state", y = "ChromHMM segments overlapped (%)",
+       title = "Percentage of ChromHMM peaks \noverlap with OCR peaks") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p1)
+print(p2)
+```
+
+
+
+### With ATAC-seq -- IDR -- GM12878
+
+#### 1. Base-pair (bp) overlap
+
+```{r fig.height=4, fig.width=4}
+
+#-----------------------------
+# 2) Load Other peaks (possibly multiple .bed.gz files)
+#-----------------------------
+peak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_IDR_peaks_ENCFF429WTW.bed.gz",
+  showProgress = FALSE
+)
+
+peak_gr_raw <- bed_to_gr(peak_df, keep_chr)
+
+n_other_raw <- length(peak_gr_raw)
+peak_gr_red <- reduce(peak_gr_raw, ignore.strand = TRUE)
+n_other_red <- length(peak_gr_red)
+
+#-----------------------------
+# A) BP overlap (on reduced ranges)
+#-----------------------------
+ov_red <- intersect(FIRE_gr_red, peak_gr_red, ignore.strand = TRUE)
+
+bp_FIRE_total  <- sum(width(FIRE_gr_red))
+bp_other_total <- sum(width(peak_gr_red))
+bp_overlap     <- sum(width(ov_red))
+
+cat("\n=== BP overlap (reduced ranges) ===\n")
+cat("FIRE total bp (reduced):  ", bp_FIRE_total,  "\n")
+cat("Other total bp (reduced): ", bp_other_total, "\n")
+cat("Overlap bp:               ", bp_overlap,     "\n")
+cat("% FIRE bp in ATAC-seq:       ", bp_overlap/bp_FIRE_total*100,       "\n")
+cat("% ATAC-seq bp in FIRE:       ", bp_overlap/bp_other_total*100,       "\n")
+
+overlap_summary <- data.table(
+  metric = c("FIRE bp in ATAC-seq", "ATAC-seq bp in FIRE"),
+  percent = c(
+    bp_overlap / bp_FIRE_total * 100,
+    bp_overlap / bp_other_total * 100
+  )
+)
+
+# Plot percentage barplot
+ggplot(overlap_summary, aes(x = metric, y = percent, fill = metric)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf("%.1f%%", percent)),
+            vjust = -0.5, size = 5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "",
+    y = "Percentage (%)",
+    #title = "Genomic overlap between FIRE and DNase peaks"
+  ) +
+  theme(legend.position = "none")
+```
+
+#### 2. Peak-level overlap
+
+```{r fig.height=4, fig.width=4}
+
+#-----------------------------
+# B) Peak overlap counts (min overlap = min_ov_bp) on RAW peaks
+#    This answers: how many FIRE peaks overlap ANY other peak by >=100bp (and vice versa)
+#-----------------------------
+hitsoverlap <- findOverlaps(
+  FIRE_gr_raw, peak_gr_raw,
+  ignore.strand = TRUE,
+  minoverlap = min_ov_bp
+)
+
+FIRE_hit_idx  <- unique(queryHits(hitsoverlap))
+other_hit_idx <- unique(subjectHits(hitsoverlap))
+
+n_FIRE_with_overlap  <- length(FIRE_hit_idx)
+n_other_with_overlap <- length(other_hit_idx)
+n_pairs_overlap      <- length(hitsoverlap)
+
+cat("\n=== Peak overlap (RAW peaks; minoverlap =", min_ov_bp, "bp) ===\n")
+cat("FIRE peaks (raw):                    ", n_FIRE_raw, "\n")
+cat("ATAC-seq peaks (raw):                   ", n_other_raw, "\n")
+cat("Number of overlapping peak pairs:    ", n_pairs_overlap, "\n")
+
+
+#-----------------------------
+# C) 2-set Venn (peak overlap)
+# NOTE: With genomic intervals, overlap is not 1-to-1, so "intersection size" is asymmetric.
+# Here we define intersection = number of FIRE peaks that overlap Other by >=min_ov_bp.
+# We also print the "Other peaks that overlap FIRE" separately above.
+#-----------------------------
+venn_a_only <- n_FIRE_raw - n_FIRE_with_overlap
+venn_b_only <- n_other_raw - n_other_with_overlap
+venn_inter  <- n_FIRE_with_overlap  # definition for the Venn plot below
+
+grid::grid.newpage()
+VennDiagram::draw.pairwise.venn(
+  area1 = n_FIRE_raw,
+  area2 = n_other_raw,
+  cross.area = venn_inter,
+  category = c("FIRE", "ATAC-seq - IDR"),
+  scaled = T
+)
+
+```
+
+### With ATAC-seq -- pseudoreplicated -- GM12878
+
+#### 1. Base-pair (bp) overlap
+
+```{r fig.height=4, fig.width=4}
+
+#-----------------------------
+# 2) Load Other peaks (possibly multiple .bed.gz files)
+#-----------------------------
+peak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_pseudoreplicated_peaks_ENCFF748UZH.bed.gz",
+  showProgress = FALSE
+)
+
+peak_gr_raw <- bed_to_gr(peak_df, keep_chr)
+
+n_other_raw <- length(peak_gr_raw)
+peak_gr_red <- reduce(peak_gr_raw, ignore.strand = TRUE)
+n_other_red <- length(peak_gr_red)
+
+#-----------------------------
+# A) BP overlap (on reduced ranges)
+#-----------------------------
+ov_red <- intersect(FIRE_gr_red, peak_gr_red, ignore.strand = TRUE)
+
+bp_FIRE_total  <- sum(width(FIRE_gr_red))
+bp_other_total <- sum(width(peak_gr_red))
+bp_overlap     <- sum(width(ov_red))
+
+cat("\n=== BP overlap (reduced ranges) ===\n")
+cat("FIRE total bp (reduced):  ", bp_FIRE_total,  "\n")
+cat("Other total bp (reduced): ", bp_other_total, "\n")
+cat("Overlap bp:               ", bp_overlap,     "\n")
+cat("% FIRE bp in ATAC-seq:       ", bp_overlap/bp_FIRE_total*100,       "\n")
+cat("% ATAC-seq bp in FIRE:       ", bp_overlap/bp_other_total*100,       "\n")
+
+overlap_summary <- data.table(
+  metric = c("FIRE bp in ATAC-seq", "ATAC-seq bp in FIRE"),
+  percent = c(
+    bp_overlap / bp_FIRE_total * 100,
+    bp_overlap / bp_other_total * 100
+  )
+)
+
+# Plot percentage barplot
+ggplot(overlap_summary, aes(x = metric, y = percent, fill = metric)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf("%.1f%%", percent)),
+            vjust = -0.5, size = 5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "",
+    y = "Percentage (%)",
+    #title = "Genomic overlap between FIRE and DNase peaks"
+  ) +
+  theme(legend.position = "none")
+```
+
+#### 2. Peak-level overlap
+
+```{r fig.height=4, fig.width=4}
+
+#-----------------------------
+# B) Peak overlap counts (min overlap = min_ov_bp) on RAW peaks
+#    This answers: how many FIRE peaks overlap ANY other peak by >=100bp (and vice versa)
+#-----------------------------
+hitsoverlap <- findOverlaps(
+  FIRE_gr_raw, peak_gr_raw,
+  ignore.strand = TRUE,
+  minoverlap = min_ov_bp
+)
+
+FIRE_hit_idx  <- unique(queryHits(hitsoverlap))
+other_hit_idx <- unique(subjectHits(hitsoverlap))
+
+n_FIRE_with_overlap  <- length(FIRE_hit_idx)
+n_other_with_overlap <- length(other_hit_idx)
+n_pairs_overlap      <- length(hitsoverlap)
+
+cat("\n=== Peak overlap (RAW peaks; minoverlap =", min_ov_bp, "bp) ===\n")
+cat("FIRE peaks (raw):                    ", n_FIRE_raw, "\n")
+cat("ATAC-seq peaks (raw):                   ", n_other_raw, "\n")
+cat("Number of overlapping peak pairs:    ", n_pairs_overlap, "\n")
+
+
+#-----------------------------
+# C) 2-set Venn (peak overlap)
+# NOTE: With genomic intervals, overlap is not 1-to-1, so "intersection size" is asymmetric.
+# Here we define intersection = number of FIRE peaks that overlap Other by >=min_ov_bp.
+# We also print the "Other peaks that overlap FIRE" separately above.
+#-----------------------------
+venn_a_only <- n_FIRE_raw - n_FIRE_with_overlap
+venn_b_only <- n_other_raw - n_other_with_overlap
+venn_inter  <- n_FIRE_with_overlap  # definition for the Venn plot below
+
+grid::grid.newpage()
+VennDiagram::draw.pairwise.venn(
+  area1 = n_FIRE_raw,
+  area2 = n_other_raw,
+  cross.area = venn_inter,
+  category = c("FIRE", "ATAC-seq - pseudoreplicated"),
+  scaled = T
+)
+
+```
+
+
+
+
+### With cCRE -- GM12878
+
+#### 1. Base-pair (bp) overlap
+
+```{r fig.height=4, fig.width=4}
+
+#-----------------------------
+# 2) Load Other peaks (possibly multiple .bed.gz files)
+#-----------------------------
+peak_df <- fread(
+  "/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4/LCLs/GM12878_cCREs_ENCFF428XFI_ENCFF280PUF_ENCFF469WVA_ENCFF644EEX.bed",
+  showProgress = FALSE
+)
+peak_df <- peak_df[peak_df$V10 !="Low-DNase",]
+peak_df <- peak_df[peak_df$V1 %in% paste0("chr",1:22),]
+
+peak_gr_raw <- bed_to_gr(peak_df, keep_chr)
+
+n_other_raw <- length(peak_gr_raw)
+peak_gr_red <- reduce(peak_gr_raw, ignore.strand = TRUE)
+n_other_red <- length(peak_gr_red)
+
+#-----------------------------
+# A) BP overlap (on reduced ranges)
+#-----------------------------
+ov_red <- intersect(FIRE_gr_red, peak_gr_red, ignore.strand = TRUE)
+
+bp_FIRE_total  <- sum(width(FIRE_gr_red))
+bp_other_total <- sum(width(peak_gr_red))
+bp_overlap     <- sum(width(ov_red))
+
+cat("\n=== BP overlap (reduced ranges) ===\n")
+cat("FIRE total bp (reduced):  ", bp_FIRE_total,  "\n")
+cat("cCRE total bp (reduced): ", bp_other_total, "\n")
+cat("Overlap bp:               ", bp_overlap,     "\n")
+cat("% FIRE bp in cCRE:       ", bp_overlap/bp_FIRE_total*100,       "\n")
+cat("% cCRE bp in FIRE:       ", bp_overlap/bp_other_total*100,       "\n")
+
+overlap_summary <- data.table(
+  metric = c("cCRE bp in FIRE","FIRE bp in cCRE"),
+  percent = c(
+    bp_overlap / bp_other_total * 100,
+    bp_overlap / bp_FIRE_total * 100
+  )
+)
+
+overlap_summary[, metric := factor(metric,
+                                   levels = c("cCRE bp in FIRE",
+                                              "FIRE bp in cCRE"))]
+
+# Plot percentage barplot
+ggplot(overlap_summary, aes(x = metric, y = percent, fill = metric)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf("%.1f%%", percent)),
+            vjust = -0.5, size = 5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "",
+    y = "Percentage (%)",
+    title = "all cCRE peaks"
+  ) +
+  theme(legend.position = "none")
+```
+
+
+```{r fig.height=6, fig.width=12}
+
+#-----------------------------
+# 1) Build cCRE GRanges with V10 labels + filter
+#-----------------------------
+peak_gr <- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3),
+  V10      = peak_df$V10
+)
+peak_gr <- peak_gr[
+  seqnames(peak_gr) %in% keep_chr &
+    !is.na(peak_gr$V10) & peak_gr$V10 != ""
+]
+
+#-----------------------------
+# 2) Reduce within each V10
+#-----------------------------
+peak_gr_by_v10 <- split(peak_gr, peak_gr$V10)
+peak_gr_red_by_v10 <- endoapply(peak_gr_by_v10, reduce, ignore.strand = TRUE)
+
+#-----------------------------
+# 3) Compute bp overlap per V10 (ONE pass)
+#-----------------------------
+overlap_by_v10 <- rbindlist(lapply(names(peak_gr_red_by_v10), function(v) {
+  gr_v <- peak_gr_red_by_v10[[v]]
+  
+  bp_v_total   <- sum(width(gr_v))
+  bp_v_overlap <- sum(width(intersect(FIRE_gr_red, gr_v, ignore.strand = TRUE)))
+  
+  data.table(
+    V10 = v,
+    bp_v_total = bp_v_total,
+    bp_overlap = bp_v_overlap,
+    pct_FIRE_in_V10 = if (bp_FIRE_total > 0) 100 * bp_v_overlap / bp_FIRE_total else NA_real_,
+    pct_V10_covered_by_FIRE = if (bp_v_total > 0) 100 * bp_v_overlap / bp_v_total else NA_real_
+  )
+}))
+
+# Define a consistent order (e.g., based on pct_FIRE_in_V10)
+v10_order <- overlap_by_v10[order(-pct_FIRE_in_V10), V10]
+overlap_by_v10[, V10 := factor(V10, levels = v10_order)]
+
+#-----------------------------
+# 4) Plot A: composition of FIRE bp across V10
+#-----------------------------
+pA <- ggplot(overlap_by_v10,
+             aes(x = V10, y = pct_FIRE_in_V10)) +
+  geom_col(width = 0.7) +
+  coord_flip() +
+  geom_text(aes(label = sprintf("%.1f%%", pct_FIRE_in_V10)),
+            hjust = -0.05, size = 4) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "cCRE category",
+    y = "% of FIRE bp overlapped"
+  )
+
+#-----------------------------
+# 5) Plot B: coverage of each V10 by FIRE
+#-----------------------------
+pB <- ggplot(overlap_by_v10,
+             aes(x = V10, y = pct_V10_covered_by_FIRE)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = sprintf("%.1f%%", pct_V10_covered_by_FIRE)),
+            hjust = -0.05, size = 4) +
+  coord_flip() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "cCRE category",
+    y = "% bp of category covered by FIRE"
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15)))
+
+#-----------------------------
+# 6) Combine into one figure (optional)
+#-----------------------------
+(pA | pB) +
+  plot_annotation(title = "FIRE vs cCRE overlap by category (bp-based)")
+
+```
+
+
+#### 2. Peak-level overlap
+
+```{r fig.height=4, fig.width=4}
+
+#-----------------------------
+# B) Peak overlap counts (min overlap = min_ov_bp) on RAW peaks
+#    This answers: how many FIRE peaks overlap ANY other peak by >=100bp (and vice versa)
+#-----------------------------
+hitsoverlap <- findOverlaps(
+  FIRE_gr_raw, peak_gr_raw,
+  ignore.strand = TRUE,
+  minoverlap = min_ov_bp
+)
+
+FIRE_hit_idx  <- unique(queryHits(hitsoverlap))
+other_hit_idx <- unique(subjectHits(hitsoverlap))
+
+n_FIRE_with_overlap  <- length(FIRE_hit_idx)
+n_other_with_overlap <- length(other_hit_idx)
+n_pairs_overlap      <- length(hitsoverlap)
+
+cat("\n=== Peak overlap (RAW peaks; minoverlap =", min_ov_bp, "bp) ===\n")
+cat("FIRE peaks (raw):                    ", n_FIRE_raw, "\n")
+cat("cCRE peaks (raw):                   ", n_other_raw, "\n")
+cat("Number of overlapping peak pairs:    ", n_pairs_overlap, "\n")
+
+
+#-----------------------------
+# C) 2-set Venn (peak overlap)
+# NOTE: With genomic intervals, overlap is not 1-to-1, so "intersection size" is asymmetric.
+# Here we define intersection = number of FIRE peaks that overlap Other by >=min_ov_bp.
+# We also print the "Other peaks that overlap FIRE" separately above.
+#-----------------------------
+venn_a_only <- n_FIRE_raw - n_FIRE_with_overlap
+venn_b_only <- n_other_raw - n_other_with_overlap
+venn_inter  <- n_FIRE_with_overlap  # definition for the Venn plot below
+
+grid::grid.newpage()
+VennDiagram::draw.pairwise.venn(
+  area1 = n_FIRE_raw,
+  area2 = n_other_raw,
+  cross.area = venn_inter,
+  category = c("FIRE", "ALL_cCRE"),
+  scaled = T
+)
+
+```
+
+```{r fig.height=12, fig.width=12}
+
+if (is.null(mcols(peak_gr_raw)$V10)) {
+  peak_gr_raw$V10 <- peak_df$V10
+}
+
+# Keep valid categories only
+peak_gr_raw <- peak_gr_raw[!is.na(peak_gr_raw$V10) & peak_gr_raw$V10 != ""]
+
+# Split cCRE peaks by V10 category
+peak_by_v10 <- split(peak_gr_raw, peak_gr_raw$V10)
+
+
+venn_grobs <- list()
+
+for (v in names(peak_by_v10)) {
+  
+  gr_v <- peak_by_v10[[v]]
+  
+  hits <- findOverlaps(
+    FIRE_gr_raw, gr_v,
+    ignore.strand = TRUE,
+    minoverlap = min_ov_bp
+  )
+  
+  n_FIRE_raw <- length(FIRE_gr_raw)
+  n_cat_raw  <- length(gr_v)
+  
+  n_FIRE_with_overlap <- length(unique(queryHits(hits)))
+  n_cat_with_overlap  <- length(unique(subjectHits(hits)))
+  
+  venn_inter <- n_FIRE_with_overlap  # same convention as before
+  
+  title_grob <- textGrob(
+    paste0("Overlap with ", v),
+    gp = gpar(fontsize = 12, fontface = "bold")
+  )
+  
+  # draw.pairwise.venn returns a LIST of grobs -> convert to ONE grob via grobTree()
+  venn_parts <- draw.pairwise.venn(
+    area1 = n_FIRE_raw,
+    area2 = n_cat_raw,
+    cross.area = venn_inter,
+    category = c("FIRE", paste0("cCRE: ", v)),
+    scaled = TRUE,
+    cex = 0.9,
+    cat.cex = 0.9,
+    ind = FALSE
+  )
+
+  
+  venn_grobs[[v]] <- arrangeGrob(
+    grobTree(venn_parts),
+    top = title_grob)
+}
+
+# Show all Venns in one figure
+grid.arrange(grobs = venn_grobs, ncol = 3)
+
+
+
+```

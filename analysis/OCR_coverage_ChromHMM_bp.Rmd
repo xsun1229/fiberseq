@@ -1,0 +1,28 @@
+---
+title: "Checking the OCR coverage for 15 states from ChromHMM -- base pair coverage"
+author: "XSun"
+date: "2026-03-05"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+# Introduction
+
+Here we check how the 15 ChromHMM states are covered by the FIRE/ ATAC-seq/ DNase-seq/ cCRE peaks. 
+
+We sum the total number of base pairs of all the 15 ChromHMM states inside FIRE/ ATAC-seq/ DNase-seq/ cCRE  peaks, and then divided by the total number of base pairs across all states.
+
+# Data
+
+Data are described here: https://xsun1229.github.io/fiberseq/data.html
+
+For DNase/ ATAC-seq/ cCRE we used GM12878 cell line
+
+# Results
+
+* [FIRE peaks](fire_coverage_ChromHMM.html)
+* [DNase peak](DNase_coverage_ChromHMM.html)
+* [cCRE peak](cCRE_coverage_ChromHMM_GM12878.html)
+* [ATAC-seq peak](atac_coverage_ChromHMM.html)
+

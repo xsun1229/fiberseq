@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="XSun" />
+
+<meta name="date" content="2026-03-05" />
+
+<title>Checking the OCR coverage for 15 states from ChromHMM – peak level coverage</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.22/datatables.js"></script>
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">fiberseq</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/xsun1229/fiberseq">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Checking the OCR coverage for 15 states
+from ChromHMM – peak level coverage</h1>
+<h4 class="author">XSun</h4>
+<h4 class="date">2026-03-05</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-03-05
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>fiberseq/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250831code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250831)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250831code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250831)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree1d11038e1eaa5677ff7e497a62b28b128b12c3a0targetblank1d11038a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/xsun1229/fiberseq/tree/1d11038e1eaa5677ff7e497a62b28b128b12c3a0" target="_blank">1d11038</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree1d11038e1eaa5677ff7e497a62b28b128b12c3a0targetblank1d11038a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/xsun1229/fiberseq/tree/1d11038e1eaa5677ff7e497a62b28b128b12c3a0" target="_blank">1d11038</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Untracked files:
+    Untracked:  analysis/OCR_coverage_ChromHMM_bp.Rmd
+    Untracked:  analysis/OCR_coverage_ChromHMM_peak.Rmd
+
+Unstaged changes:
+    Deleted:    FIRE_vs_cCRE_Venn_byV10_minoverlap100.pdf
+    Modified:   analysis/index.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>suppressPackageStartupMessages({
+  library(data.table)
+  library(GenomicRanges)
+  library(ggplot2)
+  library(patchwork)
+})
+
+source(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/0.functions.R&quot;)
+
+chromhmm_annot &lt;- as.data.table(chromhmm_annot)
+chromhmm_annot[, state := paste0(state_id, &quot;_&quot;, mnemonic)]
+state_titles &lt;- chromhmm_annot[, .(state, title = description)]</code></pre>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>Here we check how the 15 ChromHMM states are covered by the FIRE/
+ATAC-seq/ DNase-seq/ cCRE peaks.</p>
+<p>To assess overlap at the <strong>individual peak level</strong>, we
+performed overlap detection using the <strong>original (non-merged)
+peaks</strong>.</p>
+<p>Peak overlaps were identified using <code>findOverlaps()</code> with
+a <strong>minimum overlap threshold of 100 bp</strong>, meaning two
+peaks were considered overlapping only if they shared <strong>≥100
+bp</strong>.</p>
+<p>Peak-level overlap was summarized using a <strong>two-set Venn
+diagram</strong>,</p>
+</div>
+<div id="data" class="section level1">
+<h1>Data</h1>
+<p>Data: <a href="https://xsun1229.github.io/fiberseq/data.html"
+class="uri">https://xsun1229.github.io/fiberseq/data.html</a></p>
+<p>For DNase/ ATAC-seq/ cCRE we used GM12878 cell line</p>
+<div id="chromhmm-peak-length-distribution" class="section level2">
+<h2>ChromHMM peak length distribution</h2>
+<pre class="r"><code>ChromHMM_df &lt;- fread(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/data/E116_15_coreMarks_hg38lift_mnemonics.bed.gz&quot;, showProgress = FALSE)
+ChromHMM_df &lt;- ChromHMM_df[!is.na(V4) &amp; V4 != &quot;&quot;]
+setnames(ChromHMM_df, 1:4, c(&quot;chr&quot;,&quot;start0&quot;,&quot;end&quot;,&quot;state&quot;))
+
+dt &lt;- as.data.table(ChromHMM_df)
+dt[, len_bp := end - start0]
+dt[, state_id := as.integer(sub(&quot;_.*&quot;, &quot;&quot;, state))]
+dt &lt;- merge(dt, chromhmm_annot, by = &quot;state_id&quot;, all.x = TRUE)
+dt[, facet_label := paste0(state_id, &quot;: &quot;, description)]
+dt[, facet_label := factor(
+  facet_label,
+  levels = unique(facet_label[order(state_id)])
+)]
+
+
+ggplot(dt, aes(x = len_bp)) +
+  geom_histogram(bins = 60) +
+  facet_wrap(~ facet_label, scales = &quot;free_y&quot;, ncol = 5) +
+  scale_x_log10() +
+  labs(
+    x = &quot;Segment length (bp, log10)&quot;,
+    y = &quot;Count&quot;,
+    title = &quot;ChromHMM segment length distribution&quot;
+  ) +
+  theme_classic(base_size = 13)</code></pre>
+<p><img src="figure/OCR_coverage_ChromHMM_peak.Rmd/unnamed-chunk-2-1.png" width="1920" style="display: block; margin: auto;" /></p>
+</div>
+<div id="peak-length-distribution-for-others" class="section level2">
+<h2>Peak length distribution for others</h2>
+<p><a
+href="https://xsun1229.github.io/fiberseq/fire_overlap_OCRs.html#Data_overview_–_peak_length_distribution"
+class="uri">https://xsun1229.github.io/fiberseq/fire_overlap_OCRs.html#Data_overview_–_peak_length_distribution</a></p>
+</div>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<pre class="r"><code>min_bp &lt;- 100
+
+gr_hmm &lt;- GRanges(
+  seqnames = ChromHMM_df$chr,
+  ranges   = IRanges(start = ChromHMM_df$start0 + 1L, end = ChromHMM_df$end),
+  state    = ChromHMM_df$state
+)</code></pre>
+<div id="fire-peak" class="section level2">
+<h2>FIRE peak</h2>
+<pre class="r"><code>peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/results/QTL/fireQTL/consensus_peaks/merged_fire_peaks_31samples.bed.gz&quot;,
+  showProgress = FALSE
+)
+
+gr_peaks &lt;- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3)
+)
+
+all_states &lt;- sort(unique(ChromHMM_df$state))
+
+min_bp &lt;- 100L
+
+## --- 1) One overlap for ALL states (fast) ---
+hits &lt;- findOverlaps(gr_peaks, gr_hmm, ignore.strand = TRUE)
+
+# overlap width for each hit
+ov_bp &lt;- width(pintersect(gr_peaks[queryHits(hits)], gr_hmm[subjectHits(hits)]))
+
+# keep only &gt;= min_bp
+keep &lt;- ov_bp &gt;= min_bp
+qh &lt;- queryHits(hits)[keep]      # peak indices
+sh &lt;- subjectHits(hits)[keep]    # chromhmm segment indices
+
+# state label for each kept hit
+st &lt;- mcols(gr_hmm)$state[sh]
+
+## --- 2) Summarize per state (unique peak hits, unique segment hits) ---
+dt_hits &lt;- data.table(
+  state = st,
+  peak_i = qh,
+  seg_i  = sh
+)
+
+sum_by_state &lt;- dt_hits[, .(
+  OCRpeaks_overlap        = uniqueN(peak_i),
+  chromHMMstate_overlap   = uniqueN(seg_i)
+), by = state]
+
+## --- 3) Add totals for each state and compute proportions ---
+# totals
+n_OCRpeaks &lt;- length(gr_peaks)
+
+dt_state_totals &lt;- data.table(
+  state = names(table(mcols(gr_hmm)$state)),
+  n_chromHMMstate_peaks = as.integer(table(mcols(gr_hmm)$state))
+)
+
+summary_table &lt;- merge(dt_state_totals, sum_by_state, by = &quot;state&quot;, all.x = TRUE)
+
+# states with no overlap -&gt; NA to 0
+for (col in c(&quot;OCRpeaks_overlap&quot;, &quot;chromHMMstate_overlap&quot;)) {
+  summary_table[is.na(get(col)), (col) := 0L]
+}
+
+summary_table[, `:=`(
+  n_OCRpeaks = n_OCRpeaks,
+  OCRpeaks_overlap_prop = OCRpeaks_overlap / n_OCRpeaks,
+  chromHMMstate_overlap_prop = chromHMMstate_overlap / n_chromHMMstate_peaks
+)]
+
+## --- 4) Add annotation + select final columns ---
+setDT(chromhmm_annot)
+
+final_table &lt;- merge(
+  chromhmm_annot[, .(state, state_id, mnemonic, description)],
+  summary_table[, .(
+    state,
+    n_OCRpeaks,
+    n_chromHMMstate_peaks,
+    OCRpeaks_overlap,
+    OCRpeaks_overlap_prop,
+    chromHMMstate_overlap,
+    chromHMMstate_overlap_prop
+  )],
+  by = &quot;state&quot;,
+  all.x = TRUE
+)
+
+# if some states missing in summary_table (shouldn&#39;t), set to 0
+for (col in c(&quot;n_OCRpeaks&quot;,&quot;n_chromHMMstate_peaks&quot;,&quot;OCRpeaks_overlap&quot;,&quot;chromHMMstate_overlap&quot;,
+              &quot;OCRpeaks_overlap_prop&quot;,&quot;chromHMMstate_overlap_prop&quot;)) {
+  final_table[is.na(get(col)), (col) := if (grepl(&quot;prop$&quot;, col)) 0 else 0L]
+}
+
+final_table &lt;- final_table[, .(
+  state_id, mnemonic, description,
+  n_OCRpeaks,
+  n_chromHMMstate_peaks,
+  OCRpeaks_overlap,
+  OCRpeaks_overlap_prop,
+  chromHMMstate_overlap,
+  chromHMMstate_overlap_prop
+)]
+
+setorder(final_table, state_id)
+
+DT::datatable(final_table,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Overlap summary&#39;),options = list(pageLength = 10) )</code></pre>
+<div id="htmlwidget-55d484e2ce688c3024c2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Overlap summary<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],["TssA","TssAFlnk","TxFlnk","Tx","TxWk","EnhG","Enh","ZNF/Rpts","Het","TssBiv","BivFlnk","EnhBiv","ReprPC","ReprPCWk","Quies"],["Active TSS","Flanking Active TSS","Transcr. at gene 5' and 3'","Strong transcription","Weak transcription","Genic enhancers","Enhancers","ZNF genes &amp; repeats","Heterochromatin","Bivalent/Poised TSS","Flanking Bivalent TSS/Enh","Bivalent Enhancer","Repressed PolyComb","Weak Repressed PolyComb","Quiescent/Low"],[201605,201605,201605,201605,201605,201605,201605,201605,201605,201605,201605,201605,201605,201605,201605],[26595,58205,8002,32347,74732,14563,94668,11942,33445,2046,2958,4203,9432,28612,71748],[27742,40273,3864,3209,13379,5357,48101,2171,2801,1179,1365,1275,1837,14152,47803],[0.137605714143994,0.199761910666898,0.0191661913146995,0.0159172639567471,0.0663624414077032,0.0265717616130552,0.238590312740259,0.0107685821284194,0.0138935046253813,0.00584806924431438,0.00677066541008408,0.00632424791051809,0.00911187718558567,0.070196671709531,0.237112174797252],[17232,31858,2801,2843,11242,4429,40470,1797,2534,1028,1230,1206,1563,9455,23809],[0.647941342357586,0.54734129370329,0.350037490627343,0.0878906853804062,0.150430872986137,0.304126896930577,0.427493978958043,0.150477306983755,0.0757661832859919,0.502443792766373,0.415821501014199,0.286937901498929,0.165712468193384,0.33045575283098,0.331842002564531]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>state_id<\/th>\n      <th>mnemonic<\/th>\n      <th>description<\/th>\n      <th>n_OCRpeaks<\/th>\n      <th>n_chromHMMstate_peaks<\/th>\n      <th>OCRpeaks_overlap<\/th>\n      <th>OCRpeaks_overlap_prop<\/th>\n      <th>chromHMMstate_overlap<\/th>\n      <th>chromHMMstate_overlap_prop<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[1,4,5,6,7,8,9]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>final_table[, OCRpeaks_overlap_pct := OCRpeaks_overlap_prop * 100]
+final_table[, chromHMMstate_overlap_pct := chromHMMstate_overlap_prop * 100]
+
+
+
+final_table[, state_label := paste(state_id, mnemonic, sep = &quot; &quot;)]
+final_table[, state_label := factor(state_label,
+                                    levels = final_table[order(state_id), state_label])]
+
+final_table &lt;- merge(
+  final_table,
+  chromhmm_annot[, .(state_id, hex)],
+  by = &quot;state_id&quot;,
+  all.x = TRUE
+)
+
+p1 &lt;- ggplot(final_table,
+       aes(x = state_label, y = OCRpeaks_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;ChromHMM state&quot;,
+    y = &quot;OCR peaks overlapping (%)&quot;,
+    title = &quot;Percentage of OCR peaks \noverlap with each ChromHMM state&quot;
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p2 &lt;- ggplot(final_table, aes(x = state_label, y = chromHMMstate_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(x = &quot;ChromHMM state&quot;, y = &quot;ChromHMM segments overlapped (%)&quot;,
+       title = &quot;Percentage of ChromHMM peaks \noverlap with OCR peaks&quot;) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p1)</code></pre>
+<p><img src="figure/OCR_coverage_ChromHMM_peak.Rmd/unnamed-chunk-4-2.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>print(p2)</code></pre>
+<p><img src="figure/OCR_coverage_ChromHMM_peak.Rmd/unnamed-chunk-4-3.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dnase-peaks" class="section level2">
+<h2>DNase peaks</h2>
+<pre class="r"><code>peak_folder &lt;- &quot;/project/spott/kevinluo/Fiber_seq/data/DNaseseq/GM12878/&quot;
+
+peak_files &lt;- list.files(
+  path = peak_folder,
+  pattern = &quot;_peaks_.*\\.bed\\.gz$&quot;,
+  full.names = TRUE
+)
+stopifnot(length(peak_files) &gt;= 1)
+
+other_list &lt;- lapply(peak_files, fread, showProgress = FALSE)
+peak_df &lt;- rbindlist(other_list, use.names = FALSE, fill = TRUE)</code></pre>
+<pre><code>Warning in rbindlist(other_list, use.names = FALSE, fill = TRUE): use.names=
+cannot be FALSE when fill is TRUE. Setting use.names=TRUE.</code></pre>
+<pre class="r"><code>gr_peaks &lt;- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3)
+)
+
+all_states &lt;- sort(unique(ChromHMM_df$state))
+
+min_bp &lt;- 100L
+
+## --- 1) One overlap for ALL states (fast) ---
+hits &lt;- findOverlaps(gr_peaks, gr_hmm, ignore.strand = TRUE)
+
+# overlap width for each hit
+ov_bp &lt;- width(pintersect(gr_peaks[queryHits(hits)], gr_hmm[subjectHits(hits)]))
+
+# keep only &gt;= min_bp
+keep &lt;- ov_bp &gt;= min_bp
+qh &lt;- queryHits(hits)[keep]      # peak indices
+sh &lt;- subjectHits(hits)[keep]    # chromhmm segment indices
+
+# state label for each kept hit
+st &lt;- mcols(gr_hmm)$state[sh]
+
+## --- 2) Summarize per state (unique peak hits, unique segment hits) ---
+dt_hits &lt;- data.table(
+  state = st,
+  peak_i = qh,
+  seg_i  = sh
+)
+
+sum_by_state &lt;- dt_hits[, .(
+  OCRpeaks_overlap        = uniqueN(peak_i),
+  chromHMMstate_overlap   = uniqueN(seg_i)
+), by = state]
+
+## --- 3) Add totals for each state and compute proportions ---
+# totals
+n_OCRpeaks &lt;- length(gr_peaks)
+
+dt_state_totals &lt;- data.table(
+  state = names(table(mcols(gr_hmm)$state)),
+  n_chromHMMstate_peaks = as.integer(table(mcols(gr_hmm)$state))
+)
+
+summary_table &lt;- merge(dt_state_totals, sum_by_state, by = &quot;state&quot;, all.x = TRUE)
+
+# states with no overlap -&gt; NA to 0
+for (col in c(&quot;OCRpeaks_overlap&quot;, &quot;chromHMMstate_overlap&quot;)) {
+  summary_table[is.na(get(col)), (col) := 0L]
+}
+
+summary_table[, `:=`(
+  n_OCRpeaks = n_OCRpeaks,
+  OCRpeaks_overlap_prop = OCRpeaks_overlap / n_OCRpeaks,
+  chromHMMstate_overlap_prop = chromHMMstate_overlap / n_chromHMMstate_peaks
+)]
+
+## --- 4) Add annotation + select final columns ---
+setDT(chromhmm_annot)
+
+final_table &lt;- merge(
+  chromhmm_annot[, .(state, state_id, mnemonic, description)],
+  summary_table[, .(
+    state,
+    n_OCRpeaks,
+    n_chromHMMstate_peaks,
+    OCRpeaks_overlap,
+    OCRpeaks_overlap_prop,
+    chromHMMstate_overlap,
+    chromHMMstate_overlap_prop
+  )],
+  by = &quot;state&quot;,
+  all.x = TRUE
+)
+
+# if some states missing in summary_table (shouldn&#39;t), set to 0
+for (col in c(&quot;n_OCRpeaks&quot;,&quot;n_chromHMMstate_peaks&quot;,&quot;OCRpeaks_overlap&quot;,&quot;chromHMMstate_overlap&quot;,
+              &quot;OCRpeaks_overlap_prop&quot;,&quot;chromHMMstate_overlap_prop&quot;)) {
+  final_table[is.na(get(col)), (col) := if (grepl(&quot;prop$&quot;, col)) 0 else 0L]
+}
+
+final_table &lt;- final_table[, .(
+  state_id, mnemonic, description,
+  n_OCRpeaks,
+  n_chromHMMstate_peaks,
+  OCRpeaks_overlap,
+  OCRpeaks_overlap_prop,
+  chromHMMstate_overlap,
+  chromHMMstate_overlap_prop
+)]
+
+setorder(final_table, state_id)
+
+DT::datatable(final_table,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Overlap summary&#39;),options = list(pageLength = 10) )</code></pre>
+<div id="htmlwidget-0c375f72d786c94bb27a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0c375f72d786c94bb27a">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Overlap summary<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],["TssA","TssAFlnk","TxFlnk","Tx","TxWk","EnhG","Enh","ZNF/Rpts","Het","TssBiv","BivFlnk","EnhBiv","ReprPC","ReprPCWk","Quies"],["Active TSS","Flanking Active TSS","Transcr. at gene 5' and 3'","Strong transcription","Weak transcription","Genic enhancers","Enhancers","ZNF genes &amp; repeats","Heterochromatin","Bivalent/Poised TSS","Flanking Bivalent TSS/Enh","Bivalent Enhancer","Repressed PolyComb","Weak Repressed PolyComb","Quiescent/Low"],[50260,50260,50260,50260,50260,50260,50260,50260,50260,50260,50260,50260,50260,50260,50260],[26595,58205,8002,32347,74732,14563,94668,11942,33445,2046,2958,4203,9432,28612,71748],[12301,13291,588,207,1122,685,9877,480,384,77,59,86,34,1122,4609],[0.24474731396737,0.264444886589733,0.0116991643454039,0.00411858336649423,0.0223239156386789,0.0136291285316355,0.196518105849582,0.00955033824114604,0.00764027059291683,0.00153203342618384,0.00117389574214087,0.00171110226820533,0.000676482292081178,0.0223239156386789,0.0917031436530044],[9913,11447,529,206,1087,646,9391,454,363,77,59,84,34,1064,3995],[0.372739236698628,0.19666695301091,0.0661084728817796,0.00636844220484125,0.0145453085692876,0.0443589919659411,0.0991993070520134,0.0380170825657344,0.0108536403049783,0.0376344086021505,0.0199459093982421,0.0199857244825125,0.00360474978795589,0.0371871941842584,0.0556809945921838]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>state_id<\/th>\n      <th>mnemonic<\/th>\n      <th>description<\/th>\n      <th>n_OCRpeaks<\/th>\n      <th>n_chromHMMstate_peaks<\/th>\n      <th>OCRpeaks_overlap<\/th>\n      <th>OCRpeaks_overlap_prop<\/th>\n      <th>chromHMMstate_overlap<\/th>\n      <th>chromHMMstate_overlap_prop<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[1,4,5,6,7,8,9]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>final_table[, OCRpeaks_overlap_pct := OCRpeaks_overlap_prop * 100]
+final_table[, chromHMMstate_overlap_pct := chromHMMstate_overlap_prop * 100]
+
+
+
+final_table[, state_label := paste(state_id, mnemonic, sep = &quot; &quot;)]
+final_table[, state_label := factor(state_label,
+                                    levels = final_table[order(state_id), state_label])]
+
+final_table &lt;- merge(
+  final_table,
+  chromhmm_annot[, .(state_id, hex)],
+  by = &quot;state_id&quot;,
+  all.x = TRUE
+)
+
+p1 &lt;- ggplot(final_table,
+       aes(x = state_label, y = OCRpeaks_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;ChromHMM state&quot;,
+    y = &quot;OCR peaks overlapping (%)&quot;,
+    title = &quot;Percentage of OCR peaks \noverlap with each ChromHMM state&quot;
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p2 &lt;- ggplot(final_table, aes(x = state_label, y = chromHMMstate_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(x = &quot;ChromHMM state&quot;, y = &quot;ChromHMM segments overlapped (%)&quot;,
+       title = &quot;Percentage of ChromHMM peaks \noverlap with OCR peaks&quot;) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p1)</code></pre>
+<p><img src="figure/OCR_coverage_ChromHMM_peak.Rmd/unnamed-chunk-5-2.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>print(p2)</code></pre>
+<p><img src="figure/OCR_coverage_ChromHMM_peak.Rmd/unnamed-chunk-5-3.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="atac-seq-peaks-idr" class="section level2">
+<h2>ATAC-seq peaks – IDR</h2>
+<pre class="r"><code>peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_IDR_peaks_ENCFF429WTW.bed.gz&quot;,
+  showProgress = FALSE
+)
+
+gr_peaks &lt;- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3)
+)
+
+all_states &lt;- sort(unique(ChromHMM_df$state))
+
+min_bp &lt;- 100L
+
+## --- 1) One overlap for ALL states (fast) ---
+hits &lt;- findOverlaps(gr_peaks, gr_hmm, ignore.strand = TRUE)
+
+# overlap width for each hit
+ov_bp &lt;- width(pintersect(gr_peaks[queryHits(hits)], gr_hmm[subjectHits(hits)]))
+
+# keep only &gt;= min_bp
+keep &lt;- ov_bp &gt;= min_bp
+qh &lt;- queryHits(hits)[keep]      # peak indices
+sh &lt;- subjectHits(hits)[keep]    # chromhmm segment indices
+
+# state label for each kept hit
+st &lt;- mcols(gr_hmm)$state[sh]
+
+## --- 2) Summarize per state (unique peak hits, unique segment hits) ---
+dt_hits &lt;- data.table(
+  state = st,
+  peak_i = qh,
+  seg_i  = sh
+)
+
+sum_by_state &lt;- dt_hits[, .(
+  OCRpeaks_overlap        = uniqueN(peak_i),
+  chromHMMstate_overlap   = uniqueN(seg_i)
+), by = state]
+
+## --- 3) Add totals for each state and compute proportions ---
+# totals
+n_OCRpeaks &lt;- length(gr_peaks)
+
+dt_state_totals &lt;- data.table(
+  state = names(table(mcols(gr_hmm)$state)),
+  n_chromHMMstate_peaks = as.integer(table(mcols(gr_hmm)$state))
+)
+
+summary_table &lt;- merge(dt_state_totals, sum_by_state, by = &quot;state&quot;, all.x = TRUE)
+
+# states with no overlap -&gt; NA to 0
+for (col in c(&quot;OCRpeaks_overlap&quot;, &quot;chromHMMstate_overlap&quot;)) {
+  summary_table[is.na(get(col)), (col) := 0L]
+}
+
+summary_table[, `:=`(
+  n_OCRpeaks = n_OCRpeaks,
+  OCRpeaks_overlap_prop = OCRpeaks_overlap / n_OCRpeaks,
+  chromHMMstate_overlap_prop = chromHMMstate_overlap / n_chromHMMstate_peaks
+)]
+
+## --- 4) Add annotation + select final columns ---
+setDT(chromhmm_annot)
+
+final_table &lt;- merge(
+  chromhmm_annot[, .(state, state_id, mnemonic, description)],
+  summary_table[, .(
+    state,
+    n_OCRpeaks,
+    n_chromHMMstate_peaks,
+    OCRpeaks_overlap,
+    OCRpeaks_overlap_prop,
+    chromHMMstate_overlap,
+    chromHMMstate_overlap_prop
+  )],
+  by = &quot;state&quot;,
+  all.x = TRUE
+)
+
+# if some states missing in summary_table (shouldn&#39;t), set to 0
+for (col in c(&quot;n_OCRpeaks&quot;,&quot;n_chromHMMstate_peaks&quot;,&quot;OCRpeaks_overlap&quot;,&quot;chromHMMstate_overlap&quot;,
+              &quot;OCRpeaks_overlap_prop&quot;,&quot;chromHMMstate_overlap_prop&quot;)) {
+  final_table[is.na(get(col)), (col) := if (grepl(&quot;prop$&quot;, col)) 0 else 0L]
+}
+
+final_table &lt;- final_table[, .(
+  state_id, mnemonic, description,
+  n_OCRpeaks,
+  n_chromHMMstate_peaks,
+  OCRpeaks_overlap,
+  OCRpeaks_overlap_prop,
+  chromHMMstate_overlap,
+  chromHMMstate_overlap_prop
+)]
+
+setorder(final_table, state_id)
+
+DT::datatable(final_table,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Overlap summary&#39;),options = list(pageLength = 10) )</code></pre>
+<div id="htmlwidget-9fa6da26214ebfd05e61" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9fa6da26214ebfd05e61">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Overlap summary<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],["TssA","TssAFlnk","TxFlnk","Tx","TxWk","EnhG","Enh","ZNF/Rpts","Het","TssBiv","BivFlnk","EnhBiv","ReprPC","ReprPCWk","Quies"],["Active TSS","Flanking Active TSS","Transcr. at gene 5' and 3'","Strong transcription","Weak transcription","Genic enhancers","Enhancers","ZNF genes &amp; repeats","Heterochromatin","Bivalent/Poised TSS","Flanking Bivalent TSS/Enh","Bivalent Enhancer","Repressed PolyComb","Weak Repressed PolyComb","Quiescent/Low"],[207875,207875,207875,207875,207875,207875,207875,207875,207875,207875,207875,207875,207875,207875,207875],[26595,58205,8002,32347,74732,14563,94668,11942,33445,2046,2958,4203,9432,28612,71748],[58420,81484,5488,2824,14954,5896,67865,2490,2298,2948,4512,3017,2665,13029,44823],[0.281034275405893,0.39198556825015,0.0264004810583283,0.013585087191822,0.0719374624173181,0.0283631990378833,0.326470234515935,0.0119783523752255,0.0110547203848467,0.0141815995189417,0.0217053517739026,0.0145135297654841,0.0128202044497895,0.0626770895971137,0.215624774503909],[16973,33866,2393,1763,7886,3155,35104,1314,1398,1007,1614,1269,1142,6375,17142],[0.638202669674751,0.581840048105833,0.29905023744064,0.0545027359569666,0.105523738157683,0.216644922062762,0.370811678708751,0.110031820465584,0.0417999701001645,0.492179863147605,0.545638945233266,0.301927194860814,0.121077184054283,0.222808611771285,0.238919551764509]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>state_id<\/th>\n      <th>mnemonic<\/th>\n      <th>description<\/th>\n      <th>n_OCRpeaks<\/th>\n      <th>n_chromHMMstate_peaks<\/th>\n      <th>OCRpeaks_overlap<\/th>\n      <th>OCRpeaks_overlap_prop<\/th>\n      <th>chromHMMstate_overlap<\/th>\n      <th>chromHMMstate_overlap_prop<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[1,4,5,6,7,8,9]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>final_table[, OCRpeaks_overlap_pct := OCRpeaks_overlap_prop * 100]
+final_table[, chromHMMstate_overlap_pct := chromHMMstate_overlap_prop * 100]
+
+
+
+final_table[, state_label := paste(state_id, mnemonic, sep = &quot; &quot;)]
+final_table[, state_label := factor(state_label,
+                                    levels = final_table[order(state_id), state_label])]
+
+final_table &lt;- merge(
+  final_table,
+  chromhmm_annot[, .(state_id, hex)],
+  by = &quot;state_id&quot;,
+  all.x = TRUE
+)
+
+p1 &lt;- ggplot(final_table,
+       aes(x = state_label, y = OCRpeaks_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;ChromHMM state&quot;,
+    y = &quot;OCR peaks overlapping (%)&quot;,
+    title = &quot;Percentage of OCR peaks \noverlap with each ChromHMM state&quot;
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p2 &lt;- ggplot(final_table, aes(x = state_label, y = chromHMMstate_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(x = &quot;ChromHMM state&quot;, y = &quot;ChromHMM segments overlapped (%)&quot;,
+       title = &quot;Percentage of ChromHMM peaks \noverlap with OCR peaks&quot;) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p1)</code></pre>
+<p><img src="figure/OCR_coverage_ChromHMM_peak.Rmd/unnamed-chunk-6-2.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>print(p2)</code></pre>
+<p><img src="figure/OCR_coverage_ChromHMM_peak.Rmd/unnamed-chunk-6-3.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="atac-seq-peak-pseudoreplicated" class="section level2">
+<h2>ATAC-seq peak – pseudoreplicated</h2>
+<pre class="r"><code>peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/ATACseq/GM12878/ATACseq_GM12878_pseudoreplicated_peaks_ENCFF748UZH.bed.gz&quot;,
+  showProgress = FALSE
+)
+
+gr_peaks &lt;- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3)
+)
+
+all_states &lt;- sort(unique(ChromHMM_df$state))
+
+min_bp &lt;- 100L
+
+## --- 1) One overlap for ALL states (fast) ---
+hits &lt;- findOverlaps(gr_peaks, gr_hmm, ignore.strand = TRUE)
+
+# overlap width for each hit
+ov_bp &lt;- width(pintersect(gr_peaks[queryHits(hits)], gr_hmm[subjectHits(hits)]))
+
+# keep only &gt;= min_bp
+keep &lt;- ov_bp &gt;= min_bp
+qh &lt;- queryHits(hits)[keep]      # peak indices
+sh &lt;- subjectHits(hits)[keep]    # chromhmm segment indices
+
+# state label for each kept hit
+st &lt;- mcols(gr_hmm)$state[sh]
+
+## --- 2) Summarize per state (unique peak hits, unique segment hits) ---
+dt_hits &lt;- data.table(
+  state = st,
+  peak_i = qh,
+  seg_i  = sh
+)
+
+sum_by_state &lt;- dt_hits[, .(
+  OCRpeaks_overlap        = uniqueN(peak_i),
+  chromHMMstate_overlap   = uniqueN(seg_i)
+), by = state]
+
+## --- 3) Add totals for each state and compute proportions ---
+# totals
+n_OCRpeaks &lt;- length(gr_peaks)
+
+dt_state_totals &lt;- data.table(
+  state = names(table(mcols(gr_hmm)$state)),
+  n_chromHMMstate_peaks = as.integer(table(mcols(gr_hmm)$state))
+)
+
+summary_table &lt;- merge(dt_state_totals, sum_by_state, by = &quot;state&quot;, all.x = TRUE)
+
+# states with no overlap -&gt; NA to 0
+for (col in c(&quot;OCRpeaks_overlap&quot;, &quot;chromHMMstate_overlap&quot;)) {
+  summary_table[is.na(get(col)), (col) := 0L]
+}
+
+summary_table[, `:=`(
+  n_OCRpeaks = n_OCRpeaks,
+  OCRpeaks_overlap_prop = OCRpeaks_overlap / n_OCRpeaks,
+  chromHMMstate_overlap_prop = chromHMMstate_overlap / n_chromHMMstate_peaks
+)]
+
+## --- 4) Add annotation + select final columns ---
+setDT(chromhmm_annot)
+
+final_table &lt;- merge(
+  chromhmm_annot[, .(state, state_id, mnemonic, description)],
+  summary_table[, .(
+    state,
+    n_OCRpeaks,
+    n_chromHMMstate_peaks,
+    OCRpeaks_overlap,
+    OCRpeaks_overlap_prop,
+    chromHMMstate_overlap,
+    chromHMMstate_overlap_prop
+  )],
+  by = &quot;state&quot;,
+  all.x = TRUE
+)
+
+# if some states missing in summary_table (shouldn&#39;t), set to 0
+for (col in c(&quot;n_OCRpeaks&quot;,&quot;n_chromHMMstate_peaks&quot;,&quot;OCRpeaks_overlap&quot;,&quot;chromHMMstate_overlap&quot;,
+              &quot;OCRpeaks_overlap_prop&quot;,&quot;chromHMMstate_overlap_prop&quot;)) {
+  final_table[is.na(get(col)), (col) := if (grepl(&quot;prop$&quot;, col)) 0 else 0L]
+}
+
+final_table &lt;- final_table[, .(
+  state_id, mnemonic, description,
+  n_OCRpeaks,
+  n_chromHMMstate_peaks,
+  OCRpeaks_overlap,
+  OCRpeaks_overlap_prop,
+  chromHMMstate_overlap,
+  chromHMMstate_overlap_prop
+)]
+
+setorder(final_table, state_id)
+
+DT::datatable(final_table,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Overlap summary&#39;),options = list(pageLength = 10) )</code></pre>
+<div id="htmlwidget-1b1a8ec0941961691c13" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1b1a8ec0941961691c13">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Overlap summary<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],["TssA","TssAFlnk","TxFlnk","Tx","TxWk","EnhG","Enh","ZNF/Rpts","Het","TssBiv","BivFlnk","EnhBiv","ReprPC","ReprPCWk","Quies"],["Active TSS","Flanking Active TSS","Transcr. at gene 5' and 3'","Strong transcription","Weak transcription","Genic enhancers","Enhancers","ZNF genes &amp; repeats","Heterochromatin","Bivalent/Poised TSS","Flanking Bivalent TSS/Enh","Bivalent Enhancer","Repressed PolyComb","Weak Repressed PolyComb","Quiescent/Low"],[277999,277999,277999,277999,277999,277999,277999,277999,277999,277999,277999,277999,277999,277999,277999],[26595,58205,8002,32347,74732,14563,94668,11942,33445,2046,2958,4203,9432,28612,71748],[60795,87757,6646,5155,22321,7990,83184,3558,3790,3357,4947,3699,3618,19983,74216],[0.218687837006608,0.31567379738776,0.023906560814967,0.0185432321698999,0.0802916557253803,0.0287411105795345,0.29922409792841,0.0127986071892345,0.013633142565261,0.0120755830056943,0.0177950280396692,0.0133058032582851,0.0130144353037241,0.0718815535307681,0.266964989082695],[17706,37080,2975,3336,12351,4472,44341,2011,2536,1220,1857,1719,1734,9385,24591],[0.665764241398759,0.637058671935401,0.371782054486378,0.103131665996847,0.165270566825456,0.307079585250292,0.468384248109182,0.168397253391392,0.0758259829570937,0.596285434995112,0.627789046653144,0.408993576017131,0.183842239185751,0.328009226897805,0.342741261080448]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>state_id<\/th>\n      <th>mnemonic<\/th>\n      <th>description<\/th>\n      <th>n_OCRpeaks<\/th>\n      <th>n_chromHMMstate_peaks<\/th>\n      <th>OCRpeaks_overlap<\/th>\n      <th>OCRpeaks_overlap_prop<\/th>\n      <th>chromHMMstate_overlap<\/th>\n      <th>chromHMMstate_overlap_prop<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[1,4,5,6,7,8,9]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>final_table[, OCRpeaks_overlap_pct := OCRpeaks_overlap_prop * 100]
+final_table[, chromHMMstate_overlap_pct := chromHMMstate_overlap_prop * 100]
+
+
+
+final_table[, state_label := paste(state_id, mnemonic, sep = &quot; &quot;)]
+final_table[, state_label := factor(state_label,
+                                    levels = final_table[order(state_id), state_label])]
+
+final_table &lt;- merge(
+  final_table,
+  chromhmm_annot[, .(state_id, hex)],
+  by = &quot;state_id&quot;,
+  all.x = TRUE
+)
+
+p1 &lt;- ggplot(final_table,
+       aes(x = state_label, y = OCRpeaks_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;ChromHMM state&quot;,
+    y = &quot;OCR peaks overlapping (%)&quot;,
+    title = &quot;Percentage of OCR peaks \noverlap with each ChromHMM state&quot;
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p2 &lt;- ggplot(final_table, aes(x = state_label, y = chromHMMstate_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(x = &quot;ChromHMM state&quot;, y = &quot;ChromHMM segments overlapped (%)&quot;,
+       title = &quot;Percentage of ChromHMM peaks \noverlap with OCR peaks&quot;) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p1)</code></pre>
+<p><img src="figure/OCR_coverage_ChromHMM_peak.Rmd/unnamed-chunk-7-2.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>print(p2)</code></pre>
+<p><img src="figure/OCR_coverage_ChromHMM_peak.Rmd/unnamed-chunk-7-3.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="ccre-peak" class="section level2">
+<h2>cCRE peak</h2>
+<pre class="r"><code>peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4/LCLs/GM12878_cCREs_ENCFF428XFI_ENCFF280PUF_ENCFF469WVA_ENCFF644EEX.bed&quot;,
+  showProgress = FALSE
+)
+peak_df &lt;- peak_df[peak_df$V10 !=&quot;Low-DNase&quot;,]
+
+gr_peaks &lt;- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3)
+)
+
+all_states &lt;- sort(unique(ChromHMM_df$state))
+
+min_bp &lt;- 100L
+
+## --- 1) One overlap for ALL states (fast) ---
+hits &lt;- findOverlaps(gr_peaks, gr_hmm, ignore.strand = TRUE)
+
+# overlap width for each hit
+ov_bp &lt;- width(pintersect(gr_peaks[queryHits(hits)], gr_hmm[subjectHits(hits)]))
+
+# keep only &gt;= min_bp
+keep &lt;- ov_bp &gt;= min_bp
+qh &lt;- queryHits(hits)[keep]      # peak indices
+sh &lt;- subjectHits(hits)[keep]    # chromhmm segment indices
+
+# state label for each kept hit
+st &lt;- mcols(gr_hmm)$state[sh]
+
+## --- 2) Summarize per state (unique peak hits, unique segment hits) ---
+dt_hits &lt;- data.table(
+  state = st,
+  peak_i = qh,
+  seg_i  = sh
+)
+
+sum_by_state &lt;- dt_hits[, .(
+  OCRpeaks_overlap        = uniqueN(peak_i),
+  chromHMMstate_overlap   = uniqueN(seg_i)
+), by = state]
+
+## --- 3) Add totals for each state and compute proportions ---
+# totals
+n_OCRpeaks &lt;- length(gr_peaks)
+
+dt_state_totals &lt;- data.table(
+  state = names(table(mcols(gr_hmm)$state)),
+  n_chromHMMstate_peaks = as.integer(table(mcols(gr_hmm)$state))
+)
+
+summary_table &lt;- merge(dt_state_totals, sum_by_state, by = &quot;state&quot;, all.x = TRUE)
+
+# states with no overlap -&gt; NA to 0
+for (col in c(&quot;OCRpeaks_overlap&quot;, &quot;chromHMMstate_overlap&quot;)) {
+  summary_table[is.na(get(col)), (col) := 0L]
+}
+
+summary_table[, `:=`(
+  n_OCRpeaks = n_OCRpeaks,
+  OCRpeaks_overlap_prop = OCRpeaks_overlap / n_OCRpeaks,
+  chromHMMstate_overlap_prop = chromHMMstate_overlap / n_chromHMMstate_peaks
+)]
+
+## --- 4) Add annotation + select final columns ---
+setDT(chromhmm_annot)
+
+final_table &lt;- merge(
+  chromhmm_annot[, .(state, state_id, mnemonic, description)],
+  summary_table[, .(
+    state,
+    n_OCRpeaks,
+    n_chromHMMstate_peaks,
+    OCRpeaks_overlap,
+    OCRpeaks_overlap_prop,
+    chromHMMstate_overlap,
+    chromHMMstate_overlap_prop
+  )],
+  by = &quot;state&quot;,
+  all.x = TRUE
+)
+
+# if some states missing in summary_table (shouldn&#39;t), set to 0
+for (col in c(&quot;n_OCRpeaks&quot;,&quot;n_chromHMMstate_peaks&quot;,&quot;OCRpeaks_overlap&quot;,&quot;chromHMMstate_overlap&quot;,
+              &quot;OCRpeaks_overlap_prop&quot;,&quot;chromHMMstate_overlap_prop&quot;)) {
+  final_table[is.na(get(col)), (col) := if (grepl(&quot;prop$&quot;, col)) 0 else 0L]
+}
+
+final_table &lt;- final_table[, .(
+  state_id, mnemonic, description,
+  n_OCRpeaks,
+  n_chromHMMstate_peaks,
+  OCRpeaks_overlap,
+  OCRpeaks_overlap_prop,
+  chromHMMstate_overlap,
+  chromHMMstate_overlap_prop
+)]
+
+setorder(final_table, state_id)
+
+DT::datatable(final_table,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;Overlap summary&#39;),options = list(pageLength = 10) )</code></pre>
+<div id="htmlwidget-d3bdb3a70b69fe9ab76d" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d3bdb3a70b69fe9ab76d">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">Overlap summary<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],["TssA","TssAFlnk","TxFlnk","Tx","TxWk","EnhG","Enh","ZNF/Rpts","Het","TssBiv","BivFlnk","EnhBiv","ReprPC","ReprPCWk","Quies"],["Active TSS","Flanking Active TSS","Transcr. at gene 5' and 3'","Strong transcription","Weak transcription","Genic enhancers","Enhancers","ZNF genes &amp; repeats","Heterochromatin","Bivalent/Poised TSS","Flanking Bivalent TSS/Enh","Bivalent Enhancer","Repressed PolyComb","Weak Repressed PolyComb","Quiescent/Low"],[129266,129266,129266,129266,129266,129266,129266,129266,129266,129266,129266,129266,129266,129266,129266],[26595,58205,8002,32347,74732,14563,94668,11942,33445,2046,2958,4203,9432,28612,71748],[46197,38366,6809,3020,5058,3741,20178,1440,800,371,518,373,202,2797,7640],[0.357379357294261,0.296798848885244,0.0526743304503891,0.023362678507883,0.0391286185075735,0.0289403246019835,0.156096730772206,0.0111398202156793,0.00618878900871072,0.0028700509027896,0.00400724088314019,0.00288552287531137,0.00156266922469946,0.0216375535717049,0.0591029350331874],[14983,23925,3001,1908,4353,2728,16978,1101,729,307,429,346,192,2416,6339],[0.563376574544087,0.41104716089683,0.375031242189453,0.0589853773147433,0.0582481400203393,0.187324040376296,0.179342544471205,0.0921956121252721,0.0217969801166094,0.150048875855327,0.145030425963489,0.0823221508446348,0.0203562340966921,0.0844400950650077,0.0883508947984613]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>state_id<\/th>\n      <th>mnemonic<\/th>\n      <th>description<\/th>\n      <th>n_OCRpeaks<\/th>\n      <th>n_chromHMMstate_peaks<\/th>\n      <th>OCRpeaks_overlap<\/th>\n      <th>OCRpeaks_overlap_prop<\/th>\n      <th>chromHMMstate_overlap<\/th>\n      <th>chromHMMstate_overlap_prop<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":[1,4,5,6,7,8,9]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>final_table[, OCRpeaks_overlap_pct := OCRpeaks_overlap_prop * 100]
+final_table[, chromHMMstate_overlap_pct := chromHMMstate_overlap_prop * 100]
+
+
+
+final_table[, state_label := paste(state_id, mnemonic, sep = &quot; &quot;)]
+final_table[, state_label := factor(state_label,
+                                    levels = final_table[order(state_id), state_label])]
+
+final_table &lt;- merge(
+  final_table,
+  chromhmm_annot[, .(state_id, hex)],
+  by = &quot;state_id&quot;,
+  all.x = TRUE
+)
+
+p1 &lt;- ggplot(final_table,
+       aes(x = state_label, y = OCRpeaks_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;ChromHMM state&quot;,
+    y = &quot;OCR peaks overlapping (%)&quot;,
+    title = &quot;Percentage of OCR peaks \noverlap with each ChromHMM state&quot;
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+p2 &lt;- ggplot(final_table, aes(x = state_label, y = chromHMMstate_overlap_pct)) +
+  geom_col(aes(fill = hex)) +
+  scale_fill_identity() +
+  theme_classic(base_size = 14) +
+  labs(x = &quot;ChromHMM state&quot;, y = &quot;ChromHMM segments overlapped (%)&quot;,
+       title = &quot;Percentage of ChromHMM peaks \noverlap with OCR peaks&quot;) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p1)</code></pre>
+<p><img src="figure/OCR_coverage_ChromHMM_peak.Rmd/unnamed-chunk-8-2.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>print(p2)</code></pre>
+<p><img src="figure/OCR_coverage_ChromHMM_peak.Rmd/unnamed-chunk-8-3.png" width="576" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /software/openblas-0.3.13-el7-x86_64/lib/libopenblas_haswellp-r0.3.13.so
+
+locale:
+[1] C
+
+attached base packages:
+[1] stats4    stats     graphics  grDevices utils     datasets  methods  
+[8] base     
+
+other attached packages:
+[1] patchwork_1.3.2.9000 ggplot2_4.0.0        GenomicRanges_1.48.0
+[4] GenomeInfoDb_1.39.9  IRanges_2.30.0       S4Vectors_0.34.0    
+[7] BiocGenerics_0.42.0  data.table_1.14.2   
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.2.0       xfun_0.41              bslib_0.3.1           
+ [4] vctrs_0.6.5            generics_0.1.4         htmltools_0.5.2       
+ [7] yaml_2.3.5             utf8_1.2.2             rlang_1.1.2           
+[10] R.oo_1.24.0            jquerylib_0.1.4        later_1.3.0           
+[13] pillar_1.9.0           R.utils_2.11.0         withr_2.5.0           
+[16] glue_1.6.2             RColorBrewer_1.1-3     S7_0.2.0              
+[19] GenomeInfoDbData_1.2.8 lifecycle_1.0.4        stringr_1.5.1         
+[22] zlibbioc_1.42.0        gtable_0.3.6           workflowr_1.7.0       
+[25] R.methodsS3_1.8.1      htmlwidgets_1.5.4      evaluate_0.15         
+[28] labeling_0.4.2         knitr_1.39             fastmap_1.1.0         
+[31] crosstalk_1.2.0        httpuv_1.6.5           fansi_1.0.3           
+[34] highr_0.9              Rcpp_1.0.12            DT_0.22               
+[37] promises_1.2.0.1       scales_1.4.0           jsonlite_1.8.0        
+[40] XVector_0.36.0         farver_2.1.0           fs_1.5.2              
+[43] digest_0.6.29          stringi_1.7.6          dplyr_1.1.4           
+[46] rprojroot_2.0.3        grid_4.2.0             cli_3.6.1             
+[49] tools_4.2.0            bitops_1.0-7           magrittr_2.0.3        
+[52] sass_0.4.1             RCurl_1.98-1.7         tibble_3.2.1          
+[55] dichromat_2.0-0.1      pkgconfig_2.0.3        rmarkdown_2.25        
+[58] rstudioapi_0.13        R6_2.5.1               git2r_0.30.1          
+[61] compiler_4.2.0        </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
