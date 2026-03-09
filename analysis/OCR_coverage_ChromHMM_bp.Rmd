@@ -1,5 +1,5 @@
 ---
-title: "Checking the OCR coverage for 15 states from ChromHMM -- base pair coverage"
+title: "Checking the FIRE/ ATAC-seq/ DNase-seq/ cCRE peaks coverage for 15 states from ChromHMM -- base pair coverage"
 author: "XSun"
 date: "2026-03-05"
 output: workflowr::wflow_html
