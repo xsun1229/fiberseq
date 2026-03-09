@@ -39,11 +39,10 @@ Determine the footprint cutoffs (p-value, q-value, fold-enrichment, pileup)
 
 * [Link](determine_footprint_cutoffs.html)
 
-Checking the OCR coverage for 15 states from ChromHMM
+Checking the FIRE/ DNase/ ATAC-seq/ cCREs coverage for 15 states from ChromHMM
 
 * [Base pair overlap](OCR_coverage_ChromHMM_bp.html)
 * [Peak level overlap](OCR_coverage_ChromHMM_peak.html)
-
 
 Checking the overlap of FIRE peaks with DNase/ ATAC-seq/ cCREs
 
