@@ -48,6 +48,8 @@ Checking the overlap of FIRE peaks with DNase/ ATAC-seq/ cCREs
 
 * [Link](fire_overlap_OCRs.html)
 
+Checking the overlap of DNase peaks with cCREs peaks
 
+* [Link](DNase_overlap_cCREs.html)
 
 
