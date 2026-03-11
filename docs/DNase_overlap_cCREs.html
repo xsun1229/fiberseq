@@ -403,7 +403,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-03-10
+<strong>Last updated:</strong> 2026-03-11
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -441,10 +441,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -537,15 +537,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree3bc19bc1a84e46952065bbcc5c91f19bc9d0fbb7targetblank3bc19bca">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreebdf293349e1bb13371dfec3ec3f9d07f345b8010targetblankbdf2933a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/xsun1229/fiberseq/tree/3bc19bc1a84e46952065bbcc5c91f19bc9d0fbb7" target="_blank">3bc19bc</a>
+<a href="https://github.com/xsun1229/fiberseq/tree/bdf293349e1bb13371dfec3ec3f9d07f345b8010" target="_blank">bdf2933</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree3bc19bc1a84e46952065bbcc5c91f19bc9d0fbb7targetblank3bc19bca"
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreebdf293349e1bb13371dfec3ec3f9d07f345b8010targetblankbdf2933a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -555,7 +555,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/xsun1229/fiberseq/tree/3bc19bc1a84e46952065bbcc5c91f19bc9d0fbb7" target="_blank">3bc19bc</a>.
+<a href="https://github.com/xsun1229/fiberseq/tree/bdf293349e1bb13371dfec3ec3f9d07f345b8010" target="_blank">bdf2933</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -569,11 +569,9 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-Untracked files:
-    Untracked:  analysis/DNase_overlap_cCREs.Rmd
-
 Unstaged changes:
-    Modified:   analysis/index.Rmd
+    Modified:   analysis/DNase_overlap_cCREs.Rmd
+    Modified:   analysis/data.Rmd
 
 </code></pre>
 <p>
@@ -588,10 +586,74 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/DNase_overlap_cCREs.Rmd</code>)
+and HTML (<code>docs/DNase_overlap_cCREs.html</code>) files. If you’ve
+configured a remote Git repository (see <code>?wflow_git_remote</code>),
+click on the hyperlinks in the table below to view the files as they
+were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/bdf293349e1bb13371dfec3ec3f9d07f345b8010/analysis/DNase_overlap_cCREs.Rmd" target="_blank">bdf2933</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-10
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/bdf293349e1bb13371dfec3ec3f9d07f345b8010/docs/DNase_overlap_cCREs.html" target="_blank">bdf2933</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-10
+</td>
+<td>
+update
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -640,8 +702,10 @@ overlap</strong> and <strong>peak-level overlap</strong>.</p>
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
-<div id="base-pair-bp-overlap" class="section level2">
-<h2>1. Base-pair (bp) overlap</h2>
+<div id="gm12878" class="section level2">
+<h2>GM12878</h2>
+<div id="base-pair-bp-overlap" class="section level3">
+<h3>1. Base-pair (bp) overlap</h3>
 <pre class="r"><code>#-----------------------------
 # 1) Load DNase peaks
 #-----------------------------
@@ -811,9 +875,46 @@ pB &lt;- ggplot(overlap_by_v10,
 (pA | pB) +
   plot_annotation(title = &quot;DNase vs cCRE overlap by category (bp-based)&quot;)</code></pre>
 <p><img src="figure/DNase_overlap_cCREs.Rmd/unnamed-chunk-3-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/bdf293349e1bb13371dfec3ec3f9d07f345b8010/docs/figure/DNase_overlap_cCREs.Rmd/unnamed-chunk-3-1.png" target="_blank">bdf2933</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-10
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="peak-level-overlap" class="section level2">
-<h2>2. Peak-level overlap</h2>
+</div>
+</div>
+<div id="peak-level-overlap" class="section level3">
+<h3>2. Peak-level overlap</h3>
 <pre class="r"><code>#-----------------------------
 # B) Peak overlap counts (min overlap = min_ov_bp) on RAW peaks
 #    This answers: how many DNase peaks overlap ANY other peak by &gt;=100bp (and vice versa)
@@ -878,6 +979,43 @@ p2 &lt;- ggplot(overlap_summary, aes(x = group, y = percent, fill = group)) +
 
 p1 + p2</code></pre>
 <p><img src="figure/DNase_overlap_cCREs.Rmd/unnamed-chunk-4-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/bdf293349e1bb13371dfec3ec3f9d07f345b8010/docs/figure/DNase_overlap_cCREs.Rmd/unnamed-chunk-4-1.png" target="_blank">bdf2933</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code># Keep valid categories only
 peak_gr_raw &lt;- peak_gr_raw[!is.na(peak_gr_raw$V10) &amp; peak_gr_raw$V10 != &quot;&quot;]
 
@@ -973,6 +1111,380 @@ p2 &lt;- ggplot(
 (p1 | p2) +
   plot_annotation(title = &quot;DNase vs cCRE overlap by category (peak-level)&quot;)</code></pre>
 <p><img src="figure/DNase_overlap_cCREs.Rmd/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/bdf293349e1bb13371dfec3ec3f9d07f345b8010/docs/figure/DNase_overlap_cCREs.Rmd/unnamed-chunk-5-1.png" target="_blank">bdf2933</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-10
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="gm12891" class="section level2">
+<h2>GM12891</h2>
+<div id="base-pair-bp-overlap-1" class="section level3">
+<h3>1. Base-pair (bp) overlap</h3>
+<pre class="r"><code>#-----------------------------
+# 1) Load DNase peaks
+#-----------------------------
+DNasepeak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/DNaseseq/GM12891/DNase_GM12891_peaks_ENCFF087IIE.bed.gz&quot;,
+  showProgress = FALSE
+)
+
+DNase_gr_raw &lt;- bed_to_gr(DNasepeak_df, keep_chr)
+
+# Raw counts (peak-based)
+n_DNase_raw &lt;- length(DNase_gr_raw)
+
+# Reduced counts (bp-based; avoids double-counting bp)
+DNase_gr_red &lt;- reduce(DNase_gr_raw, ignore.strand = TRUE)
+n_DNase_red  &lt;- length(DNase_gr_red)
+
+
+#-----------------------------
+# 2) Load Other peaks (possibly multiple .bed.gz files)
+#-----------------------------
+peak_df &lt;- fread(
+  &quot;/project/spott/kevinluo/Fiber_seq/data/ENCODE_CREs/cCREs_v4/LCLs/GM12891_cCREs_ENCFF933EUW.bed&quot;,
+  showProgress = FALSE
+)
+peak_df &lt;- peak_df[peak_df$V10 !=&quot;Low-DNase&quot;,]
+peak_df &lt;- peak_df[peak_df$V1 %in% paste0(&quot;chr&quot;,1:22),]
+
+peak_gr_raw &lt;- bed_to_gr(peak_df, keep_chr)
+
+n_other_raw &lt;- length(peak_gr_raw)
+peak_gr_red &lt;- reduce(peak_gr_raw, ignore.strand = TRUE)
+n_other_red &lt;- length(peak_gr_red)
+
+#-----------------------------
+# A) BP overlap (on reduced ranges)
+#-----------------------------
+ov_red &lt;- intersect(DNase_gr_red, peak_gr_red, ignore.strand = TRUE)
+
+bp_DNase_total  &lt;- sum(width(DNase_gr_red))
+bp_other_total &lt;- sum(width(peak_gr_red))
+bp_overlap     &lt;- sum(width(ov_red))
+
+cat(&quot;\n=== BP overlap (reduced ranges) ===\n&quot;)</code></pre>
+<pre><code>
+=== BP overlap (reduced ranges) ===</code></pre>
+<pre class="r"><code>cat(&quot;DNase total bp (reduced):  &quot;, bp_DNase_total,  &quot;\n&quot;)</code></pre>
+<pre><code>DNase total bp (reduced):   9292190 </code></pre>
+<pre class="r"><code>cat(&quot;cCRE total bp (reduced): &quot;, bp_other_total, &quot;\n&quot;)</code></pre>
+<pre><code>cCRE total bp (reduced):  30043427 </code></pre>
+<pre class="r"><code>cat(&quot;Overlap bp:               &quot;, bp_overlap,     &quot;\n&quot;)</code></pre>
+<pre><code>Overlap bp:                7527167 </code></pre>
+<pre class="r"><code>cat(&quot;% DNase bp in cCRE:       &quot;, bp_overlap/bp_DNase_total*100,       &quot;\n&quot;)</code></pre>
+<pre><code>% DNase bp in cCRE:        81.00531 </code></pre>
+<pre class="r"><code>cat(&quot;% cCRE bp in DNase:       &quot;, bp_overlap/bp_other_total*100,       &quot;\n&quot;)</code></pre>
+<pre><code>% cCRE bp in DNase:        25.05429 </code></pre>
+<pre class="r"><code>overlap_summary &lt;- data.table(
+  metric = c(&quot;all_cCRE bp in DNase&quot;,&quot;DNase bp in all_cCRE&quot;),
+  percent = c(
+    bp_overlap / bp_other_total * 100,
+    bp_overlap / bp_DNase_total * 100
+  )
+)
+
+
+base_bar_theme &lt;- theme_classic(base_size = 14) +
+  theme(
+    legend.position = &quot;none&quot;,
+    axis.text.x = element_text(angle = 15, hjust = 1),
+    plot.margin = margin(t = 12, r = 10, b = 5, l = 5)
+  )
+
+
+# Plot percentage barplot
+p1 &lt;- ggplot(overlap_summary, aes(x = metric, y = percent, fill = metric)) +
+  geom_col(width = 0.65) +
+  geom_text(
+    aes(label = sprintf(&quot;%.1f%%&quot;, percent)),
+    vjust = -0.3, size = 4.5
+  ) +
+  labs(
+    x = NULL,
+    y = &quot;Percentage (%)&quot;,
+    title = &quot;base-pair&quot;
+  ) +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, 0.12))
+  ) +
+  coord_cartesian(clip = &quot;off&quot;) +
+  base_bar_theme</code></pre>
+<pre class="r"><code>#-----------------------------
+# 1) Build cCRE GRanges with V10 labels + filter
+#-----------------------------
+peak_gr &lt;- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3),
+  V10      = peak_df$V10
+)
+peak_gr &lt;- peak_gr[
+  seqnames(peak_gr) %in% keep_chr &amp;
+    !is.na(peak_gr$V10) &amp; peak_gr$V10 != &quot;&quot;
+]
+
+
+#-----------------------------
+# 2) Reduce within each V10
+#-----------------------------
+peak_gr_by_v10 &lt;- split(peak_gr, peak_gr$V10)
+peak_gr_red_by_v10 &lt;- endoapply(peak_gr_by_v10, reduce, ignore.strand = TRUE)
+
+#-----------------------------
+# 3) Compute bp overlap per V10 (ONE pass)
+#-----------------------------
+overlap_by_v10 &lt;- rbindlist(lapply(names(peak_gr_red_by_v10), function(v) {
+  gr_v &lt;- peak_gr_red_by_v10[[v]]
+  
+  bp_v_total   &lt;- sum(width(gr_v))
+  bp_v_overlap &lt;- sum(width(intersect(DNase_gr_red, gr_v, ignore.strand = TRUE)))
+  
+  data.table(
+    V10 = v,
+    bp_v_total = bp_v_total,
+    bp_overlap = bp_v_overlap,
+    pct_DNase_in_V10 = if (bp_DNase_total &gt; 0) 100 * bp_v_overlap / bp_DNase_total else NA_real_,
+    pct_V10_covered_by_DNase = if (bp_v_total &gt; 0) 100 * bp_v_overlap / bp_v_total else NA_real_
+  )
+}))
+
+# Define a consistent order (e.g., based on pct_DNase_in_V10)
+v10_order &lt;- overlap_by_v10[order(-pct_DNase_in_V10), V10]
+overlap_by_v10[, V10 := factor(V10, levels = v10_order)]
+
+#-----------------------------
+# 4) Plot A: composition of DNase bp across V10
+#-----------------------------
+pA &lt;- ggplot(overlap_by_v10,
+             aes(x = V10, y = pct_DNase_in_V10)) +
+  geom_col(width = 0.7) +
+  coord_flip() +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, pct_DNase_in_V10)),
+            hjust = -0.05, size = 4) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;cCRE category&quot;,
+    y = &quot;% of DNase bp overlapped&quot;
+  )
+
+#-----------------------------
+# 5) Plot B: coverage of each V10 by DNase
+#-----------------------------
+pB &lt;- ggplot(overlap_by_v10,
+             aes(x = V10, y = pct_V10_covered_by_DNase)) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, pct_V10_covered_by_DNase)),
+            hjust = -0.05, size = 4) +
+  coord_flip() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;cCRE category&quot;,
+    y = &quot;% bp of category covered by DNase&quot;
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.15)))
+
+#-----------------------------
+# 6) Combine into one figure (optional)
+#-----------------------------
+(pA | pB) +
+  plot_annotation(title = &quot;DNase vs cCRE overlap by category (bp-based)&quot;)</code></pre>
+<p><img src="figure/DNase_overlap_cCREs.Rmd/unnamed-chunk-7-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="peak-level-overlap-1" class="section level3">
+<h3>2. Peak-level overlap</h3>
+<pre class="r"><code>#-----------------------------
+# B) Peak overlap counts (min overlap = min_ov_bp) on RAW peaks
+#    This answers: how many DNase peaks overlap ANY other peak by &gt;=100bp (and vice versa)
+#-----------------------------
+
+peak_gr_raw &lt;- GRanges(
+  seqnames = peak_df$V1,
+  ranges   = IRanges(start = peak_df$V2 + 1L, end = peak_df$V3),
+  V10      = peak_df$V10
+)
+
+hitsoverlap &lt;- findOverlaps(
+  DNase_gr_raw, peak_gr_raw,
+  ignore.strand = TRUE,
+  minoverlap = min_ov_bp
+)
+
+DNase_hit_idx  &lt;- unique(queryHits(hitsoverlap))
+other_hit_idx &lt;- unique(subjectHits(hitsoverlap))
+
+n_DNase_with_overlap  &lt;- length(DNase_hit_idx)
+n_other_with_overlap &lt;- length(other_hit_idx)
+n_pairs_overlap      &lt;- length(hitsoverlap)
+
+prop_DNase_overlap  &lt;- n_DNase_with_overlap / n_DNase_raw
+prop_other_overlap &lt;- n_other_with_overlap / n_other_raw
+
+cat(&quot;\n=== Peak overlap proportions (RAW peaks; minoverlap =&quot;, min_ov_bp, &quot;bp) ===\n&quot;)</code></pre>
+<pre><code>
+=== Peak overlap proportions (RAW peaks; minoverlap = 100 bp) ===</code></pre>
+<pre class="r"><code>cat(sprintf(&quot;DNase peaks overlapping all_cCRE: %d / %d (%.2f%%)\n&quot;,
+            n_DNase_with_overlap, n_DNase_raw, 100 * prop_DNase_overlap))</code></pre>
+<pre><code>DNase peaks overlapping all_cCRE: 36113 / 50289 (71.81%)</code></pre>
+<pre class="r"><code>cat(sprintf(&quot;all_cCRE peaks overlapping DNase: %d / %d (%.2f%%)\n&quot;,
+            n_other_with_overlap, n_other_raw, 100 * prop_other_overlap))</code></pre>
+<pre><code>all_cCRE peaks overlapping DNase: 36576 / 109964 (33.26%)</code></pre>
+<pre class="r"><code>overlap_summary &lt;- data.table(
+  group = c(&quot;DNase peaks overlapping all_cCRE&quot;,
+            &quot;all_cCRE peaks overlapping DNase&quot;),
+  n_overlap = c(n_DNase_with_overlap, n_other_with_overlap),
+  n_total   = c(n_DNase_raw, n_other_raw)
+)
+
+overlap_summary[, percent := 100 * n_overlap / n_total]
+
+p2 &lt;- ggplot(overlap_summary, aes(x = group, y = percent, fill = group)) +
+  geom_col(width = 0.65) +
+  geom_text(
+    aes(label = sprintf(&quot;%.1f%%\n(%d/%d)&quot;, percent, n_overlap, n_total)),
+    vjust = -0.3, size = 4.5
+  ) +
+  labs(
+    x = NULL,
+    y = &quot;Overlapping peaks (%)&quot;,
+    title = &quot;Peak-level&quot;
+  ) +
+  scale_y_continuous(
+    expand = expansion(mult = c(0, 0.18))
+  ) +
+  coord_cartesian(clip = &quot;off&quot;) +
+  base_bar_theme
+
+p1 + p2</code></pre>
+<p><img src="figure/DNase_overlap_cCREs.Rmd/unnamed-chunk-8-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Keep valid categories only
+peak_gr_raw &lt;- peak_gr_raw[!is.na(peak_gr_raw$V10) &amp; peak_gr_raw$V10 != &quot;&quot;]
+
+# Split cCRE peaks by V10 category
+peak_by_v10 &lt;- split(peak_gr_raw, peak_gr_raw$V10)
+
+peak_categories &lt;- sort(unique(mcols(peak_gr_raw)$V10))
+
+overlap_summary &lt;- rbindlist(lapply(peak_categories, function(cat) {
+  
+  gr_v &lt;- peak_gr_raw[mcols(peak_gr_raw)$V10 == cat]
+  
+  hits &lt;- findOverlaps(
+    DNase_gr_raw, gr_v,
+    ignore.strand = TRUE,
+    minoverlap = min_ov_bp
+  )
+  
+  n_peak_total &lt;- length(gr_v)
+  n_DNase_total &lt;- length(DNase_gr_raw)
+  
+  if (length(hits) == 0) {
+    n_peak_overlap &lt;- 0
+    n_DNase_overlap &lt;- 0
+  } else {
+    n_peak_overlap &lt;- length(unique(subjectHits(hits)))  # peaks in this category hit by DNase
+    n_DNase_overlap &lt;- length(unique(queryHits(hits)))    # DNases hit by peaks in this category
+  }
+  
+  data.table(
+    category = cat,
+    n_peak_total = n_peak_total,
+    n_peak_overlap = n_peak_overlap,
+    prop_peak_overlap = n_peak_overlap / n_peak_total,
+    n_DNase_total = n_DNase_total,
+    n_DNase_overlap = n_DNase_overlap,
+    prop_DNase_overlap = n_DNase_overlap / n_DNase_total
+  )
+}))
+
+overlap_summary[, `:=`(
+  peak_overlap_pct = prop_peak_overlap * 100,
+  DNase_overlap_pct = prop_DNase_overlap * 100
+)]
+
+plot_dt &lt;- melt(
+  overlap_summary[, .(
+    category,
+    `Peaks overlapping DNase (%)` = peak_overlap_pct,
+    `DNase overlapping peaks (%)` = DNase_overlap_pct
+  )],
+  id.vars = &quot;category&quot;,
+  variable.name = &quot;metric&quot;,
+  value.name = &quot;percent&quot;
+)
+
+# optional: order categories by one metric
+overlap_summary[, category := factor(
+  category,
+  levels = overlap_summary[order(DNase_overlap_pct, decreasing = T), category]
+)]
+
+p1 &lt;- ggplot(
+  overlap_summary,
+  aes(x = DNase_overlap_pct, y = category)
+) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, DNase_overlap_pct)),
+            hjust = -0.1, size = 3.8) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.12))) +
+  labs(
+    x = &quot;DNase overlapping peaks (%)&quot;,
+    y = NULL,
+    #title = &quot;Proportion of DNase overlapping each peak category&quot;
+  ) +
+  theme_classic(base_size = 13)
+
+p2 &lt;- ggplot(
+  overlap_summary,
+  aes(x = peak_overlap_pct, y = category)
+) +
+  geom_col(width = 0.7) +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, peak_overlap_pct)),
+            hjust = -0.1, size = 3.8) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.12))) +
+  labs(
+    x = &quot;Peaks overlapping DNase (%)&quot;,
+    y = NULL,
+    #title = &quot;Proportion of peaks overlapping DNase&quot;
+  ) +
+  theme_classic(base_size = 13)
+
+(p1 | p2) +
+  plot_annotation(title = &quot;DNase vs cCRE overlap by category (peak-level)&quot;)</code></pre>
+<p><img src="figure/DNase_overlap_cCREs.Rmd/unnamed-chunk-9-1.png" width="1152" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1019,9 +1531,10 @@ loaded via a namespace (and not attached):
 [43] rprojroot_2.0.3        grid_4.2.0             cli_3.6.1             
 [46] tools_4.2.0            bitops_1.0-7           magrittr_2.0.3        
 [49] sass_0.4.1             RCurl_1.98-1.7         tibble_3.2.1          
-[52] dichromat_2.0-0.1      pkgconfig_2.0.3        rmarkdown_2.25        
-[55] rstudioapi_0.13        R6_2.5.1               git2r_0.30.1          
-[58] compiler_4.2.0        </code></pre>
+[52] dichromat_2.0-0.1      whisker_0.4            pkgconfig_2.0.3       
+[55] rmarkdown_2.25         rstudioapi_0.13        R6_2.5.1              
+[58] git2r_0.30.1           compiler_4.2.0        </code></pre>
+</div>
 </div>
 </div>
 </div>
