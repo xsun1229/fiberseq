@@ -30,12 +30,13 @@ CpG methylation and TF binding
 
 # Annotation for the footprints
 
-Annotate footprints(q < 0.1) by location
+Annotating footprints(q < 0.1) by location
 
 * [Promoters, Pol2, OCR](annotation_by_location_prompolocr.html)
 * [15 states from ChromHMM](annotation_by_location_ChromHMM.html)
+* [Motif cluster](annotation_by_location_motif_cluster.html)
 
-Determine the footprint cutoffs (p-value, q-value, fold-enrichment, pileup)
+Determining the footprint cutoffs (p-value, q-value, fold-enrichment, pileup)
 
 * [Link](determine_footprint_cutoffs.html)
 
@@ -51,5 +52,6 @@ Checking the overlap of FIRE peaks with DNase/ ATAC-seq/ cCREs
 Checking the overlap of DNase peaks with cCREs peaks
 
 * [Link](DNase_overlap_cCREs.html)
+
 
 

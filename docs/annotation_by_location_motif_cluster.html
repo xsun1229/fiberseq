@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="XSun" />
+
+<meta name="date" content="2026-03-12" />
+
+<title>Annotating footprints using motif cluster</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.22/datatables.js"></script>
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">fiberseq</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/xsun1229/fiberseq">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Annotating footprints using motif
+cluster</h1>
+<h4 class="author">XSun</h4>
+<h4 class="date">2026-03-12</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-03-12
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>fiberseq/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R
+Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250831code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250831)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250831code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250831)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreeaa2499289d6dccebb2a1e9f369c5ca388f9f0f20targetblankaa24992a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/xsun1229/fiberseq/tree/aa2499289d6dccebb2a1e9f369c5ca388f9f0f20" target="_blank">aa24992</a>
+</a>
+</p>
+</div>
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreeaa2499289d6dccebb2a1e9f369c5ca388f9f0f20targetblankaa24992a"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version
+<a href="https://github.com/xsun1229/fiberseq/tree/aa2499289d6dccebb2a1e9f369c5ca388f9f0f20" target="_blank">aa24992</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Untracked files:
+    Untracked:  analysis/annotation_by_location_motif_cluster.Rmd
+
+Unstaged changes:
+    Modified:   analysis/index.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with
+<code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>library(ggplot2)
+library(data.table)
+library(patchwork)
+
+#fp_lengths &lt;- c(&quot;10-30bp&quot;, &quot;30-60bp&quot;, &quot;60-80bp&quot;)
+fp_lengths &lt;- c(&quot;60-80bp&quot;)
+fp_length &lt;- &quot;60-80bp&quot;
+
+base_out_dir     &lt;- &quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation&quot;</code></pre>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This analysis aimed to annotate Fiber-seq footprints with known motif
+clusters from the Vierstra motif clustering resource
+(<code>/project/spott/kevinluo/Fiber_seq/data/motifs/Vierstra_motif_clustering/hg38.archetype_motifs.v1.0.bed.gz</code>,
+collected by Kevin).</p>
+<p>The workflow consisted of two major stages:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Genome-wide overlap of footprint intervals with motif
+matches</strong> using <code>bedtools</code>.</li>
+</ol>
+<p><code>/project/spott/xsun/fiberseq/2.annotating_footprints/13.motif_cluster_by_chr.sbatch</code>
+<code>/project/spott/xsun/fiberseq/2.annotating_footprints/14.fp_overlap_motifcluster.sbatch</code>
+<code>/project/spott/xsun/fiberseq/2.annotating_footprints/15.run_fp_motif_overlap_by_chr.sbatch</code>
+<code>/project/spott/xsun/fiberseq/2.annotating_footprints/16.submit_fp_motif_overlap_jobs.sh</code></p>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Downstream summarization and visualization in R</strong>,
+including motif assignment per footprint and descriptive statistics
+across footprint size bins.</li>
+</ol>
+<p>The footprint size bins analyzed were:</p>
+<ul>
+<li><code>10-30bp</code></li>
+<li><code>30-60bp</code></li>
+<li><code>60-80bp</code></li>
+</ul>
+<p>To keep only reasonably motif matches, overlaps were filtered by
+requiring at least 5 bp overlap:</p>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<p>The processed overlaps are storaged here:
+<code>/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/</code></p>
+<p>Taking the footprints in <code>60-80bp</code> as an example</p>
+<ul>
+<li><code>annotate_fp_motif.filtered_overlap.RDS</code> &amp;
+<code>annotate_fp_motif.filtered_overlap.tsv.gz</code>: full filtered
+overlap table after applying overlap_bp &gt;= min_overlap (5bp)</li>
+</ul>
+<pre class="bash"><code>
+zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/60-80bp/annotate_fp_motif.filtered_overlap.tsv.gz | head
+</code></pre>
+<pre><code>fp_chr  fp_start    fp_end  fp_name fp_strand   fp_foldenrichment   fp_log10pValue  fp_log10qValue  motif_chr   motif_start motif_end   motif_cluster   match_score motif_strand    best_model  num_models  overlap_bp
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10482   10499   KLF/SP/2    13.0016 -   SP3_HUMAN.H11MO.0.B 14  17
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10502   10518   NR/16   11.5888 -   THA_HUMAN.H11MO.0.C 13  16
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10486   10503   KLF/SP/2    11.2207 -   SP2_HUMAN.H11MO.0.A 9   17
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10480   10489   MBD2    11.1198 -   MBD2_HUMAN.H11MO.0.B    2   9
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10489   10509   GC-tract    10.5797 -   THAP1_HUMAN.H11MO.0.C   1   20
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10510   10530   GC-tract    10.5313 -   ZSC22_HUMAN.H11MO.0.C   1   20
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10472   10486   CTCF    10.298  -   CTCF_MOUSE.H11MO.0.A    5   14
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10478   10495   KLF/SP/2    10.1838 -   SP3_HUMAN.H11MO.0.B 6   17
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10472   10492   GC-tract    10.1658 +   THAP1_HUMAN.H11MO.0.C   1   20</code></pre>
+<ul>
+<li><code>annotate_fp_motif.top1.RDS</code> &amp;
+<code>annotate_fp_motif.top1.tsv.gz</code> : keep only the best motif
+per footprint (based on <code>match_score</code>).</li>
+</ul>
+<pre class="bash"><code>
+zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/60-80bp/annotate_fp_motif.top1.tsv.gz | head
+</code></pre>
+<pre><code>fp_chr  fp_start    fp_end  fp_name fp_strand   fp_foldenrichment   fp_log10pValue  fp_log10qValue  motif_chr   motif_start motif_end   motif_cluster   match_score motif_strand    best_model  num_models  overlap_bp
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10482   10499   KLF/SP/2    13.0016 -   SP3_HUMAN.H11MO.0.B 14  17
+chr1    15143   15173   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_2 .   2.86428 4.07267 1.62783 chr1    15135   15148   DMRT1   9.6864  -   DMRTB_MOUSE.H11MO.0.C   2   5
+chr1    17135   17189   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_3 .   3.13611 5.37744 2.59731 chr1    17177   17197   ZNF335  8.1558  -   ZN335_HUMAN.H11MO.0.A   2   12
+chr1    19705   19778   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_4 .   4.9345  13.3775 9.95773 chr1    19761   19777   IRF/2   10.1224 +   BC11A_HUMAN.H11MO.0.A   5   16
+chr1    19782   19845   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_5 .   3.5939  7.56031 4.4826  chr1    19808   19817   SREBF1  10.7497 +   SRBP2_HUMAN.H11MO.0.B   4   9
+chr1    20929   20955   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_6 .   2.87657 4.97791 2.26458 chr1    20944   20964   GC-tract    10.1726 +   THAP1_HUMAN.H11MO.0.C   1   11
+chr1    24972   25023   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_7 .   2.67157 4.172   1.65792 chr1    24965   24979   HAND1   9.229   -   HAND1_MOUSE.H11MO.0.C   1   7
+chr1    29214   29241   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_8 .   2.48365 3.47125 1.21956 chr1    29223   29240   KLF/SP/2    15.0018 -   SP2_HUMAN.H11MO.0.A 23  17
+chr1    29262   29283   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_9 .   2.84902 4.5626  1.96491 chr1    29270   29287   KLF/SP/2    10.9992 -   SP3_HUMAN.H11MO.0.B 16  13</code></pre>
+<ul>
+<li><code>annotate_fp_motif.top5.RDS</code> &amp;
+<code>annotate_fp_motif.top5.tsv.gz</code> : keep top 5 motifs per
+footprint (based on <code>match_score</code>).</li>
+</ul>
+<pre class="bash"><code>
+zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/60-80bp/annotate_fp_motif.top5.tsv.gz | head
+</code></pre>
+<pre><code>fp_chr  fp_start    fp_end  fp_name fp_strand   fp_foldenrichment   fp_log10pValue  fp_log10qValue  motif_chr   motif_start motif_end   motif_cluster   match_score motif_strand    best_model  num_models  overlap_bp
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10482   10499   KLF/SP/2    13.0016 -   SP3_HUMAN.H11MO.0.B 14  17
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10502   10518   NR/16   11.5888 -   THA_HUMAN.H11MO.0.C 13  16
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10486   10503   KLF/SP/2    11.2207 -   SP2_HUMAN.H11MO.0.A 9   17
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10480   10489   MBD2    11.1198 -   MBD2_HUMAN.H11MO.0.B    2   9
+chr1    10464   10533   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_1 .   4.24116 7.07988 4.03912 chr1    10489   10509   GC-tract    10.5797 -   THAP1_HUMAN.H11MO.0.C   1   20
+chr1    15143   15173   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_2 .   2.86428 4.07267 1.62783 chr1    15135   15148   DMRT1   9.6864  -   DMRTB_MOUSE.H11MO.0.C   2   5
+chr1    15143   15173   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_2 .   2.86428 4.07267 1.62783 chr1    15142   15152   FOX/4   8.4046  +   FOXP1_HUMAN.H11MO.0.A   1   9
+chr1    15143   15173   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_2 .   2.86428 4.07267 1.62783 chr1    15143   15152   RBPJ    8.3251  -   RBPJ_MA1116.1   1   9
+chr1    15143   15173   combined_all_chrs_60-80bp_macs3_q0.1_maxgap1_peak_2 .   2.86428 4.07267 1.62783 chr1    15162   15171   TFAP2/1 7.9443  -   TFAP2C_TFAP_6   1   9</code></pre>
+<div id="how-many-footprints-can-be-annotated" class="section level2">
+<h2>How many footprints can be annotated?</h2>
+<p>A footprint is considered annotated if it has at least one motif
+passing the overlap filter.</p>
+<pre class="r"><code>p &lt;- list()
+for (fp_length in fp_lengths){
+  
+  annotation_summary &lt;- readRDS(paste0(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/&quot;, fp_length, &quot;/annotation_summary.RDS&quot;))
+  
+  df_plot &lt;- data.table(
+    category = c(&quot;Annotated footprints&quot;, &quot;Unannotated footprints&quot;),
+    count = c(annotation_summary$annotated_footprints, annotation_summary$unannotated_footprints)
+  )
+  df_plot[, percent := count / sum(count) * 100]
+  
+  p[[length(p)+1]] &lt;- ggplot(df_plot, aes(x = category, y = count, fill = category)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, percent)),
+            vjust = -0.4, size = 5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Number of footprints&quot;,
+    title = paste0(&quot;Footprint annotation: &quot;, fp_length)
+  ) +
+  theme(legend.position = &quot;none&quot;)
+  
+}
+
+wrap_plots(p)</code></pre>
+<p><img src="figure/annotation_by_location_motif_cluster.Rmd/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="do-footprints-usually-have-one-motif-or-multiple-motifs"
+class="section level2">
+<h2>Do footprints usually have one motif or multiple motifs?</h2>
+<p>This is summarized by counting how many motif hits are associated
+with each footprint.</p>
+<pre class="r"><code>p &lt;- list()
+for (fp_length in fp_lengths){
+  
+  fp_dist_summary &lt;- readRDS(paste0(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/&quot;, fp_length, &quot;/motifs_per_footprint_summary.RDS&quot;))
+  
+  plot_dt &lt;- data.table(
+    category = c(&quot;1 motif&quot;, &quot;Multiple motifs&quot;),
+    count = c(
+      fp_dist_summary$footprints_with_1_motif,
+      fp_dist_summary$footprints_with_multiple_motifs
+    ),
+    proportion = c(
+      fp_dist_summary$prop_with_1_motif,
+      fp_dist_summary$prop_with_multiple_motifs
+    )
+  )
+  
+  
+  p[[length(p)+1]] &lt;- ggplot(plot_dt, aes(x = category, y = count, fill = category)) +
+    geom_col(width = 0.6) +
+    geom_text(
+      aes(label = sprintf(&quot;%d\n(%.1f%%)&quot;, count, proportion * 100)),
+      vjust = -0.3,
+      size = 5
+    ) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+    theme_classic(base_size = 14) +
+    labs(
+      x = &quot;&quot;,
+      y = &quot;Number of annotated footprints&quot;,
+      title = paste0(&quot;Motif multiplicity per footprint: &quot;, fp_dist_summary$fp_length)
+    ) +
+    theme(legend.position = &quot;none&quot;)
+  
+  
+}
+
+wrap_plots(p)</code></pre>
+<p><img src="figure/annotation_by_location_motif_cluster.Rmd/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p &lt;- list()
+for (fp_length in fp_lengths){
+  
+  distribution &lt;- readRDS(paste0(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/&quot;, fp_length, &quot;/motifs_per_footprint_distribution.RDS&quot;))
+
+  p[[length(p)+1]] &lt;- ggplot(distribution, aes(x = n_motifs, y = N)) +
+    geom_col(width = 1, fill = &quot;#4C72B0&quot;) +
+    scale_y_log10() +
+    theme_classic(base_size = 14) +
+    labs(
+      x = &quot;Number of motifs per footprint&quot;,
+      y = &quot;Number of footprints (log scale)&quot;,
+      title = paste0(&quot;Distribution of motifs per footprint: &quot;, fp_dist_summary$fp_length)
+    )
+  
+  
+}
+
+wrap_plots(p)</code></pre>
+<p><img src="figure/annotation_by_location_motif_cluster.Rmd/unnamed-chunk-6-2.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="what-motifs-have-the-most-footprints" class="section level2">
+<h2>What motifs have the most footprints?</h2>
+<p>For each motif cluster, the number of unique footprints containing
+that motif is counted.</p>
+<pre class="r"><code>top_n &lt;- 20
+
+p &lt;- list()
+for (fp_length in fp_lengths){
+  
+  motif_fp_counts &lt;- readRDS(paste0(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/&quot;, fp_length, &quot;/motif_footprint_counts.RDS&quot;))
+  
+  df_plot &lt;- motif_fp_counts[order(-n_footprints)][1:top_n]
+  
+  p[[length(p)+1]] &lt;- ggplot(df_plot,
+                             aes(x = reorder(motif_cluster, n_footprints), y = n_footprints)) +
+    geom_col(width = 0.8) +
+    coord_flip() +
+    theme_classic(base_size = 14) +
+    labs(
+      x = &quot;Motif cluster&quot;,
+      y = &quot;Number of footprints&quot;,
+      title = paste0(&quot;Top &quot;, top_n, &quot; motif clusters by annotated footprints: &quot;, fp_length)
+    )
+  
+  
+  
+  
+}
+
+wrap_plots(p, ncol = 1)</code></pre>
+<p><img src="figure/annotation_by_location_motif_cluster.Rmd/unnamed-chunk-7-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="for-each-motif-how-many-footprints-are-found"
+class="section level2">
+<h2>For each motif, how many footprints are found?</h2>
+<p>For each motif cluster, the number of unique footprints containing
+that motif is counted:</p>
+<!-- ```{r fig.height=4, fig.width=12} -->
+<!-- motif_fp_counts <- readRDS(paste0("/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/10-30bp/motif_footprint_counts.RDS")) -->
+<!-- DT::datatable(motif_fp_counts,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','10-30bp'),options = list(pageLength = 10) ) -->
+<!-- ``` -->
+<!-- ```{r fig.height=4, fig.width=12} -->
+<!-- motif_fp_counts <- readRDS(paste0("/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/30-60bp/motif_footprint_counts.RDS")) -->
+<!-- DT::datatable(motif_fp_counts,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','30-60bp'),options = list(pageLength = 10) ) -->
+<!-- ``` -->
+<pre class="r"><code>motif_fp_counts &lt;- readRDS(paste0(&quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/60-80bp/motif_footprint_counts.RDS&quot;))
+
+DT::datatable(motif_fp_counts,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;60-80bp&#39;),options = list(pageLength = 10) )</code></pre>
+<div id="htmlwidget-55d484e2ce688c3024c2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">60-80bp<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223","224","225","226","227","228","229","230","231","232","233","234","235","236","237","238","239","240","241","242","243","244","245","246","247","248","249","250","251","252","253","254","255","256","257","258","259","260","261","262","263","264","265","266","267","268","269","270","271","272","273","274","275","276","277","278","279","280","281","282"],["KLF/SP/2","GC-tract","NR/3","IRF/2","ETS/2","ZNF354","FOX/5","NR/16","NR/12","ZNF143","KLF/SP/1","Ebox/CAGATGG","FOX/4","TBX/4","E2F/2","SMAD","CTCF","TBX/3","SOX/1","Ebox/CAGCTG","NR/1","PAX/2","HD/2","TFAP2/1","ZFX","ZNF335","NR/11","NR/17","ETS/1","NFAC/2","SPI","NR/19","ZIC","HD/18","LEF1","ZNF324","Ebox/CACCTG","GLI","MAF","NFI/1","MZF1","HD/22","RFX/1","SMARCA5","ZNF320","SREBF1","POU/3","RBPJ","Ebox/CACGTG/2","HIC/1","IRF/1","ZFN121","Ebox/CACGTG/1","ZNF28","ZNF563","ZIC/2","NR/18","NR/7","NR/15","PRDM5","PRDM1","NFI/3","RUNX/1","ZNF768","STAT/2","ZNF332","EGR","AP1/2","P53-like/1","RFX/3","ZSCAN3","NFKB/1","ZNF384/2","TEAD","PLAG1","ZNF554","YY1","POU/1","MIES","NFAT/1","ZNF41","MEF2","TBX/1","HD/20","OSR2","NR/13","OCT4+SOX2","AP1/1","REST/NRSF","HAND1","HEN1","TCF/LEF","REL-halfsite","GATA","HD/12","ZNF331","INSM1","NFAT/2","FOX/7","TFAP2/2","ZNF667","SIX/1","ZNF449","NRF1","EBF1","CCAAT/CEBP","ZBTB6","GLIS","ZNF134","FOX/3","NFY","PAX/1","PRDM16","ZNF418","GRHL","HD/4","ZNF524","BATF","GFI","ZNF85","SNAI2","MYB/5","MFZ1","TBX/2","ZIM3","ZBTB7A","FOX/6","NR/20","GCM","POU/2","CREB/ATF/1","PRDM9","ZNF708","ZNF274","ZNF257","HSF","NR/14","BCL6/2","ZSCAN4","THAP1","STAT/1","ZNF140","MTF1","SOX/3","E2F/1","TFCP2","NFKB/3","FEZF1","ZNF528","Ebox/CATATG","ZNF329","SMARCA1","CPEB1","CREB3/XBP1","SOX/4","ZNF423","SRF","ZNF547","ZNF53","HD/8","ZNF680","ZNF549","NFI/2","CREB/ATF/2","RUNX/2","SOX/5","HD/5","HD/16","MBD2","ZKSCAN1","HINFP1/1","ZBTB48","KLF/SP/3","NR/2","ZNF431","SPDEF/2","FOX/8","PRDM14","MECP2","NFKB/2","HD/14","SPZ1","ZNF436","ZNF57","SOX/2","ZNF146","TATA","CREB/ATF/3","ZNF382","DMRT1","P53-like/3","E2F/4","HIC/2","NR/4","NR/8","RFX/2","HD/10","ZNF384/1","HD/6","ZNF282","HD/17","FOX/1","FOX/2","EWSR1/FLI1","ZNF317","ZNF24","CUX/1","NR/5","E2F/3","ZBTB49","ZNF136","PRDM4","HD/23","SOX/8","IRF/3","KAISO","SCRT1","SOX/6","EVI1/MECOM","ZBTB14","HD/7","P53-like/2","DDIT3+CEBPA","CUX/2","HIF","AIRE","HD/21","NR/10","ZNF586","ZNF250","HD/24","AHR","HD/15","FOX/9","ZNF306","LIN54","SPDEF/1","ZNF784","SIX/2","NFAT/4","CENBP","ARI5B","HD/11","CUX/4","ZNF410","NR2E3","NR/9","ZNF652","HLTF","IRF/4","ZNF232","HD/1","NFAT/3","GMEB2/2","NR/6","HD/13","HINFP1/3","HD/9","ARI5A","MYB/2","OVOL1","ZNF713","ZNF435","DMRT3","HINFP1/2","ZNF490","HD/19","PROX1","MYB/3","HD/25","HSFY2","GMEB2/1","PAX-halfsite","MYB/1","MYB/4","HD/3","SOX/7","CUX/3","BCL6/1","GMEB2/3","HOMEZ","ZBED1"],[181211,174860,101821,97090,87285,74992,68464,67395,66605,66283,63918,63124,61257,59849,59221,58313,56953,54549,53062,51633,51478,49665,49042,47354,47270,46908,45294,43793,43710,42724,42412,42224,41096,40641,40328,39953,39602,39572,39235,38852,37551,37038,36826,36041,35878,35031,34881,32695,32333,31793,31719,31468,31258,31210,30116,29979,29795,29604,29320,29164,28899,28656,28488,28464,28247,27860,27545,27355,27027,26569,25926,25600,25381,25004,25002,24935,24809,23737,23009,22999,22995,22425,22406,22206,22024,21574,21439,21277,21124,20859,20674,20370,20208,20155,20136,20072,19930,19670,19536,19216,18309,18121,18053,18043,17584,17365,17043,16846,16772,16441,16411,16278,15948,15647,15531,15445,15406,15314,15256,14975,14798,14707,14493,14286,14110,14058,14052,13997,13728,13719,13359,13128,13074,12698,12653,12634,12604,12592,12555,12551,12544,12460,12429,12344,12331,12276,12265,12025,11919,11745,11583,11226,11222,11174,11131,11090,11060,11011,10968,10788,10726,10631,10609,10555,10505,10337,10322,10316,10301,10113,10096,10076,9881,9803,9797,9728,9717,9656,9475,9402,9191,9162,8972,8658,8451,8426,8419,8275,8203,7835,7820,7731,7425,7356,7344,7327,7310,7290,7178,7174,7154,6957,6932,6925,6883,6882,6857,6707,6701,6654,6510,6490,6460,6424,6372,6326,6311,6293,5836,5795,5587,5207,4923,4880,4832,4817,4647,4473,4466,4464,4330,4271,4270,4233,4231,4045,4016,3963,3822,3769,3643,3633,3621,3593,3436,3434,3407,3358,3255,3154,3127,3091,3090,2942,2915,2861,2777,2711,2561,2528,2445,2411,2365,2323,1853,1792,1744,1724,1717,1698,1674,1384,1366,1355,1290,1227,1145,1041,925,896,847,500]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>motif_cluster<\/th>\n      <th>n_footprints<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: CentOS Linux 7 (Core)
+
+Matrix products: default
+BLAS/LAPACK: /software/openblas-0.3.13-el7-x86_64/lib/libopenblas_haswellp-r0.3.13.so
+
+locale:
+[1] C
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] patchwork_1.3.2.9000 data.table_1.14.2    ggplot2_4.0.0       
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.12        highr_0.9          RColorBrewer_1.1-3 pillar_1.9.0      
+ [5] compiler_4.2.0     bslib_0.3.1        later_1.3.0        jquerylib_0.1.4   
+ [9] git2r_0.30.1       workflowr_1.7.0    tools_4.2.0        digest_0.6.29     
+[13] jsonlite_1.8.0     evaluate_0.15      lifecycle_1.0.4    tibble_3.2.1      
+[17] gtable_0.3.6       pkgconfig_2.0.3    rlang_1.1.2        cli_3.6.1         
+[21] rstudioapi_0.13    crosstalk_1.2.0    yaml_2.3.5         xfun_0.41         
+[25] fastmap_1.1.0      withr_2.5.0        dplyr_1.1.4        stringr_1.5.1     
+[29] knitr_1.39         htmlwidgets_1.5.4  generics_0.1.4     fs_1.5.2          
+[33] vctrs_0.6.5        sass_0.4.1         DT_0.22            tidyselect_1.2.0  
+[37] rprojroot_2.0.3    grid_4.2.0         glue_1.6.2         R6_2.5.1          
+[41] fansi_1.0.3        rmarkdown_2.25     farver_2.1.0       magrittr_2.0.3    
+[45] scales_1.4.0       promises_1.2.0.1   htmltools_0.5.2    dichromat_2.0-0.1 
+[49] httpuv_1.6.5       labeling_0.4.2     S7_0.2.0           utf8_1.2.2        
+[53] stringi_1.7.6     </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

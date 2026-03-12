@@ -63,15 +63,16 @@ we can use the file `hg38.archetype_motifs.v1.0.bed.gz`
 
 this file contains genome-wide TF motif matches, and they clustered motifs by motif similarity
 
- 	Column		Example		Description
-1	contig		chr1		Chromosome
-2	start		10005		Start position (0-based)
-3	stop		10022		End position
-4	motif_cluster	KLF/SP/2	Motif cluster name
-5	match_score	3.7536		MOODS match score for best cluster match
-6	strand		+		Matching strand
-7	best_model	RREB1_MA0073.1	Best matching motif model from cluster
-8	num_models	1		Number of motif model from cluster with a match
+| Column        | Example        | Description                                     |
+|---------------|----------------|-------------------------------------------------|
+| contig        | chr1           | Chromosome                                      |
+| start         | 10005          | Start position (0-based)                        |
+| stop          | 10022          | End position                                    |
+| motif_cluster | KLF/SP/2       | Motif cluster name                              |
+| match_score   | 3.7536         | MOODS match score for best cluster match        |
+| strand        | +              | Matching strand                                 |
+| best_model    | RREB1_MA0073.1 | Best matching motif model from cluster          |
+| num_models    | 1              | Number of motif model from cluster with a match |
 
 
 

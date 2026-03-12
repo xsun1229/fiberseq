@@ -398,7 +398,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-03-02
+<strong>Last updated:</strong> 2026-03-12
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -532,15 +532,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree4d9469660eb05e62a6e7dbe957b5a3a8f995eb06targetblank4d94696a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreeaa2499289d6dccebb2a1e9f369c5ca388f9f0f20targetblankaa24992a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/xsun1229/fiberseq/tree/4d9469660eb05e62a6e7dbe957b5a3a8f995eb06" target="_blank">4d94696</a>
+<a href="https://github.com/xsun1229/fiberseq/tree/aa2499289d6dccebb2a1e9f369c5ca388f9f0f20" target="_blank">aa24992</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree4d9469660eb05e62a6e7dbe957b5a3a8f995eb06targetblank4d94696a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreeaa2499289d6dccebb2a1e9f369c5ca388f9f0f20targetblankaa24992a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -550,7 +550,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/xsun1229/fiberseq/tree/4d9469660eb05e62a6e7dbe957b5a3a8f995eb06" target="_blank">4d94696</a>.
+<a href="https://github.com/xsun1229/fiberseq/tree/aa2499289d6dccebb2a1e9f369c5ca388f9f0f20" target="_blank">aa24992</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -564,8 +564,12 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
+Untracked files:
+    Untracked:  analysis/annotation_by_location_motif_cluster.Rmd
+
 Unstaged changes:
     Modified:   analysis/data.Rmd
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -610,6 +614,57 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/aa2499289d6dccebb2a1e9f369c5ca388f9f0f20/analysis/data.Rmd" target="_blank">aa24992</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-11
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/f8e2a9d6ad8ab79fb623fe5d8d7a062769e01de9/analysis/data.Rmd" target="_blank">f8e2a9d</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-02
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/f8e2a9d6ad8ab79fb623fe5d8d7a062769e01de9/docs/data.html" target="_blank">f8e2a9d</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-02
+</td>
+<td>
+update
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -764,6 +819,74 @@ footprint-based analyses.</p>
 </div>
 <div id="data-downloaded" class="section level1">
 <h1>Data downloaded</h1>
+<div id="motif-cluster" class="section level2">
+<h2>Motif cluster</h2>
+<p>motif clusters <a
+href="https://www.vierstra.org/resources/motif_clustering"
+class="uri">https://www.vierstra.org/resources/motif_clustering</a></p>
+<p>Kevin has downloaded hg38 motif clusters to
+/project/spott/kevinluo/Fiber_seq/data/motifs/Vierstra_motif_clustering/</p>
+<p>we can use the file
+<code>hg38.archetype_motifs.v1.0.bed.gz</code></p>
+<p>this file contains genome-wide TF motif matches, and they clustered
+motifs by motif similarity</p>
+<table>
+<colgroup>
+<col width="18%" />
+<col width="20%" />
+<col width="61%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Column</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>contig</td>
+<td>chr1</td>
+<td>Chromosome</td>
+</tr>
+<tr class="even">
+<td>start</td>
+<td>10005</td>
+<td>Start position (0-based)</td>
+</tr>
+<tr class="odd">
+<td>stop</td>
+<td>10022</td>
+<td>End position</td>
+</tr>
+<tr class="even">
+<td>motif_cluster</td>
+<td>KLF/SP/2</td>
+<td>Motif cluster name</td>
+</tr>
+<tr class="odd">
+<td>match_score</td>
+<td>3.7536</td>
+<td>MOODS match score for best cluster match</td>
+</tr>
+<tr class="even">
+<td>strand</td>
+<td>+</td>
+<td>Matching strand</td>
+</tr>
+<tr class="odd">
+<td>best_model</td>
+<td>RREB1_MA0073.1</td>
+<td>Best matching motif model from cluster</td>
+</tr>
+<tr class="even">
+<td>num_models</td>
+<td>1</td>
+<td>Number of motif model from cluster with a match</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div id="roadmap-epigenomics-chromhmm-core-15-state-segmentation"
 class="section level2">
 <h2>Roadmap Epigenomics ChromHMM core 15-state segmentation</h2>
