@@ -53,6 +53,15 @@ These files can serve as the starting point for downstream footprint-based analy
 
 # Data downloaded 
 
+## DNase footprints
+
+https://www.vierstra.org/resources/dgf
+From the Digital genomic footprinting (DGF) files, they have two LCL lines: https://resources.altius.org/~jvierstra/projects/footprinting.2020/Supplementary_Table_1.xlsx
+[3:14 PM]maybe use the GM12865
+[3:15 PM]https://resources.altius.org/~jvierstra/projects/footprinting.2020/per.dataset/GM12865-DS12436/
+[3:18 PM]You can download those to my directory /project/spott/kevinluo/Fiber_seq/data/Vierstra_DGF
+
+
 ## Motif cluster
 
 motif clusters https://www.vierstra.org/resources/motif_clustering

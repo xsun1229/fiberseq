@@ -36,9 +36,15 @@ Annotating footprints(q < 0.1) by location
 * [15 states from ChromHMM](annotation_by_location_ChromHMM.html)
 * [Motif cluster](annotation_by_location_motif_cluster.html)
 
+<!-- * [Motif cluster, using refined footprint peaks](annotation_by_location_motif_cluster_refined_peaks.html) -->
+
 Determining the footprint cutoffs (p-value, q-value, fold-enrichment, pileup)
 
 * [Link](determine_footprint_cutoffs.html)
+
+Validating the footprints using DNase footprint
+
+* [Link](validating_footprint_using_DNase_footprint.html)
 
 Checking the FIRE/ DNase/ ATAC-seq/ cCREs coverage for 15 states from ChromHMM
 

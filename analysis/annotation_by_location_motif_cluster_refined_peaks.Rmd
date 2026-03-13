@@ -1,5 +1,5 @@
 ---
-title: "Annotating footprints using motif cluster"
+title: "Annotating footprints using motif cluster, using refined peaks"
 author: "XSun"
 date: "2026-03-12"
 output:
@@ -18,7 +18,7 @@ fp_lengths <- c("10-30bp", "30-60bp", "60-80bp")
 #fp_lengths <- c("10-30bp","60-80bp")
 #fp_length <- "60-80bp"
 
-base_out_dir  <- "/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/"
+base_out_dir  <- "/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/refined_peaks/"
 ```
 
 
