@@ -1,0 +1,222 @@
+---
+title: "Validating the footprints using DNase footprint -- refined peaks"
+author: "XSun"
+date: "2026-03-16"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+
+```{r warning=F, message=F}
+library(data.table)
+library(GenomicRanges)
+library(ggplot2)
+library(patchwork)
+
+```
+
+
+# Introduction
+
+To validate footprints, we used DNase footprints from: https://www.vierstra.org/resources/dgf
+
+They have two LCL lines: https://resources.altius.org/~jvierstra/projects/footprinting.2020/Supplementary_Table_1.xlsx
+
+We used the GM12865: https://resources.altius.org/~jvierstra/projects/footprinting.2020/per.dataset/GM12865-DS12436/
+
+DNase footprint file: `/project/spott/kevinluo/Fiber_seq/data/Vierstra_DGF/interval.all.fps.0.05.bed.gz`
+
+Our footprint files are `/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM/merged/combined/joint_trained_peaks/refined_peaks/`
+
+- 10–30 bp
+- 30–60 bp
+- 60–80 bp
+
+For each footprint set, we varied the footprint significance threshold q value (0.01, 0.1) and measured how much footprint sequence overlaps DNase peaks on **base-pair level**.
+
+
+
+# Results
+
+```{r}
+fp_lengths <- c("10-30bp", "30-60bp", "60-80bp")
+
+folder_fp <- "/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM/merged/combined/joint_trained_peaks/refined_peaks/"
+
+## -----------------------------
+## DNase peaks: read once
+## -----------------------------
+file_DNase_peak <- "/project/spott/kevinluo/Fiber_seq/data/Vierstra_DGF/interval.all.fps.0.05.bed.gz"
+DNase_peak <- fread(file_DNase_peak, showProgress = FALSE)
+setnames(DNase_peak, c(
+  "dnase_chr","dnase_start","dnase_end","dnase_strand","dnase_pval"
+))
+
+setDT(DNase_peak)
+
+gr_dnase <- GRanges(
+  seqnames = DNase_peak$dnase_chr,
+  ranges = IRanges(
+    start = DNase_peak$dnase_start + 1,   ## 0-based -> 1-based
+    end   = DNase_peak$dnase_end
+  ),
+  #strand = DNase_peak$dnase_strand
+)
+
+dnase_total_bp <- sum(width(reduce(gr_dnase)))
+```
+
+
+## q-values
+
+```{r fig.width=13, fig.height=4}
+q_cutoffs <- c(0.1, 0.01)
+
+all_res <- list()
+k <- 1
+
+for (fp_length in fp_lengths) {
+  
+  res_list <- vector("list", length(q_cutoffs))
+  for (i in seq(q_cutoffs)){
+    
+    
+    ## -----------------------------
+    ## read footprint file
+    ## -----------------------------
+    fp_file <- file.path(
+      folder_fp,
+      paste0("combined_all_chrs_", fp_length, "_macs3_q", q_cutoffs[i], "_minratio0.5_refined_peaks.bed.gz")
+    )
+    
+    df_fp <- fread(fp_file, header = FALSE, showProgress = FALSE)
+    
+    setnames(df_fp, c(
+      "fp_chr","fp_start","fp_end"
+    ))
+    
+    setDT(df_fp)
+    
+    gr_fp <- GRanges(
+      seqnames = df_fp$fp_chr,
+      ranges = IRanges(
+        start = df_fp$fp_start + 1,   ## 0-based -> 1-based
+        end   = df_fp$fp_end
+      )
+    )
+    
+    fp_total_bp <- sum(width(reduce(gr_fp)))
+    
+    ## overlap
+    hits <- findOverlaps(gr_fp, gr_dnase, ignore.strand = TRUE)
+    
+    if (length(hits) == 0) {
+      overlap_bp <- 0
+    } else {
+      overlap_ranges <- pintersect(
+        gr_fp[queryHits(hits)],
+        gr_dnase[subjectHits(hits)]
+      )
+      overlap_bp <- sum(width(reduce(overlap_ranges)))
+    }
+    
+    res_list[[i]] <- data.table(
+      fp_length = fp_length,
+      fp_qValue_cutoff = q_cutoffs[i],
+      n_fp = length(gr_fp),
+      fp_total_bp = fp_total_bp,
+      overlap_bp = overlap_bp,
+      prop_fp_bp_overlap_DNase = overlap_bp / fp_total_bp,
+      prop_DNase_bp_overlap_FP = overlap_bp / dnase_total_bp
+    )
+    
+    
+    
+    
+  }
+  
+  
+  all_res[[k]] <- rbindlist(res_list)
+  k <- k + 1
+    
+}
+  
+overlap_res_all <- rbindlist(all_res)
+
+
+library(ggplot2)
+library(patchwork)
+
+## ------------------------------
+## Plot 1: number of footprints
+## ------------------------------
+p_nfp <- ggplot(
+  overlap_res_all,
+  aes(
+    x = factor(fp_qValue_cutoff),
+    y = n_fp,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_y_log10() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "qValue cutoff",
+    y = "Number of footprints(log 10 scale)",
+    color = "Footprint length"
+  )
+
+## ------------------------------
+## Plot 2: FP bp overlapping DNase
+## ------------------------------
+p1 <- ggplot(
+  overlap_res_all,
+  aes(
+    x = factor(fp_qValue_cutoff),
+    y = prop_fp_bp_overlap_DNase,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "qValue cutoff",
+    y = "Proportion of FP bp \noverlapping DNase",
+    color = "Footprint length"
+  )
+
+## ------------------------------
+## Plot 3: DNase bp overlapped by FP
+## ------------------------------
+p2 <- ggplot(
+  overlap_res_all,
+  aes(
+    x = factor(fp_qValue_cutoff),
+    y = prop_DNase_bp_overlap_FP,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "qValue cutoff",
+    y = "Proportion of DNase bp \noverlapped by FP",
+    color = "Footprint length"
+  )
+
+## ------------------------------
+## Combine plots
+## ------------------------------
+p_nfp + p1 + p2
+
+
+
+```

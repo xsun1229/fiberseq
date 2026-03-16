@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="XSun" />
+
+<meta name="date" content="2026-03-12" />
+
+<title>Annotating footprints using motif cluster, using refined peaks</title>
+
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.22/datatables.js"></script>
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="site_libs/font-awesome-6.2.1/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.2.1/css/v4-shims.min.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">fiberseq</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/xsun1229/fiberseq">
+    <span class="fab fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+<h1 class="title toc-ignore">Annotating footprints using motif cluster, using refined peaks</h1>
+<h4 class="author">XSun</h4>
+<h4 class="date">2026-03-12</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2026-03-16
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>fiberseq/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.1). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250831code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20250831)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20250831code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20250831)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree42efd3cd6dedc23c9a49a6d4fcf779878be35fcbtargetblank42efd3ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/xsun1229/fiberseq/tree/42efd3cd6dedc23c9a49a6d4fcf779878be35fcb" target="_blank">42efd3c</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree42efd3cd6dedc23c9a49a6d4fcf779878be35fcbtargetblank42efd3ca" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/xsun1229/fiberseq/tree/42efd3cd6dedc23c9a49a6d4fcf779878be35fcb" target="_blank">42efd3c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Unstaged changes:
+    Modified:   analysis/annotation_by_location_motif_cluster_refined_peaks.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/annotation_by_location_motif_cluster_refined_peaks.Rmd</code>) and HTML (<code>docs/annotation_by_location_motif_cluster_refined_peaks.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/95d0e19a53c7c0cd704ed294769bd38011c8fde4/analysis/annotation_by_location_motif_cluster_refined_peaks.Rmd" target="_blank">95d0e19</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-13
+</td>
+<td>
+update
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<pre class="r"><code>library(ggplot2)
+library(data.table)
+library(patchwork)
+
+fp_lengths &lt;- c(&quot;10-30bp&quot;, &quot;30-60bp&quot;, &quot;60-80bp&quot;)
+#fp_lengths &lt;- c(&quot;10-30bp&quot;,&quot;60-80bp&quot;)
+#fp_length &lt;- &quot;60-80bp&quot;
+
+base_out_dir  &lt;- &quot;/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/refined_peaks/&quot;</code></pre>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This analysis aimed to annotate Fiber-seq footprints with known motif clusters from the Vierstra motif clustering resource (<code>/project/spott/kevinluo/Fiber_seq/data/motifs/Vierstra_motif_clustering/hg38.archetype_motifs.v1.0.bed.gz</code>, collected by Kevin).</p>
+<p>The workflow consisted of two major stages:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Genome-wide overlap of footprint intervals with motif matches</strong> using <code>bedtools</code>.</li>
+</ol>
+<p><code>/project/spott/xsun/fiberseq/2.annotating_footprints/13.motif_cluster_by_chr.sbatch</code> <code>/project/spott/xsun/fiberseq/2.annotating_footprints/15.run_fp_motif_overlap_by_chr.sbatch</code> <code>/project/spott/xsun/fiberseq/2.annotating_footprints/16.submit_fp_motif_overlap_jobs.sh</code></p>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Downstream summarization and visualization in R</strong>, including motif assignment per footprint and descriptive statistics across footprint size bins.</li>
+</ol>
+<p>The footprint size bins analyzed were:</p>
+<ul>
+<li><code>10-30bp</code></li>
+<li><code>30-60bp</code></li>
+<li><code>60-80bp</code></li>
+</ul>
+<p>To keep only reasonably motif matches, overlaps were filtered by requiring at least 5 bp overlap:</p>
+</div>
+<div id="results" class="section level1">
+<h1>Results</h1>
+<p>The processed overlaps are storaged here: <code>/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/refined_peaks/</code></p>
+<p>Taking the footprints in <code>60-80bp</code> as an example</p>
+<ul>
+<li><code>annotate_fp_motif.filtered_overlap.RDS</code> &amp; <code>annotate_fp_motif.filtered_overlap.tsv.gz</code>: full filtered overlap table after applying overlap_bp &gt;= min_overlap (5bp)</li>
+</ul>
+<pre class="bash"><code>
+zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/refined_peaks/60-80bp/annotate_fp_motif.filtered_overlap.tsv.gz | head
+</code></pre>
+<pre><code>fp_chr  fp_start    fp_end  motif_chr   motif_start motif_end   motif_cluster   match_score motif_strand    best_model  num_models  overlap_bp  fp_name
+chr1    10464   10533   chr1    10460   10477   ZNF768  4.6512  -   ZN768_HUMAN.H11MO.0.C   1   13  chr1-10464-10533
+chr1    10464   10533   chr1    10461   10475   NR/3    7.4443  -   RXRA_HUMAN.H11MO.0.A    1   11  chr1-10464-10533
+chr1    10464   10533   chr1    10461   10478   NR/12   2.7163  -   RARA_MA0730.1   2   14  chr1-10464-10533
+chr1    10464   10533   chr1    10463   10475   KAISO   6.9049  +   ZBTB33_MA0527.1 1   11  chr1-10464-10533
+chr1    10464   10533   chr1    10465   10477   KAISO   9.7757  -   ZBTB33_MA0527.1 3   12  chr1-10464-10533
+chr1    10464   10533   chr1    10467   10484   KLF/SP/2    6.4928  -   SP1_MOUSE.H11MO.0.A 1   17  chr1-10464-10533
+chr1    10464   10533   chr1    10467   10486   ZNF324  7.3886  +   Z324A_HUMAN.H11MO.0.C   1   19  chr1-10464-10533
+chr1    10464   10533   chr1    10471   10482   GCM 7.1602  -   GCM1_GCM_3  2   11  chr1-10464-10533
+chr1    10464   10533   chr1    10471   10488   PAX/2   7.7185  -   PAX5_HUMAN.H11MO.0.A    1   17  chr1-10464-10533</code></pre>
+<ul>
+<li><code>annotate_fp_motif.top1.RDS</code> &amp; <code>annotate_fp_motif.top1.tsv.gz</code> : keep only the best motif per footprint (based on <code>match_score</code>).</li>
+</ul>
+<pre class="bash"><code>
+zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/refined_peaks/60-80bp/annotate_fp_motif.top1.tsv.gz | head
+</code></pre>
+<pre><code>fp_chr  fp_start    fp_end  motif_chr   motif_start motif_end   motif_cluster   match_score motif_strand    best_model  num_models  overlap_bp  fp_name
+chr1    10464   10533   chr1    10482   10499   KLF/SP/2    13.0016 -   SP3_HUMAN.H11MO.0.B 14  17  chr1-10464-10533
+chr1    15143   15173   chr1    15135   15148   DMRT1   9.6864  -   DMRTB_MOUSE.H11MO.0.C   2   5   chr1-15143-15173
+chr1    17135   17189   chr1    17177   17197   ZNF335  8.1558  -   ZN335_HUMAN.H11MO.0.A   2   12  chr1-17135-17189
+chr1    19705   19778   chr1    19761   19777   IRF/2   10.1224 +   BC11A_HUMAN.H11MO.0.A   5   16  chr1-19705-19778
+chr1    19782   19845   chr1    19808   19817   SREBF1  10.7497 +   SRBP2_HUMAN.H11MO.0.B   4   9   chr1-19782-19845
+chr1    20929   20955   chr1    20944   20964   GC-tract    10.1726 +   THAP1_HUMAN.H11MO.0.C   1   11  chr1-20929-20955
+chr1    24972   25023   chr1    24965   24979   HAND1   9.229   -   HAND1_MOUSE.H11MO.0.C   1   7   chr1-24972-25023
+chr1    29214   29241   chr1    29223   29240   KLF/SP/2    15.0018 -   SP2_HUMAN.H11MO.0.A 23  17  chr1-29214-29241
+chr1    29262   29283   chr1    29270   29287   KLF/SP/2    10.9992 -   SP3_HUMAN.H11MO.0.B 16  13  chr1-29262-29283</code></pre>
+<ul>
+<li><code>annotate_fp_motif.top5.RDS</code> &amp; <code>annotate_fp_motif.top5.tsv.gz</code> : keep top 5 motifs per footprint (based on <code>match_score</code>).</li>
+</ul>
+<pre class="bash"><code>
+zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/refined_peaks/60-80bp/annotate_fp_motif.top5.tsv.gz | head
+</code></pre>
+<pre><code>fp_chr  fp_start    fp_end  motif_chr   motif_start motif_end   motif_cluster   match_score motif_strand    best_model  num_models  overlap_bp  fp_name
+chr1    10464   10533   chr1    10482   10499   KLF/SP/2    13.0016 -   SP3_HUMAN.H11MO.0.B 14  17  chr1-10464-10533
+chr1    10464   10533   chr1    10502   10518   NR/16   11.5888 -   THA_HUMAN.H11MO.0.C 13  16  chr1-10464-10533
+chr1    10464   10533   chr1    10486   10503   KLF/SP/2    11.2207 -   SP2_HUMAN.H11MO.0.A 9   17  chr1-10464-10533
+chr1    10464   10533   chr1    10480   10489   MBD2    11.1198 -   MBD2_HUMAN.H11MO.0.B    2   9   chr1-10464-10533
+chr1    10464   10533   chr1    10489   10509   GC-tract    10.5797 -   THAP1_HUMAN.H11MO.0.C   1   20  chr1-10464-10533
+chr1    15143   15173   chr1    15135   15148   DMRT1   9.6864  -   DMRTB_MOUSE.H11MO.0.C   2   5   chr1-15143-15173
+chr1    15143   15173   chr1    15142   15152   FOX/4   8.4046  +   FOXP1_HUMAN.H11MO.0.A   1   9   chr1-15143-15173
+chr1    15143   15173   chr1    15143   15152   RBPJ    8.3251  -   RBPJ_MA1116.1   1   9   chr1-15143-15173
+chr1    15143   15173   chr1    15162   15171   TFAP2/1 7.9443  -   TFAP2C_TFAP_6   1   9   chr1-15143-15173</code></pre>
+<div id="how-many-footprints-can-be-annotated" class="section level2">
+<h2>How many footprints can be annotated?</h2>
+<p>A footprint is considered annotated if it has at least one motif passing the overlap filter.</p>
+<pre class="r"><code>p &lt;- list()
+for (fp_length in fp_lengths){
+  
+  annotation_summary &lt;- readRDS(paste0(base_out_dir , fp_length, &quot;/annotation_summary.RDS&quot;))
+  
+  df_plot &lt;- data.table(
+    category = c(&quot;Annotated \nfootprints&quot;, &quot;Unannotated \nfootprints&quot;),
+    count = c(annotation_summary$annotated_footprints, annotation_summary$unannotated_footprints)
+  )
+  df_plot[, percent := count / sum(count) * 100]
+  
+  p[[length(p)+1]] &lt;- ggplot(df_plot, aes(x = category, y = count, fill = category)) +
+  geom_col(width = 0.6) +
+  geom_text(aes(label = sprintf(&quot;%.1f%%&quot;, percent)),
+            vjust = -0.4, size = 5) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;&quot;,
+    y = &quot;Number of footprints&quot;,
+    title = paste0(&quot;Footprint annotation: \n&quot;, fp_length)
+  ) +
+  theme(legend.position = &quot;none&quot;)
+  
+}
+
+wrap_plots(p)</code></pre>
+<p><img src="figure/annotation_by_location_motif_cluster_refined_peaks.Rmd/unnamed-chunk-5-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="do-footprints-usually-have-one-motif-or-multiple-motifs" class="section level2">
+<h2>Do footprints usually have one motif or multiple motifs?</h2>
+<p>This is summarized by counting how many motif hits are associated with each footprint.</p>
+<pre class="r"><code>p &lt;- list()
+for (fp_length in fp_lengths){
+  
+  fp_dist_summary &lt;- readRDS(paste0(base_out_dir , fp_length, &quot;/motifs_per_footprint_summary.RDS&quot;))
+  
+  plot_dt &lt;- data.table(
+    category = c(&quot;1 motif&quot;, &quot;Multiple motifs&quot;),
+    count = c(
+      fp_dist_summary$footprints_with_1_motif,
+      fp_dist_summary$footprints_with_multiple_motifs
+    ),
+    proportion = c(
+      fp_dist_summary$prop_with_1_motif,
+      fp_dist_summary$prop_with_multiple_motifs
+    )
+  )
+  
+  
+  p[[length(p)+1]] &lt;- ggplot(plot_dt, aes(x = category, y = count, fill = category)) +
+    geom_col(width = 0.6) +
+    geom_text(
+      aes(label = sprintf(&quot;%d\n(%.1f%%)&quot;, count, proportion * 100)),
+      vjust = -0.3,
+      size = 5
+    ) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.1))) +
+    theme_classic(base_size = 14) +
+    labs(
+      x = &quot;&quot;,
+      y = &quot;Number of annotated footprints&quot;,
+      #title = paste0(&quot;Motif multiplicity per footprint: \n&quot;, fp_dist_summary$fp_length)
+    ) +
+    theme(legend.position = &quot;none&quot;)
+  
+  
+}
+
+wrap_plots(p)</code></pre>
+<p><img src="figure/annotation_by_location_motif_cluster_refined_peaks.Rmd/unnamed-chunk-6-1.png" width="1152" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p &lt;- list()
+for (fp_length in fp_lengths){
+  
+  distribution &lt;- readRDS(paste0(base_out_dir , fp_length, &quot;/motifs_per_footprint_distribution.RDS&quot;))
+
+  p[[length(p)+1]] &lt;- ggplot(distribution, aes(x = n_motifs, y = N)) +
+    geom_col(width = 1, fill = &quot;#4C72B0&quot;) +
+    scale_y_log10() +
+    theme_classic(base_size = 14) +
+    labs(
+      x = &quot;Number of motifs per footprint&quot;,
+      y = &quot;Number of footprints (log scale)&quot;,
+      #title = paste0(&quot;Distribution of motifs per footprint: &quot;, fp_dist_summary$fp_length)
+    )
+  
+  
+}
+
+wrap_plots(p)</code></pre>
+<p><img src="figure/annotation_by_location_motif_cluster_refined_peaks.Rmd/unnamed-chunk-6-2.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="what-motifs-have-the-most-footprints" class="section level2">
+<h2>What motifs have the most footprints?</h2>
+<p>For each motif cluster, the number of unique footprints containing that motif is counted.</p>
+<pre class="r"><code>top_n &lt;- 20
+
+p &lt;- list()
+for (fp_length in fp_lengths){
+  
+  motif_fp_counts &lt;- readRDS(paste0(base_out_dir , fp_length, &quot;/motif_footprint_counts.RDS&quot;))
+  
+  df_plot &lt;- motif_fp_counts[order(-n_footprints)][1:top_n]
+  
+  p[[length(p)+1]] &lt;- ggplot(df_plot,
+                             aes(x = reorder(motif_cluster, n_footprints), y = n_footprints)) +
+    geom_col(width = 0.8) +
+    coord_flip() +
+    theme_classic(base_size = 14) +
+    labs(
+      x = &quot;Motif cluster&quot;,
+      y = &quot;Number of footprints&quot;,
+      title = paste0(&quot;Top &quot;, top_n, &quot; motif clusters by annotated footprints: &quot;, fp_length)
+    )
+  
+  
+  
+  
+}
+
+wrap_plots(p, ncol = 1)</code></pre>
+<p><img src="figure/annotation_by_location_motif_cluster_refined_peaks.Rmd/unnamed-chunk-7-1.png" width="1152" style="display: block; margin: auto;" /></p>
+</div>
+<div id="for-each-motif-how-many-footprints-are-found" class="section level2">
+<h2>For each motif, how many footprints are found?</h2>
+<p>For each motif cluster, the number of unique footprints containing that motif is counted:</p>
+<pre class="r"><code>motif_fp_counts &lt;- readRDS(paste0(base_out_dir, &quot;/10-30bp/motif_footprint_counts.RDS&quot;))
+
+DT::datatable(motif_fp_counts,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;10-30bp&#39;),options = list(pageLength = 10) )</code></pre>
+<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-55d484e2ce688c3024c2" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">10-30bp<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223","224","225","226","227","228","229","230","231","232","233","234","235","236","237","238","239","240","241","242","243","244","245","246","247","248","249","250","251","252","253","254","255","256","257","258","259","260","261","262","263","264","265","266","267","268","269","270","271","272","273","274","275","276","277","278","279","280","281","282"],["GC-tract","KLF/SP/2","NR/3","TBX/4","ZNF143","ZNF354","IRF/2","NR/16","ETS/2","Ebox/CAGATGG","NR/12","PAX/2","ZFN121","TBX/3","FOX/4","SOX/1","ZNF335","MAF","FOX/5","NR/11","NR/1","HD/2","SMAD","SMARCA5","NFI/1","NR/17","LEF1","Ebox/CAGCTG","HD/18","ZNF324","NR/19","RFX/1","ETS/1","SPI","NR/7","KLF/SP/1","ZFX","NFKB/1","CTCF","NR/15","NFAC/2","STAT/2","AP1/2","HD/20","RBPJ","P53-like/1","TEAD","TFAP2/1","MZF1","HD/22","RFX/3","POU/3","MIES","ZNF554","ZIC","ZNF768","NR/13","ZNF332","IRF/1","HIC/1","E2F/2","HAND1","YY1","OCT4+SOX2","ZNF320","TBX/1","GLI","Ebox/CACGTG/1","ZNF563","SIX/1","ZNF331","NFAT/1","CCAAT/CEBP","NFI/3","TCF/LEF","PRDM1","OSR2","ZNF41","Ebox/CACCTG","SREBF1","HD/12","ZSCAN3","NFAT/2","GATA","BATF","POU/1","ZNF667","ZNF134","REST/NRSF","RUNX/1","AP1/1","SPZ1","ZNF524","NR/20","ZNF274","NR/18","ZNF28","PRDM5","Ebox/CACGTG/2","FOX/7","PLAG1","ZNF85","MEF2","ZNF140","ZNF418","HEN1","GRHL","ZNF528","NFY","NR/14","PAX/1","HD/4","ZNF329","PRDM9","HSF","ZNF708","ZBTB6","NFKB/2","BCL6/2","TBX/2","GFI","REL-halfsite","STAT/1","FOX/3","ZNF547","SOX/3","ZIM3","SOX/4","NFKB/3","ZNF680","INSM1","MTF1","ZNF431","ZNF449","ZNF549","CREB/ATF/1","POU/2","SMARCA1","ZNF317","TFCP2","SOX/5","ZKSCAN1","SRF","DMRT1","FEZF1","HD/14","ZNF423","CREB/ATF/2","HD/16","NFI/2","ZNF257","CREB/ATF/3","GCM","ZNF436","HD/8","Ebox/CATATG","ZNF382","PRDM14","EBF1","ZNF136","SOX/2","HD/5","DDIT3+CEBPA","ZIC/2","P53-like/3","E2F/1","TFAP2/2","GLIS","RFX/2","FOX/8","HIC/2","EGR","TATA","ZNF146","HD/17","ZSCAN4","NR/2","SPDEF/2","NR/5","ZNF282","NR/8","SIX/2","CREB3/XBP1","CPEB1","HD/6","PRDM4","HD/23","NRF1","MYB/5","P53-like/2","ZNF250","SCRT1","FOX/1","ZNF24","EVI1/MECOM","MFZ1","HD/10","SOX/8","SOX/6","NR/4","ZNF384/2","FOX/9","ZBTB49","HD/24","SNAI2","FOX/6","IRF/3","ZNF384/1","E2F/3","ZBTB48","ZNF586","THAP1","NR/10","RUNX/2","PRDM16","AIRE","FOX/2","CUX/1","HD/21","KLF/SP/3","HD/7","EWSR1/FLI1","ZNF306","MECP2","ARI5B","CUX/2","HD/11","HD/15","NFAT/4","LIN54","ZBTB7A","ZNF435","NR/9","NR2E3","ZNF490","HLTF","CUX/4","ZNF784","NR/6","ZNF410","ZNF652","ZNF232","NFAT/3","HD/1","SPDEF/1","E2F/4","ZNF57","OVOL1","DMRT3","ZNF53","IRF/4","ARI5A","HD/25","MBD2","HD/13","HIF","MYB/2","PROX1","AHR","ZNF713","HINFP1/1","CENBP","HD/9","KAISO","SOX/7","MYB/3","GMEB2/2","HD/19","BCL6/1","HSFY2","ZBTB14","MYB/4","MYB/1","HD/3","CUX/3","GMEB2/1","PAX-halfsite","HOMEZ","GMEB2/3","HINFP1/3","ZBED1","HINFP1/2"],[4127525,3584377,1874906,1658379,1448086,1409927,1385258,1384528,1363661,1361436,1359925,1216876,1149724,1144705,1106779,1025163,987181,984428,948958,946256,890803,888798,874810,838456,810321,776157,740826,736253,699759,694050,693148,677242,668695,647340,635727,631483,609892,597421,588226,577969,569683,565157,563827,556935,552661,552612,550060,546080,538848,529702,514938,514084,513536,506869,483698,480279,475820,475042,473076,468099,467302,463460,458789,454850,452098,451546,442156,441200,436052,431504,430176,425887,420058,418960,418623,416656,399014,381060,380618,378837,377445,375950,365284,364175,362230,362087,361736,361143,358845,351792,333861,333337,327937,326155,323295,323062,321376,320522,314360,313631,312485,311727,310691,308135,306620,305676,302811,285722,284917,284772,279072,278711,269710,265914,265049,263470,262801,262529,261614,261264,258885,258321,253479,248864,246622,242149,235802,228088,223336,223318,223114,221871,218995,217738,212994,212542,211235,206550,206470,204273,203091,202179,200644,199701,197859,197304,196748,195484,195353,194894,194190,189015,188471,188080,187999,187723,183827,183064,181876,180181,176729,173052,171386,170216,170186,168993,167757,167071,166708,166201,166008,164372,163427,162219,159690,158359,158026,154982,154233,148712,148195,145820,142025,139252,138309,137843,136980,135773,133897,133311,132831,131377,129587,125651,124748,124002,123214,122700,122524,120162,119198,117230,116031,115512,115510,110640,109059,108942,108682,107382,105344,103458,103080,101755,100289,100215,100022,92687,89957,86859,86799,85416,84485,80360,74522,73901,72580,71759,70878,69458,67614,67069,66959,64963,64093,63012,62890,60727,60476,58837,58819,56363,55166,54669,53652,53571,49713,49327,48587,47953,46679,45482,44810,43030,40133,39788,36215,35872,35124,32783,31713,31623,29909,29765,26926,26623,23634,23042,22534,22389,21915,20992,20706,20328,14613,13415,11027,9385,8388,6049,5780,3966]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>motif_cluster<\/th>\n      <th>n_footprints<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>motif_fp_counts &lt;- readRDS(paste0(base_out_dir, &quot;/30-60bp/motif_footprint_counts.RDS&quot;))
+
+DT::datatable(motif_fp_counts,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;30-60bp&#39;),options = list(pageLength = 10) )</code></pre>
+<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-0c375f72d786c94bb27a" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-0c375f72d786c94bb27a">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">30-60bp<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223","224","225","226","227","228","229","230","231","232","233","234","235","236","237","238","239","240","241","242","243","244","245","246","247","248","249","250","251","252","253","254","255","256","257","258","259","260","261","262","263","264","265","266","267","268","269","270","271","272","273","274","275","276","277","278","279","280","281","282"],["GC-tract","KLF/SP/2","IRF/2","NR/3","ETS/2","FOX/5","ZNF354","FOX/4","SOX/1","TBX/4","Ebox/CAGATGG","NR/12","ZNF143","NR/16","NFAC/2","HD/2","LEF1","HD/18","TBX/3","SPI","NR/1","Ebox/CAGCTG","ETS/1","IRF/1","NR/11","ZNF335","MAF","SMAD","KLF/SP/1","ZNF28","NFI/1","E2F/2","SMARCA5","ZFX","NR/17","NR/19","ZNF324","ZNF384/2","PRDM1","CTCF","NR/7","TFAP2/1","POU/3","PAX/2","STAT/2","HD/22","OCT4+SOX2","NFAT/1","MZF1","TCF/LEF","RBPJ","RFX/1","GLI","RUNX/1","POU/1","ZIC","Ebox/CACCTG","MIES","TEAD","HIC/1","P53-like/1","NR/15","NFKB/1","NFAT/2","AP1/2","MEF2","ZNF768","ZNF41","NFI/3","ZIM3","FOX/3","TBX/1","GATA","Ebox/CACGTG/1","ZFN121","HAND1","ZNF320","RFX/3","CCAAT/CEBP","SIX/1","NR/14","SREBF1","NR/13","HD/20","YY1","ZNF332","HD/4","PRDM5","ZNF418","AP1/1","BATF","ZNF554","Ebox/CACGTG/2","ZNF563","NR/18","REL-halfsite","GFI","PLAG1","ZNF85","ZSCAN3","ZNF331","OSR2","NFY","NR/20","SOX/3","FEZF1","REST/NRSF","FOX/7","ZIC/2","ZNF274","GRHL","ZNF667","ZNF134","HSF","PAX/1","POU/2","INSM1","EGR","SMARCA1","NR/2","HD/12","ZNF528","STAT/1","SOX/4","CPEB1","SRF","NFKB/3","HEN1","BCL6/2","SPDEF/2","MYB/5","ZNF449","E2F/1","SOX/2","ZNF257","ZNF431","HD/8","ZNF680","ZNF140","ZNF708","Ebox/CATATG","PRDM9","SOX/5","MFZ1","HD/16","NFI/2","TBX/2","HD/5","HD/17","ZNF547","TFAP2/2","HD/10","HD/14","ZNF524","EBF1","CREB/ATF/1","FOX/6","ZSCAN4","ZNF384/1","ZBTB6","DMRT1","TFCP2","ZNF329","GLIS","ZNF549","CREB/ATF/2","TATA","ZNF146","ZNF382","SNAI2","ZNF317","MTF1","CREB/ATF/3","NRF1","FOX/8","HD/6","PRDM16","SCRT1","CREB3/XBP1","PRDM14","SOX/6","ZNF423","ZKSCAN1","P53-like/3","ZNF136","GCM","CUX/1","HD/23","ZNF250","ZNF24","ZNF282","FOX/1","RFX/2","E2F/3","SPZ1","EVI1/MECOM","THAP1","IRF/3","PRDM4","SOX/8","ZNF436","HIC/2","HINFP1/1","RUNX/2","ZNF53","NFKB/2","HD/7","ZBTB48","ZBTB7A","P53-like/2","MECP2","FOX/2","ZBTB49","LIN54","NR/5","EWSR1/FLI1","AIRE","KLF/SP/3","HD/24","ZNF586","MBD2","HD/21","NR/8","HD/1","NR/4","DDIT3+CEBPA","E2F/4","NR2E3","ARI5B","ZNF57","ZNF652","NFAT/4","FOX/9","NR/10","ZNF306","CUX/4","HLTF","NFAT/3","IRF/4","NR/9","CUX/2","ZNF232","HD/15","NR/6","ZNF784","ZNF713","SIX/2","ARI5A","ZNF410","HIF","SPDEF/1","HD/13","HD/9","HD/11","ZNF435","KAISO","OVOL1","MYB/2","DMRT3","CENBP","AHR","HD/25","ZBTB14","HSFY2","ZNF490","MYB/3","HD/19","PROX1","GMEB2/2","HD/3","MYB/1","MYB/4","BCL6/1","SOX/7","HOMEZ","HINFP1/3","GMEB2/1","CUX/3","PAX-halfsite","HINFP1/2","GMEB2/3","ZBED1"],[1073200,1049240,824819,638520,610808,560831,557103,535396,470710,440726,431127,423827,396518,383339,383031,358034,357713,349023,335226,333440,320346,297969,287292,286338,282563,275474,271744,267719,264198,263159,262893,261038,245801,242738,232309,231217,221697,220977,217063,214171,209875,208299,206638,205568,203693,202096,191560,189342,189213,187344,186050,176853,172676,170114,169325,168932,168677,168654,165566,163999,162616,161457,159511,156371,155619,154873,152999,151953,150161,148876,148672,146814,143277,142301,140324,139786,136404,136079,135179,134605,130351,129722,129539,128302,128109,126934,125693,125375,124527,124294,123578,122477,121849,119834,116572,114622,112301,111684,111299,110969,108935,108557,108429,108019,106621,104180,103484,103477,101309,100072,96909,96790,94718,94372,94266,93665,92977,91626,91622,90981,90770,89592,89464,88909,88711,88284,87158,86542,85126,84656,84445,83201,82655,82104,81527,81167,80605,80111,79778,79306,77972,77030,76741,76323,75127,73900,73607,73290,72835,72664,72133,71868,71316,71025,69273,68972,67849,66768,66460,66425,66384,65847,65436,63566,63393,62803,61203,60859,60322,60281,58939,58655,58348,58059,57769,57519,57245,56899,54994,53490,53087,52906,52473,51995,51731,50930,50920,50142,50117,49994,49904,49715,49468,49224,48897,48811,48741,48462,46858,46087,45782,44830,43677,43658,43360,42913,41474,41340,41156,40287,40225,39228,39005,37843,37437,37164,36507,36308,35184,34969,34352,33362,32268,31651,31548,31033,30286,29516,28792,28646,28570,28318,27891,27342,27034,27013,25676,25124,24715,24558,24193,23953,23920,23856,23111,22142,20412,20062,20008,19337,19139,18648,18368,18296,18238,18057,17610,17580,17150,16233,14887,14307,14240,12729,12637,12479,11746,11259,10416,9782,9615,9432,8218,7584,6561,6343,5908,5858,5665,4306,3399,2278]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>motif_cluster<\/th>\n      <th>n_footprints<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>motif_fp_counts &lt;- readRDS(paste0(base_out_dir, &quot;/60-80bp/motif_footprint_counts.RDS&quot;))
+
+DT::datatable(motif_fp_counts,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;60-80bp&#39;),options = list(pageLength = 10) )</code></pre>
+<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-9fa6da26214ebfd05e61" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-9fa6da26214ebfd05e61">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">60-80bp<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223","224","225","226","227","228","229","230","231","232","233","234","235","236","237","238","239","240","241","242","243","244","245","246","247","248","249","250","251","252","253","254","255","256","257","258","259","260","261","262","263","264","265","266","267","268","269","270","271","272","273","274","275","276","277","278","279","280","281","282"],["KLF/SP/2","GC-tract","NR/3","IRF/2","ETS/2","ZNF354","FOX/5","NR/16","NR/12","ZNF143","KLF/SP/1","Ebox/CAGATGG","FOX/4","TBX/4","E2F/2","SMAD","CTCF","TBX/3","SOX/1","NR/1","Ebox/CAGCTG","PAX/2","HD/2","ZFX","TFAP2/1","ZNF335","NR/11","NR/17","ETS/1","NFAC/2","SPI","NR/19","ZIC","HD/18","LEF1","ZNF324","GLI","Ebox/CACCTG","MAF","NFI/1","MZF1","HD/22","RFX/1","SMARCA5","ZNF320","POU/3","SREBF1","RBPJ","Ebox/CACGTG/2","HIC/1","IRF/1","ZFN121","ZNF28","Ebox/CACGTG/1","ZNF563","ZIC/2","NR/18","NR/7","NR/15","PRDM5","PRDM1","NFI/3","ZNF768","RUNX/1","STAT/2","ZNF332","EGR","AP1/2","P53-like/1","RFX/3","ZSCAN3","ZNF384/2","NFKB/1","TEAD","PLAG1","ZNF554","YY1","POU/1","ZNF41","NFAT/1","MIES","MEF2","TBX/1","HD/20","OSR2","NR/13","OCT4+SOX2","AP1/1","REST/NRSF","HAND1","HEN1","TCF/LEF","GATA","REL-halfsite","HD/12","ZNF331","INSM1","NFAT/2","FOX/7","TFAP2/2","ZNF667","SIX/1","ZNF449","NRF1","EBF1","CCAAT/CEBP","ZBTB6","GLIS","ZNF134","FOX/3","NFY","PAX/1","PRDM16","ZNF418","GRHL","HD/4","ZNF524","BATF","GFI","ZNF85","SNAI2","MYB/5","MFZ1","TBX/2","ZIM3","FOX/6","ZBTB7A","NR/20","POU/2","GCM","CREB/ATF/1","PRDM9","ZNF708","ZNF274","HSF","NR/14","ZNF257","ZSCAN4","BCL6/2","STAT/1","ZNF140","THAP1","SOX/3","MTF1","E2F/1","NFKB/3","TFCP2","FEZF1","ZNF528","Ebox/CATATG","ZNF329","CPEB1","SMARCA1","SOX/4","SRF","ZNF423","CREB3/XBP1","ZNF547","ZNF53","HD/8","ZNF680","ZNF549","NFI/2","CREB/ATF/2","RUNX/2","HD/5","SOX/5","HD/16","MBD2","ZKSCAN1","ZBTB48","HINFP1/1","NR/2","KLF/SP/3","ZNF431","SPDEF/2","FOX/8","PRDM14","NFKB/2","MECP2","HD/14","SPZ1","ZNF436","ZNF57","SOX/2","ZNF146","TATA","CREB/ATF/3","ZNF382","P53-like/3","DMRT1","E2F/4","NR/8","HD/10","HIC/2","NR/4","ZNF384/1","RFX/2","HD/6","HD/17","ZNF282","FOX/2","FOX/1","EWSR1/FLI1","ZNF24","CUX/1","ZNF317","NR/5","E2F/3","ZBTB49","ZNF136","PRDM4","HD/23","SOX/8","IRF/3","SOX/6","SCRT1","KAISO","EVI1/MECOM","ZBTB14","HD/7","P53-like/2","DDIT3+CEBPA","CUX/2","AIRE","HIF","HD/21","ZNF586","ZNF250","NR/10","HD/24","HD/15","FOX/9","ZNF306","AHR","LIN54","SPDEF/1","ZNF784","SIX/2","NFAT/4","ARI5B","HD/11","CUX/4","CENBP","ZNF410","NR2E3","NR/9","ZNF652","HLTF","IRF/4","ZNF232","NFAT/3","HD/1","NR/6","GMEB2/2","HD/13","HD/9","HINFP1/3","ARI5A","MYB/2","OVOL1","ZNF713","ZNF435","DMRT3","HINFP1/2","ZNF490","HD/19","PROX1","MYB/3","HD/25","HSFY2","GMEB2/1","MYB/1","PAX-halfsite","MYB/4","HD/3","SOX/7","CUX/3","BCL6/1","GMEB2/3","HOMEZ","ZBED1"],[180835,174474,101212,96635,86509,74702,68229,66879,66160,65734,63416,62468,60941,59491,58798,57741,56682,54064,52699,51029,50953,49282,48672,46908,46897,46467,44900,43398,43116,42516,42016,41801,40681,40423,40039,39605,39115,39078,38897,38543,37158,36597,36414,35778,35522,34749,34555,32311,31932,31522,31482,31152,31098,30793,29774,29618,29454,29359,29055,28781,28695,28321,28210,28041,27919,27486,27219,26990,26706,26193,25576,25309,25281,24823,24706,24609,24509,23604,22831,22827,22769,22317,22243,22042,21703,21434,21336,21043,20839,20684,20329,20203,19963,19940,19832,19772,19631,19499,19304,18941,18055,17955,17823,17789,17332,17201,16716,16603,16600,16357,16205,16058,15670,15509,15379,15326,15204,15203,15056,14890,14610,14470,14273,14150,14043,13992,13837,13820,13654,13519,13136,12999,12921,12587,12525,12525,12487,12483,12466,12414,12349,12321,12261,12215,12191,12126,12058,11946,11741,11660,11429,11175,11106,11008,10993,10953,10943,10872,10808,10719,10655,10538,10477,10410,10280,10265,10243,10235,10065,10012,9908,9806,9752,9738,9728,9667,9621,9540,9288,9253,9127,9070,8849,8455,8406,8403,8358,8205,8132,7776,7754,7534,7295,7286,7284,7251,7231,7216,7136,7112,7103,6903,6873,6865,6846,6820,6812,6655,6616,6557,6475,6439,6411,6368,6271,6246,6241,6149,5798,5567,5556,5167,4877,4844,4785,4674,4597,4437,4436,4435,4273,4232,4186,4186,4104,4017,3949,3905,3803,3728,3613,3597,3570,3545,3412,3399,3385,3335,3217,3123,3106,3066,3061,2899,2854,2843,2699,2681,2549,2484,2411,2394,2353,2304,1788,1785,1734,1693,1691,1682,1650,1351,1322,1303,1263,1223,1138,1035,915,860,842,491]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>motif_cluster<\/th>\n      <th>n_footprints<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.0 (2022-04-22)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Red Hat Enterprise Linux 8.4 (Ootpa)
+
+Matrix products: default
+BLAS/LAPACK: /software/openblas-0.3.13-el8-x86_64/lib/libopenblas_skylakexp-r0.3.13.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] patchwork_1.1.1   data.table_1.14.4 ggplot2_3.4.2    
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.14       highr_0.9         pillar_1.9.0      compiler_4.2.0   
+ [5] bslib_0.3.1       later_1.3.0       jquerylib_0.1.4   git2r_0.30.1     
+ [9] workflowr_1.7.1   tools_4.2.0       digest_0.6.29     jsonlite_2.0.0   
+[13] evaluate_1.0.5    lifecycle_1.0.4   tibble_3.2.1      gtable_0.3.0     
+[17] pkgconfig_2.0.3   rlang_1.1.7       cli_3.6.5         rstudioapi_0.14  
+[21] crosstalk_1.2.0   yaml_2.3.5        xfun_0.38         fastmap_1.1.0    
+[25] withr_3.0.2       dplyr_1.1.2       stringr_1.5.0     knitr_1.42       
+[29] htmlwidgets_1.6.2 generics_0.1.3    fs_1.6.6          vctrs_0.6.1      
+[33] sass_0.4.1        DT_0.22           tidyselect_1.2.0  rprojroot_2.1.1  
+[37] grid_4.2.0        glue_1.6.2        R6_2.6.1          fansi_1.0.3      
+[41] rmarkdown_2.21    farver_2.1.0      magrittr_2.0.3    whisker_0.4      
+[45] ellipsis_0.3.2    scales_1.2.0      promises_1.2.0.1  htmltools_0.5.7  
+[49] colorspace_2.0-3  httpuv_1.6.5      labeling_0.4.2    utf8_1.2.2       
+[53] stringi_1.7.6     munsell_0.5.0    </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

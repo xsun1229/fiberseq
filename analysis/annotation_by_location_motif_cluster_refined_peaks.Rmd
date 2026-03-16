@@ -47,7 +47,7 @@ To keep only reasonably motif matches, overlaps were filtered by requiring at le
 
 # Results
 
-The processed overlaps are storaged here: `/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/`
+The processed overlaps are storaged here: `/project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/refined_peaks/`
 
 Taking the footprints in `60-80bp` as an example
 
@@ -55,7 +55,7 @@ Taking the footprints in `60-80bp` as an example
 
 ```{bash }
 
-zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/60-80bp/annotate_fp_motif.filtered_overlap.tsv.gz | head
+zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/refined_peaks/60-80bp/annotate_fp_motif.filtered_overlap.tsv.gz | head
 
 ```
 
@@ -63,7 +63,7 @@ zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_mo
 
 ```{bash }
 
-zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/60-80bp/annotate_fp_motif.top1.tsv.gz | head
+zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/refined_peaks/60-80bp/annotate_fp_motif.top1.tsv.gz | head
 
 ```
 
@@ -71,7 +71,7 @@ zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_mo
 
 ```{bash }
 
-zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/60-80bp/annotate_fp_motif.top5.tsv.gz | head
+zcat /project/spott/xsun/fiberseq/2.annotating_footprints/results/annotate_fp_motif/motif_annotation/refined_peaks/60-80bp/annotate_fp_motif.top5.tsv.gz | head
 
 ```
 

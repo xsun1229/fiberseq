@@ -32,9 +32,10 @@ CpG methylation and TF binding
 
 Annotating footprints(q < 0.1) by location
 
-* [Promoters, Pol2, OCR](annotation_by_location_prompolocr.html)
-* [15 states from ChromHMM](annotation_by_location_ChromHMM.html)
-* [Motif cluster](annotation_by_location_motif_cluster.html)
+* [Promoters, Pol2, OCR, earlier footprint peaks](annotation_by_location_prompolocr.html)
+* [15 states from ChromHMM, earlier footprint peaks](annotation_by_location_ChromHMM.html)
+* [Motif cluster, earlier footprint peaks](annotation_by_location_motif_cluster.html)
+* [Motif cluster, refined footprint peaks](annotation_by_location_motif_cluster_refined_peaks.html)
 
 <!-- * [Motif cluster, using refined footprint peaks](annotation_by_location_motif_cluster_refined_peaks.html) -->
 
@@ -42,9 +43,10 @@ Determining the footprint cutoffs (p-value, q-value, fold-enrichment, pileup)
 
 * [Link](determine_footprint_cutoffs.html)
 
-Validating the footprints using DNase footprint
+Validating the footprints using DGF DNase footprint
 
-* [Link](validating_footprint_using_DNase_footprint.html)
+* [Earlier footprint peaks](validating_footprint_using_DNase_footprint.html)
+* [Refined footprint peaks](validating_footprint_using_DNase_footprint_refinedpeaks.html)
 
 Checking the FIRE/ DNase/ ATAC-seq/ cCREs coverage for 15 states from ChromHMM
 
