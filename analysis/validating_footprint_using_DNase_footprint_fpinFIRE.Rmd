@@ -1,5 +1,5 @@
 ---
-title: "Validating the footprints using DNase footprint"
+title: "Validating the footprints (in FIRE peaks) using DNase footprint"
 author: "XSun"
 date: "2026-03-17"
 output:
