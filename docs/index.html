@@ -13,7 +13,7 @@
 
 <title>Fiber-seq Analysis</title>
 
-<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -32,8 +32,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.2.1/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.2.1/css/v4-shims.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -288,7 +288,9 @@ $(document).ready(function () {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -297,7 +299,9 @@ $(document).ready(function () {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -306,17 +310,27 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-03-16
+<strong>Last updated:</strong> 2026-03-17
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
 </p>
 <p>
-<strong>Knit directory:</strong> <code>fiberseq/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+<strong>Knit directory:</strong> <code>fiberseq/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
 </p>
 <p>
-This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.1). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -325,43 +339,70 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree42efd3cd6dedc23c9a49a6d4fcf779878be35fcbtargetblank42efd3ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/xsun1229/fiberseq/tree/42efd3cd6dedc23c9a49a6d4fcf779878be35fcb" target="_blank">42efd3c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreeef17c07243c241a97f062ed4a10a05f5215538e4targetblankef17c07a">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/xsun1229/fiberseq/tree/ef17c07243c241a97f062ed4a10a05f5215538e4" target="_blank">ef17c07</a>
+</a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree42efd3cd6dedc23c9a49a6d4fcf779878be35fcbtargetblank42efd3ca" class="panel-collapse collapse">
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreeef17c07243c241a97f062ed4a10a05f5215538e4targetblankef17c07a"
+class="panel-collapse collapse">
 <div class="panel-body">
 <p>
-Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/xsun1229/fiberseq/tree/42efd3cd6dedc23c9a49a6d4fcf779878be35fcb" target="_blank">42efd3c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version
+<a href="https://github.com/xsun1229/fiberseq/tree/ef17c07243c241a97f062ed4a10a05f5215538e4" target="_blank">ef17c07</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
 </p>
 <p>
-Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
 </p>
 <pre><code>
 Untracked files:
-    Untracked:  analysis/validating_footprint_using_DNase_footprint_refinedpeaks.Rmd
+    Untracked:  analysis/validating_footprint_using_DNase_footprint_fpinFIRE.Rmd
 
 Unstaged changes:
-    Modified:   analysis/annotation_by_location_motif_cluster_refined_peaks.Rmd
     Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
 </p>
 </div>
 </div>
@@ -372,7 +413,11 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML (<code>docs/index.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML
+(<code>docs/index.html</code>) files. If you’ve configured a remote Git
+repository (see <code>?wflow_git_remote</code>), click on the hyperlinks
+in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -396,6 +441,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/90a61cc92da9771b49b1c1916190be5a9b47d784/analysis/index.Rmd" target="_blank">90a61cc</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-16
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/90a61cc92da9771b49b1c1916190be5a9b47d784/docs/index.html" target="_blank">90a61cc</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-16
+</td>
+<td>
+update
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1194,25 +1273,38 @@ Start workflowr project.
 <h1>Annotation for the footprints</h1>
 <p>Annotating footprints(q &lt; 0.1) by location</p>
 <ul>
-<li><a href="annotation_by_location_prompolocr.html">Promoters, Pol2, OCR, earlier footprint peaks</a></li>
-<li><a href="annotation_by_location_ChromHMM.html">15 states from ChromHMM, earlier footprint peaks</a></li>
-<li><a href="annotation_by_location_motif_cluster.html">Motif cluster, earlier footprint peaks</a></li>
-<li><a href="annotation_by_location_motif_cluster_refined_peaks.html">Motif cluster, refined footprint peaks</a></li>
+<li><a href="annotation_by_location_prompolocr.html">Promoters, Pol2,
+OCR, original MACS footprint peaks</a></li>
+<li><a href="annotation_by_location_ChromHMM.html">15 states from
+ChromHMM, original MACS footprint peaks</a></li>
+<li><a href="annotation_by_location_motif_cluster.html">Motif cluster,
+original MACS footprint peaks</a></li>
+<li><a
+href="annotation_by_location_motif_cluster_refined_peaks.html">Motif
+cluster, refined footprint peaks</a></li>
 </ul>
-<!-- * [Motif cluster, using refined footprint peaks](annotation_by_location_motif_cluster_refined_peaks.html) -->
-<p>Determining the footprint cutoffs (p-value, q-value, fold-enrichment, pileup)</p>
+<p>Determining the footprint cutoffs (p-value, q-value, fold-enrichment,
+pileup)</p>
 <ul>
 <li><a href="determine_footprint_cutoffs.html">Link</a></li>
 </ul>
 <p>Validating the footprints using DGF DNase footprint</p>
 <ul>
-<li><a href="validating_footprint_using_DNase_footprint.html">Earlier footprint peaks</a></li>
-<li><a href="validating_footprint_using_DNase_footprint_refinedpeaks.html">Refined footprint peaks</a></li>
+<li><a href="validating_footprint_using_DNase_footprint.html">Original
+MACS footprint peaks</a></li>
+<li><a
+href="validating_footprint_using_DNase_footprint_refinedpeaks.html">Refined
+footprint peaks</a></li>
+<li><a
+href="validating_footprint_using_DNase_footprint_fpinFIRE.html">Original
+MACS footprint peaks in FIRE</a></li>
 </ul>
-<p>Checking the FIRE/ DNase/ ATAC-seq/ cCREs coverage for 15 states from ChromHMM</p>
+<p>Checking the FIRE/ DNase/ ATAC-seq/ cCREs coverage for 15 states from
+ChromHMM</p>
 <ul>
 <li><a href="OCR_coverage_ChromHMM_bp.html">Base pair overlap</a></li>
-<li><a href="OCR_coverage_ChromHMM_peak.html">Peak level overlap</a></li>
+<li><a href="OCR_coverage_ChromHMM_peak.html">Peak level
+overlap</a></li>
 </ul>
 <p>Checking the overlap of FIRE peaks with DNase/ ATAC-seq/ cCREs</p>
 <ul>
