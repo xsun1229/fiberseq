@@ -15,7 +15,7 @@
 
 <title>Validating the footprints using DNase footprint – refined peaks</title>
 
-<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
@@ -31,15 +31,23 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-6.2.1/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.2.1/css/v4-shims.min.css" rel="stylesheet" />
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.22/datatables.js"></script>
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -371,7 +379,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Validating the footprints using DNase footprint – refined peaks</h1>
+<h1 class="title toc-ignore">Validating the footprints using DNase
+footprint – refined peaks</h1>
 <h4 class="author">XSun</h4>
 <h4 class="date">2026-03-16</h4>
 
@@ -380,7 +389,9 @@ div.tocify {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -389,7 +400,9 @@ div.tocify {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -398,17 +411,27 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-03-16
+<strong>Last updated:</strong> 2026-03-17
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 1
 </p>
 <p>
-<strong>Knit directory:</strong> <code>fiberseq/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+<strong>Knit directory:</strong> <code>fiberseq/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
 </p>
 <p>
-This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
-  href="https://github.com/workflowr/workflowr">workflowr</a> (version 1.7.1). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.0). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
 </p>
 <hr>
 </div>
@@ -417,102 +440,152 @@ This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a> analysi
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges">
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted
+changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
+<code>wflow_publish</code> to commit the R Markdown file and build the
+HTML.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
 </p>
 </div>
 <div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250831code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20250831)</code> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20250831code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20250831)</code> </a>
 </p>
 </div>
-<div id="strongSeedstrongcodesetseed20250831code" class="panel-collapse collapse">
+<div id="strongSeedstrongcodesetseed20250831code"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>The command <code>set.seed(20250831)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+<p>The command <code>set.seed(20250831)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
 </p>
 </div>
-<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
 </p>
 </div>
 <div id="strongCachestrongnone" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
 </p>
 </div>
 <div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
 </div>
 </div>
 </div>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree42efd3cd6dedc23c9a49a6d4fcf779878be35fcbtargetblank42efd3ca"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/xsun1229/fiberseq/tree/42efd3cd6dedc23c9a49a6d4fcf779878be35fcb" target="_blank">42efd3c</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree90a61cc92da9771b49b1c1916190be5a9b47d784targetblank90a61cca">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong>
+<a href="https://github.com/xsun1229/fiberseq/tree/90a61cc92da9771b49b1c1916190be5a9b47d784" target="_blank">90a61cc</a>
+</a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree42efd3cd6dedc23c9a49a6d4fcf779878be35fcbtargetblank42efd3ca" class="panel-collapse collapse">
+<div
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree90a61cc92da9771b49b1c1916190be5a9b47d784targetblank90a61cca"
+class="panel-collapse collapse">
 <div class="panel-body">
 <p>
-Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/xsun1229/fiberseq/tree/42efd3cd6dedc23c9a49a6d4fcf779878be35fcb" target="_blank">42efd3c</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version
+<a href="https://github.com/xsun1229/fiberseq/tree/90a61cc92da9771b49b1c1916190be5a9b47d784" target="_blank">90a61cc</a>.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
 </p>
 <p>
-Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
 </p>
 <pre><code>
-Untracked files:
-    Untracked:  analysis/validating_footprint_using_DNase_footprint_refinedpeaks.Rmd
-
 Unstaged changes:
-    Modified:   analysis/annotation_by_location_motif_cluster_refined_peaks.Rmd
+    Modified:   analysis/validating_footprint_using_DNase_footprint.Rmd
+    Modified:   analysis/validating_footprint_using_DNase_footprint_refinedpeaks.Rmd
 
 </code></pre>
 <p>
-Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
 </p>
 </div>
 </div>
@@ -521,9 +594,76 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/validating_footprint_using_DNase_footprint_refinedpeaks.Rmd</code>)
+and HTML
+(<code>docs/validating_footprint_using_DNase_footprint_refinedpeaks.html</code>)
+files. If you’ve configured a remote Git repository (see
+<code>?wflow_git_remote</code>), click on the hyperlinks in the table
+below to view the files as they were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/90a61cc92da9771b49b1c1916190be5a9b47d784/analysis/validating_footprint_using_DNase_footprint_refinedpeaks.Rmd" target="_blank">90a61cc</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-16
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/90a61cc92da9771b49b1c1916190be5a9b47d784/docs/validating_footprint_using_DNase_footprint_refinedpeaks.html" target="_blank">90a61cc</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-16
+</td>
+<td>
+update
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -534,17 +674,30 @@ library(ggplot2)
 library(patchwork)</code></pre>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>To validate footprints, we used DNase footprints from: <a href="https://www.vierstra.org/resources/dgf" class="uri">https://www.vierstra.org/resources/dgf</a></p>
-<p>They have two LCL lines: <a href="https://resources.altius.org/~jvierstra/projects/footprinting.2020/Supplementary_Table_1.xlsx" class="uri">https://resources.altius.org/~jvierstra/projects/footprinting.2020/Supplementary_Table_1.xlsx</a></p>
-<p>We used the GM12865: <a href="https://resources.altius.org/~jvierstra/projects/footprinting.2020/per.dataset/GM12865-DS12436/" class="uri">https://resources.altius.org/~jvierstra/projects/footprinting.2020/per.dataset/GM12865-DS12436/</a></p>
-<p>DNase footprint file: <code>/project/spott/kevinluo/Fiber_seq/data/Vierstra_DGF/interval.all.fps.0.05.bed.gz</code></p>
-<p>Our footprint files are <code>/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM/merged/combined/joint_trained_peaks/refined_peaks/</code></p>
+<p>To validate footprints, we used DNase footprints from: <a
+href="https://www.vierstra.org/resources/dgf"
+class="uri">https://www.vierstra.org/resources/dgf</a></p>
+<p>They have two LCL lines: <a
+href="https://resources.altius.org/~jvierstra/projects/footprinting.2020/Supplementary_Table_1.xlsx"
+class="uri">https://resources.altius.org/~jvierstra/projects/footprinting.2020/Supplementary_Table_1.xlsx</a></p>
+<p>We used the GM12865: <a
+href="https://resources.altius.org/~jvierstra/projects/footprinting.2020/per.dataset/GM12865-DS12436/"
+class="uri">https://resources.altius.org/~jvierstra/projects/footprinting.2020/per.dataset/GM12865-DS12436/</a></p>
+<p>DNase footprint file:
+<code>/project/spott/kevinluo/Fiber_seq/data/Vierstra_DGF/interval.all.fps.0.05.bed.gz</code></p>
+<p>Our footprint files are
+<code>/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM/merged/combined/joint_trained_peaks/refined_peaks/</code></p>
 <ul>
 <li>10–30 bp</li>
 <li>30–60 bp</li>
 <li>60–80 bp</li>
 </ul>
-<p>For each footprint set, we varied the footprint significance threshold q value (0.01, 0.1) and measured how much footprint sequence overlaps DNase peaks on <strong>base-pair level</strong>.</p>
+<p>For each footprint set, we varied the footprint significance
+threshold q value (0.01, 0.1) and measured how much footprint sequence
+overlaps DNase peaks on both <strong>base-pair level</strong> and
+<strong>footprint level</strong>. For <strong>footprint level</strong>,
+any peak pair overlap &gt;= <code>1bp</code> is counted as an
+overlap.</p>
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
@@ -572,12 +725,16 @@ gr_dnase &lt;- GRanges(
   #strand = DNase_peak$dnase_strand
 )
 
-dnase_total_bp &lt;- sum(width(reduce(gr_dnase)))</code></pre>
-<div id="q-values" class="section level2">
-<h2>q-values</h2>
-<pre class="r"><code>q_cutoffs &lt;- c(0.1, 0.01)
+dnase_total_bp &lt;- sum(width(reduce(gr_dnase)))
 
-all_res &lt;- list()
+n_dnase &lt;- length(gr_dnase)
+
+q_cutoffs &lt;- c(0.1, 0.01)</code></pre>
+<div id="base-pair-level" class="section level2">
+<h2>Base pair level</h2>
+<div id="q-values" class="section level3">
+<h3>q-values</h3>
+<pre class="r"><code>all_res &lt;- list()
 k &lt;- 1
 
 for (fp_length in fp_lengths) {
@@ -648,11 +805,10 @@ for (fp_length in fp_lengths) {
   
 overlap_res_all &lt;- rbindlist(all_res)
 
-
-library(ggplot2)
-library(patchwork)
-
-## ------------------------------
+DT::datatable(overlap_res_all,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;overlap stats&#39;),options = list(pageLength = 20) )</code></pre>
+<div id="htmlwidget-55d484e2ce688c3024c2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">overlap stats<\/caption>","data":[["1","2","3","4","5","6"],["10-30bp","10-30bp","30-60bp","30-60bp","60-80bp","60-80bp"],[0.1,0.01,0.1,0.01,0.1,0.01],[23418359,16530534,5312676,2688680,630276,162388],[366248492,251339645,151004706,75648486,22115782,6616051],[4473117,4176675,4387013,3721085,1465160,1022576],[0.0122133390244785,0.0166176529771099,0.0290521607982204,0.0491891536335572,0.0662495226259691,0.154559872649107],[0.352690040792074,0.329316598721928,0.345901033647311,0.29339487888217,0.115522875920061,0.0806266348841302]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>fp_length<\/th>\n      <th>fp_qValue_cutoff<\/th>\n      <th>n_fp<\/th>\n      <th>fp_total_bp<\/th>\n      <th>overlap_bp<\/th>\n      <th>prop_fp_bp_overlap_DNase<\/th>\n      <th>prop_DNase_bp_overlap_FP<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>## ------------------------------
 ## Plot 1: number of footprints
 ## ------------------------------
 p_nfp &lt;- ggplot(
@@ -720,59 +876,186 @@ p2 &lt;- ggplot(
 ## Combine plots
 ## ------------------------------
 p_nfp + p1 + p2</code></pre>
-<p><img src="figure/validating_footprint_using_DNase_footprint_refinedpeaks.Rmd/unnamed-chunk-3-1.png" width="1248" style="display: block; margin: auto;" /></p>
+<p><img src="figure/validating_footprint_using_DNase_footprint_refinedpeaks.Rmd/unnamed-chunk-3-2.png" width="1248" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="footprint-level-min-overlap-1" class="section level2">
+<h2>Footprint level – min overlap == 1</h2>
+<pre class="r"><code>minoverlap &lt;- 1
+
+all_res &lt;- list()
+k &lt;- 1
+
+for (fp_length in fp_lengths) {
+  
+  res_list &lt;- vector(&quot;list&quot;, length(q_cutoffs))
+  
+  for (i in seq_along(q_cutoffs)) {
+    
+    ## -----------------------------
+    ## read footprint file
+    ## -----------------------------
+    fp_file &lt;- file.path(
+      folder_fp,
+      paste0(
+        &quot;combined_all_chrs_&quot;, fp_length,
+        &quot;_macs3_q&quot;, q_cutoffs[i],
+        &quot;_minratio0.5_refined_peaks.bed.gz&quot;
+      )
+    )
+    
+    df_fp &lt;- fread(fp_file, header = FALSE, showProgress = FALSE)
+    
+    setnames(df_fp, c(
+      &quot;fp_chr&quot;, &quot;fp_start&quot;, &quot;fp_end&quot;
+    ))
+    
+    setDT(df_fp)
+    
+    gr_fp &lt;- GRanges(
+      seqnames = df_fp$fp_chr,
+      ranges = IRanges(
+        start = df_fp$fp_start + 1,   ## BED: 0-based -&gt; GRanges: 1-based
+        end   = df_fp$fp_end
+      )
+    )
+    
+    n_fp &lt;- length(gr_fp)
+    
+    ## -----------------------------
+    ## peak-level overlap
+    ## any overlap &gt;= 1 bp counts
+    ## -----------------------------
+    hits &lt;- findOverlaps(
+      gr_fp,
+      gr_dnase,
+      ignore.strand = TRUE,
+      minoverlap = minoverlap
+    )
+    
+    ## number of unique FP peaks overlapping &gt;=1 DNase peak
+    n_fp_overlap_dnase &lt;- length(unique(queryHits(hits)))
+    
+    ## number of unique DNase peaks overlapping &gt;=1 FP peak
+    n_dnase_overlap_fp &lt;- length(unique(subjectHits(hits)))
+    
+    ## number of overlapping FP-DNase pairs
+    n_overlap_pairs &lt;- length(hits)
+    
+    res_list[[i]] &lt;- data.table(
+      fp_length = fp_length,
+      fp_qValue_cutoff = q_cutoffs[i],
+      n_fp = n_fp,
+      n_dnase = n_dnase,
+      n_fp_overlap_dnase = n_fp_overlap_dnase,
+      n_dnase_overlap_fp = n_dnase_overlap_fp,
+      prop_fp_overlap_DNase = n_fp_overlap_dnase / n_fp,
+      prop_DNase_overlap_FP = n_dnase_overlap_fp / n_dnase
+    )
+  }
+  
+  all_res[[k]] &lt;- rbindlist(res_list)
+  k &lt;- k + 1
+}
+
+overlap_res_all &lt;- rbindlist(all_res)
+
+DT::datatable(overlap_res_all,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;overlap stats&#39;),options = list(pageLength = 20) )</code></pre>
+<div id="htmlwidget-0c375f72d786c94bb27a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0c375f72d786c94bb27a">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">overlap stats<\/caption>","data":[["1","2","3","4","5","6"],["10-30bp","10-30bp","30-60bp","30-60bp","60-80bp","60-80bp"],[0.1,0.01,0.1,0.01,0.1,0.01],[23418359,16530534,5312676,2688680,630276,162388],[920017,920017,920017,920017,920017,920017],[469426,438490,227023,190225,51945,32892],[529932,493991,366649,304390,97942,63179],[0.0200452132448734,0.0265260638283071,0.0427323254796641,0.0707503310174509,0.0824162747748605,0.202551912702909],[0.576002399955653,0.536936817471851,0.398524157705782,0.330852582071853,0.106456728516973,0.0686715571560091]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>fp_length<\/th>\n      <th>fp_qValue_cutoff<\/th>\n      <th>n_fp<\/th>\n      <th>n_dnase<\/th>\n      <th>n_fp_overlap_dnase<\/th>\n      <th>n_dnase_overlap_fp<\/th>\n      <th>prop_fp_overlap_DNase<\/th>\n      <th>prop_DNase_overlap_FP<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7,8]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>df_plot &lt;- copy(overlap_res_all)
+
+## make q cutoff a factor so the order is controlled
+df_plot[, fp_qValue_cutoff := factor(fp_qValue_cutoff, levels = c(0.01,0.1))]
+
+p1 &lt;- ggplot(
+  df_plot,
+  aes(
+    x = fp_qValue_cutoff,
+    y = prop_fp_overlap_DNase,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Footprint q-value cutoff&quot;,
+    y = &quot;Fraction of FP peaks overlapping DNase&quot;,
+    color = &quot;Footprint length&quot;
+  )
+
+p2 &lt;- ggplot(
+  df_plot,
+  aes(
+    x = fp_qValue_cutoff,
+    y = prop_DNase_overlap_FP,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Footprint q-value cutoff&quot;,
+    y = &quot;Fraction of DNase peaks overlapping FP&quot;,
+    color = &quot;Footprint length&quot;
+  )
+
+p1 + p2</code></pre>
+<p><img src="figure/validating_footprint_using_DNase_footprint_refinedpeaks.Rmd/unnamed-chunk-4-2.png" width="1248" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
-<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
 </button>
 </p>
 <div id="workflowr-sessioninfo" class="collapse">
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 4.2.0 (2022-04-22)
 Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Red Hat Enterprise Linux 8.4 (Ootpa)
+Running under: CentOS Linux 7 (Core)
 
 Matrix products: default
-BLAS/LAPACK: /software/openblas-0.3.13-el8-x86_64/lib/libopenblas_skylakexp-r0.3.13.so
+BLAS/LAPACK: /software/openblas-0.3.13-el7-x86_64/lib/libopenblas_haswellp-r0.3.13.so
 
 locale:
- [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
- [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
- [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
- [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
- [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+[1] C
 
 attached base packages:
 [1] stats4    stats     graphics  grDevices utils     datasets  methods  
 [8] base     
 
 other attached packages:
-[1] patchwork_1.1.1      ggplot2_3.4.2        GenomicRanges_1.50.2
-[4] GenomeInfoDb_1.34.9  IRanges_2.32.0       S4Vectors_0.36.2    
-[7] BiocGenerics_0.44.0  data.table_1.14.4   
+[1] patchwork_1.3.2.9000 ggplot2_4.0.0        GenomicRanges_1.48.0
+[4] GenomeInfoDb_1.39.9  IRanges_2.30.0       S4Vectors_0.34.0    
+[7] BiocGenerics_0.42.0  data.table_1.14.2   
 
 loaded via a namespace (and not attached):
- [1] tidyselect_1.2.0       xfun_0.38              bslib_0.3.1           
- [4] colorspace_2.0-3       vctrs_0.6.1            generics_0.1.3        
- [7] htmltools_0.5.7        yaml_2.3.5             utf8_1.2.2            
-[10] rlang_1.1.7            R.oo_1.24.0            jquerylib_0.1.4       
-[13] later_1.3.0            pillar_1.9.0           R.utils_2.11.0        
-[16] glue_1.6.2             withr_3.0.2            GenomeInfoDbData_1.2.9
-[19] lifecycle_1.0.4        stringr_1.5.0          zlibbioc_1.44.0       
-[22] munsell_0.5.0          gtable_0.3.0           workflowr_1.7.1       
-[25] R.methodsS3_1.8.1      evaluate_1.0.5         labeling_0.4.2        
-[28] knitr_1.42             fastmap_1.1.0          httpuv_1.6.5          
-[31] fansi_1.0.3            highr_0.9              Rcpp_1.0.14           
-[34] promises_1.2.0.1       scales_1.2.0           jsonlite_2.0.0        
-[37] XVector_0.38.0         farver_2.1.0           fs_1.6.6              
-[40] digest_0.6.29          stringi_1.7.6          dplyr_1.1.2           
-[43] rprojroot_2.1.1        grid_4.2.0             cli_3.6.5             
-[46] tools_4.2.0            bitops_1.0-7           magrittr_2.0.3        
-[49] sass_0.4.1             RCurl_1.98-1.12        tibble_3.2.1          
-[52] pkgconfig_2.0.3        rmarkdown_2.21         rstudioapi_0.14       
-[55] R6_2.6.1               git2r_0.30.1           compiler_4.2.0        </code></pre>
+ [1] tidyselect_1.2.0       xfun_0.41              bslib_0.3.1           
+ [4] vctrs_0.6.5            generics_0.1.4         htmltools_0.5.2       
+ [7] yaml_2.3.5             utf8_1.2.2             rlang_1.1.2           
+[10] R.oo_1.24.0            jquerylib_0.1.4        later_1.3.0           
+[13] pillar_1.9.0           R.utils_2.11.0         withr_2.5.0           
+[16] glue_1.6.2             RColorBrewer_1.1-3     S7_0.2.0              
+[19] GenomeInfoDbData_1.2.8 lifecycle_1.0.4        stringr_1.5.1         
+[22] zlibbioc_1.42.0        gtable_0.3.6           workflowr_1.7.0       
+[25] R.methodsS3_1.8.1      htmlwidgets_1.5.4      evaluate_0.15         
+[28] labeling_0.4.2         knitr_1.39             fastmap_1.1.0         
+[31] crosstalk_1.2.0        httpuv_1.6.5           fansi_1.0.3           
+[34] highr_0.9              Rcpp_1.0.12            DT_0.22               
+[37] promises_1.2.0.1       scales_1.4.0           jsonlite_1.8.0        
+[40] XVector_0.36.0         farver_2.1.0           fs_1.5.2              
+[43] digest_0.6.29          stringi_1.7.6          dplyr_1.1.4           
+[46] rprojroot_2.0.3        grid_4.2.0             cli_3.6.1             
+[49] tools_4.2.0            bitops_1.0-7           magrittr_2.0.3        
+[52] sass_0.4.1             RCurl_1.98-1.7         tibble_3.2.1          
+[55] dichromat_2.0-0.1      whisker_0.4            pkgconfig_2.0.3       
+[58] rmarkdown_2.25         rstudioapi_0.13        R6_2.5.1              
+[61] git2r_0.30.1           compiler_4.2.0        </code></pre>
 </div>
 </div>
 </div>

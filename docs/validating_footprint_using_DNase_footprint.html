@@ -38,6 +38,14 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.22/datatables.js"></script>
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -403,7 +411,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-03-13
+<strong>Last updated:</strong> 2026-03-17
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -441,10 +449,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R
-Markdown file created these results, you’ll want to first commit it to
-the Git repo. If you’re still working on the analysis, you can ignore
-this warning. When you’re finished, you can run
+<p>The R Markdown file has unstaged changes. To know which version of
+the R Markdown file created these results, you’ll want to first commit
+it to the Git repo. If you’re still working on the analysis, you can
+ignore this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -537,15 +545,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree23cd8516a7929940b71037276db0e6b8ff1e6f86targetblank23cd851a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree90a61cc92da9771b49b1c1916190be5a9b47d784targetblank90a61cca">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/xsun1229/fiberseq/tree/23cd8516a7929940b71037276db0e6b8ff1e6f86" target="_blank">23cd851</a>
+<a href="https://github.com/xsun1229/fiberseq/tree/90a61cc92da9771b49b1c1916190be5a9b47d784" target="_blank">90a61cc</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree23cd8516a7929940b71037276db0e6b8ff1e6f86targetblank23cd851a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtree90a61cc92da9771b49b1c1916190be5a9b47d784targetblank90a61cca"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -555,7 +563,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/xsun1229/fiberseq/tree/23cd8516a7929940b71037276db0e6b8ff1e6f86" target="_blank">23cd851</a>.
+<a href="https://github.com/xsun1229/fiberseq/tree/90a61cc92da9771b49b1c1916190be5a9b47d784" target="_blank">90a61cc</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -569,13 +577,9 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-Untracked files:
-    Untracked:  analysis/validating_footprint_using_DNase_footprint.Rmd
-
 Unstaged changes:
-    Modified:   analysis/annotation_by_location_motif_cluster.Rmd
-    Modified:   analysis/data.Rmd
-    Modified:   analysis/index.Rmd
+    Modified:   analysis/validating_footprint_using_DNase_footprint.Rmd
+    Modified:   analysis/validating_footprint_using_DNase_footprint_refinedpeaks.Rmd
 
 </code></pre>
 <p>
@@ -590,48 +594,83 @@ have uncommitted changes.
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with
-<code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the repository in which changes were
+made to the R Markdown
+(<code>analysis/validating_footprint_using_DNase_footprint.Rmd</code>)
+and HTML
+(<code>docs/validating_footprint_using_DNase_footprint.html</code>)
+files. If you’ve configured a remote Git repository (see
+<code>?wflow_git_remote</code>), click on the hyperlinks in the table
+below to view the files as they were in that past version.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/95d0e19a53c7c0cd704ed294769bd38011c8fde4/analysis/validating_footprint_using_DNase_footprint.Rmd" target="_blank">95d0e19</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-13
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/95d0e19a53c7c0cd704ed294769bd38011c8fde4/docs/validating_footprint_using_DNase_footprint.html" target="_blank">95d0e19</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-13
+</td>
+<td>
+update
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
 </div>
 <pre class="r"><code>library(data.table)
-library(GenomicRanges)</code></pre>
-<pre><code>Loading required package: stats4</code></pre>
-<pre><code>Loading required package: BiocGenerics</code></pre>
-<pre><code>
-Attaching package: &#39;BiocGenerics&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:stats&#39;:
-
-    IQR, mad, sd, var, xtabs</code></pre>
-<pre><code>The following objects are masked from &#39;package:base&#39;:
-
-    Filter, Find, Map, Position, Reduce, anyDuplicated, append,
-    as.data.frame, basename, cbind, colnames, dirname, do.call,
-    duplicated, eval, evalq, get, grep, grepl, intersect, is.unsorted,
-    lapply, mapply, match, mget, order, paste, pmax, pmax.int, pmin,
-    pmin.int, rank, rbind, rownames, sapply, setdiff, sort, table,
-    tapply, union, unique, unsplit, which.max, which.min</code></pre>
-<pre><code>Loading required package: S4Vectors</code></pre>
-<pre><code>
-Attaching package: &#39;S4Vectors&#39;</code></pre>
-<pre><code>The following objects are masked from &#39;package:data.table&#39;:
-
-    first, second</code></pre>
-<pre><code>The following objects are masked from &#39;package:base&#39;:
-
-    I, expand.grid, unname</code></pre>
-<pre><code>Loading required package: IRanges</code></pre>
-<pre><code>
-Attaching package: &#39;IRanges&#39;</code></pre>
-<pre><code>The following object is masked from &#39;package:data.table&#39;:
-
-    shift</code></pre>
-<pre><code>Loading required package: GenomeInfoDb</code></pre>
-<pre class="r"><code>library(ggplot2)
+library(GenomicRanges)
+library(ggplot2)
 library(patchwork)</code></pre>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
@@ -656,7 +695,9 @@ class="uri">https://resources.altius.org/~jvierstra/projects/footprinting.2020/p
 <p>For each footprint set, we varied the footprint significance
 threshold (q value, fold enrichment, pileup) and measured how much
 footprint sequence overlaps DNase peaks on <strong>base-pair
-level</strong>.</p>
+level</strong> and <strong>footprint level</strong>. For
+<strong>footprint level</strong>, any peak pair overlap &gt;=
+<code>1bp</code> is counted as an overlap.</p>
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
@@ -684,9 +725,13 @@ gr_dnase &lt;- GRanges(
   #strand = DNase_peak$dnase_strand
 )
 
+n_dnase &lt;- length(gr_dnase)
+
 dnase_total_bp &lt;- sum(width(reduce(gr_dnase)))</code></pre>
-<div id="q-values" class="section level2">
-<h2>q-values</h2>
+<div id="base-pair-level" class="section level2">
+<h2>Base pair level</h2>
+<div id="q-values" class="section level3">
+<h3>q-values</h3>
 <pre class="r"><code>## store results from all footprint lengths
 all_res &lt;- list()
 k &lt;- 1
@@ -778,8 +823,10 @@ for (fp_length in fp_lengths) {
 
 overlap_res_all &lt;- rbindlist(all_res)
 
-
-p_nfp &lt;- ggplot(
+DT::datatable(overlap_res_all,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;overlap stats&#39;),options = list(pageLength = 20) )</code></pre>
+<div id="htmlwidget-55d484e2ce688c3024c2" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-55d484e2ce688c3024c2">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">overlap stats<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12"],["10-30bp","10-30bp","10-30bp","10-30bp","30-60bp","30-60bp","30-60bp","30-60bp","60-80bp","60-80bp","60-80bp","60-80bp"],[1,2,3,4,1,2,3,4,1,2,3,4],[23280243,20157821,16063372,13124237,5302704,3142153,1697419,1078468,630078,185162,83076,53677],[392500281,353392504,296969825,253005996,154343836,110766833,68319987,46746940,22395676,11125691,6187403,4341755],[6974440,6882440,6708321,6531118,5410908,5147484,4762256,4459288,1542658,1294074,1101277,979082],[0.0177692611639175,0.0194753423519136,0.0225892344449474,0.0258140838685894,0.035057493322895,0.0464713476099836,0.0697051654883951,0.0953920834176526,0.0688819573921323,0.116314033887873,0.177986951876256,0.225503742150352],[0.549910840271308,0.542656953607295,0.528928263476302,0.514956410448877,0.426631667189157,0.40586158196545,0.375487666184967,0.351599671241241,0.121633329275362,0.102033327509198,0.0868319406922226,0.0771972811171238]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>fp_length<\/th>\n      <th>fp_log10qValue_cutoff<\/th>\n      <th>n_fp<\/th>\n      <th>fp_total_bp<\/th>\n      <th>overlap_bp<\/th>\n      <th>prop_fp_bp_overlap_DNase<\/th>\n      <th>prop_DNase_bp_overlap_FP<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>p_nfp &lt;- ggplot(
   overlap_res_all,
   aes(
     x = fp_log10qValue_cutoff,
@@ -836,10 +883,10 @@ p2 &lt;- ggplot(
 
 
 p_nfp + p1 + p2</code></pre>
-<p><img src="figure/validating_footprint_using_DNase_footprint.Rmd/unnamed-chunk-3-1.png" width="1248" style="display: block; margin: auto;" /></p>
+<p><img src="figure/validating_footprint_using_DNase_footprint.Rmd/unnamed-chunk-3-2.png" width="1248" style="display: block; margin: auto;" /></p>
 </div>
-<div id="fold-enrichment" class="section level2">
-<h2>fold enrichment</h2>
+<div id="fold-enrichment" class="section level3">
+<h3>fold enrichment</h3>
 <pre class="r"><code>## store results from all footprint lengths
 all_res &lt;- list()
 k &lt;- 1
@@ -930,8 +977,10 @@ for (fp_length in fp_lengths) {
 
 overlap_res_all &lt;- rbindlist(all_res)
 
-
-p_nfp &lt;- ggplot(
+DT::datatable(overlap_res_all,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;overlap stats&#39;),options = list(pageLength = 20) )</code></pre>
+<div id="htmlwidget-0c375f72d786c94bb27a" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0c375f72d786c94bb27a">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">overlap stats<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"],["10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp"],[1,2,3,4,5,10,1,2,3,4,5,10,1,2,3,4,5,10],[23280243,19231804,7486848,2947535,1239034,80170,5302704,5075564,1177211,351458,155782,33965,630078,628862,287969,54592,27285,7206],[392500281,341223787,158863893,71384501,34359225,4675929,154343836,150649416,50271391,18467740,9958250,3205444,22395676,22359956,14609703,4388400,2416107,690028],[6974440,6805424,5898084,5028886,4294351,2006187,5410908,5377699,4435405,3622773,3039905,1523223,1542658,1542423,1377077,979883,754753,303051],[0.0177692611639175,0.019944166436439,0.0371266490366065,0.0704478693491182,0.12498393080752,0.429045650607612,0.035057493322895,0.0356967796011901,0.0882292077416358,0.196167641519753,0.305264981296915,0.475198755617007,0.0688819573921323,0.0689814863678623,0.0942576998314066,0.223289353750798,0.312383930016344,0.439186525764172],[0.549910840271308,0.536584504310386,0.465043835552497,0.396510533589595,0.338594950537955,0.158181012226268,0.426631667189157,0.424013250643231,0.349716578032582,0.28564331251573,0.239686155862686,0.120100945717589,0.121633329275362,0.121614800325731,0.108577831365427,0.0772604372390572,0.0595097034926518,0.0238945392110421]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>fp_length<\/th>\n      <th>fp_foldenrichment_cutoff<\/th>\n      <th>n_fp<\/th>\n      <th>fp_total_bp<\/th>\n      <th>overlap_bp<\/th>\n      <th>prop_fp_bp_overlap_DNase<\/th>\n      <th>prop_DNase_bp_overlap_FP<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>p_nfp &lt;- ggplot(
   overlap_res_all,
   aes(
     x = fp_foldenrichment_cutoff,
@@ -988,7 +1037,326 @@ p2 &lt;- ggplot(
 
 
 p_nfp + p1 + p2</code></pre>
-<p><img src="figure/validating_footprint_using_DNase_footprint.Rmd/unnamed-chunk-4-1.png" width="1248" style="display: block; margin: auto;" /></p>
+<p><img src="figure/validating_footprint_using_DNase_footprint.Rmd/unnamed-chunk-4-2.png" width="1248" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="footprint-level-min-overlap-1" class="section level2">
+<h2>Footprint level – min overlap == 1</h2>
+<div id="q-values-1" class="section level3">
+<h3>q-values</h3>
+<pre class="r"><code>minoverlap &lt;- 1
+
+all_res &lt;- list()
+k &lt;- 1
+
+for (fp_length in fp_lengths) {
+  
+  fp_file &lt;- file.path(
+    folder_fp,
+    paste0(&quot;combined_all_chrs_&quot;, fp_length, &quot;_macs3_q0.1_maxgap1_peaks.narrowPeak.gz&quot;)
+  )
+  
+  ## -----------------------------
+  ## read footprint file
+  ## -----------------------------
+  df_fp &lt;- fread(fp_file, header = FALSE, showProgress = FALSE)
+  setnames(df_fp, c(
+    &quot;fp_chr&quot;,&quot;fp_start&quot;,&quot;fp_end&quot;,&quot;fp_name&quot;,&quot;fp_pileup&quot;,&quot;fp_strand&quot;,
+    &quot;fp_foldenrichment&quot;,&quot;fp_log10pValue&quot;,&quot;fp_log10qValue&quot;,&quot;fp_peak&quot;
+  ))
+  setDT(df_fp)
+  
+  ## q cutoffs (original + transformed)
+  q_cutoffs &lt;- c(0.1, 0.01, 0.001, 0.0001)
+  log10q_cutoffs &lt;- -log10(q_cutoffs)
+  
+  res_list &lt;- vector(&quot;list&quot;, length(log10q_cutoffs))
+  
+  for (i in seq_along(log10q_cutoffs)) {
+    
+    q_cut_log10 &lt;- log10q_cutoffs[i]
+    
+    ## subset
+    df_sub &lt;- df_fp[fp_log10qValue &gt;= q_cut_log10]
+    
+    if (nrow(df_sub) == 0) {
+      res_list[[i]] &lt;- data.table(
+        fp_length = fp_length,
+        fp_log10qValue_cutoff = q_cut_log10,
+        n_fp = 0,
+        n_dnase = n_dnase,
+        n_fp_overlap_dnase = 0,
+        n_dnase_overlap_fp = 0,
+        prop_fp_overlap_DNase = NA_real_,
+        prop_DNase_overlap_FP = 0
+      )
+      next
+    }
+    
+    ## GRanges
+    gr_fp &lt;- GRanges(
+      seqnames = df_sub$fp_chr,
+      ranges = IRanges(
+        start = df_sub$fp_start + 1,
+        end   = df_sub$fp_end
+      )
+    )
+    
+    n_fp &lt;- length(gr_fp)
+    
+    ## overlap (peak-level)
+    hits &lt;- findOverlaps(
+      gr_fp,
+      gr_dnase,
+      ignore.strand = TRUE,
+      minoverlap = minoverlap
+    )
+    
+    n_fp_overlap_dnase &lt;- length(unique(queryHits(hits)))
+    n_dnase_overlap_fp &lt;- length(unique(subjectHits(hits)))
+    
+    res_list[[i]] &lt;- data.table(
+      fp_length = fp_length,
+      fp_log10qValue_cutoff = q_cut_log10,
+      n_fp = n_fp,
+      n_dnase = n_dnase,
+      n_fp_overlap_dnase = n_fp_overlap_dnase,
+      n_dnase_overlap_fp = n_dnase_overlap_fp,
+      prop_fp_overlap_DNase = n_fp_overlap_dnase / n_fp,
+      prop_DNase_overlap_FP = n_dnase_overlap_fp / n_dnase
+    )
+  }
+  
+  all_res[[k]] &lt;- rbindlist(res_list)
+  k &lt;- k + 1
+}
+
+overlap_res_all &lt;- rbindlist(all_res)
+
+DT::datatable(overlap_res_all,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;overlap stats&#39;),options = list(pageLength = 20) )</code></pre>
+<div id="htmlwidget-9fa6da26214ebfd05e61" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-9fa6da26214ebfd05e61">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">overlap stats<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12"],["10-30bp","10-30bp","10-30bp","10-30bp","30-60bp","30-60bp","30-60bp","30-60bp","60-80bp","60-80bp","60-80bp","60-80bp"],[1,2,3,4,1,2,3,4,1,2,3,4],[23280243,20157821,16063372,13124237,5302704,3142153,1697419,1078468,630078,185162,83076,53677],[920017,920017,920017,920017,920017,920017,920017,920017,920017,920017,920017,920017],[461264,449162,426233,403907,223032,194965,164386,144379,51919,34563,26343,22258],[632668,621421,600125,578955,420917,389943,350401,321392,102747,79704,65036,56484],[0.0198135388878888,0.0222822694972835,0.0265344661133416,0.0307756557581214,0.0420600508721588,0.0620482198034278,0.0968446800701536,0.133874162237544,0.0824009090937947,0.186663570278999,0.317095189946555,0.414665499189597],[0.687669901751815,0.67544512764438,0.652297729281089,0.629287284908866,0.457510024271291,0.423843255070287,0.380863614476689,0.349332675374477,0.11167945809697,0.0866331817781628,0.0706899981196,0.0613945177099988]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>fp_length<\/th>\n      <th>fp_log10qValue_cutoff<\/th>\n      <th>n_fp<\/th>\n      <th>n_dnase<\/th>\n      <th>n_fp_overlap_dnase<\/th>\n      <th>n_dnase_overlap_fp<\/th>\n      <th>prop_fp_overlap_DNase<\/th>\n      <th>prop_DNase_overlap_FP<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7,8]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>df_plot &lt;- copy(overlap_res_all)
+
+## keep ordering clean (numeric order works fine here)
+df_plot[, fp_log10qValue_cutoff := factor(
+  fp_log10qValue_cutoff,
+  levels = sort(unique(fp_log10qValue_cutoff))
+)]
+
+p_nfp &lt;- ggplot(
+  df_plot,
+  aes(
+    x = fp_log10qValue_cutoff,
+    y = n_fp,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  scale_y_log10() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;-log10(q-value cutoff)&quot;,
+    y = &quot;Number of footprints (log10 scale)&quot;,
+    color = &quot;Footprint length&quot;
+  )
+
+p1 &lt;- ggplot(
+  df_plot,
+  aes(
+    x = fp_log10qValue_cutoff,
+    y = prop_fp_overlap_DNase,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;-log10(q-value cutoff)&quot;,
+    y = &quot;Fraction of FP peaks overlapping DNase&quot;,
+    color = &quot;Footprint length&quot;
+  )
+
+p2 &lt;- ggplot(
+  df_plot,
+  aes(
+    x = fp_log10qValue_cutoff,
+    y = prop_DNase_overlap_FP,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;-log10(q-value cutoff)&quot;,
+    y = &quot;Fraction of DNase peaks overlapping FP&quot;,
+    color = &quot;Footprint length&quot;
+  )
+
+p_nfp + p1 + p2</code></pre>
+<p><img src="figure/validating_footprint_using_DNase_footprint.Rmd/unnamed-chunk-5-2.png" width="1248" style="display: block; margin: auto;" /></p>
+</div>
+<div id="fold-enrichment-1" class="section level3">
+<h3>fold enrichment</h3>
+<pre class="r"><code>all_res &lt;- list()
+k &lt;- 1
+
+for (fp_length in fp_lengths) {
+  
+  fp_file &lt;- file.path(
+    folder_fp,
+    paste0(&quot;combined_all_chrs_&quot;, fp_length, &quot;_macs3_q0.1_maxgap1_peaks.narrowPeak.gz&quot;)
+  )
+  
+  ## -----------------------------
+  ## read footprint file
+  ## -----------------------------
+  df_fp &lt;- fread(fp_file, header = FALSE, showProgress = FALSE)
+  setnames(df_fp, c(
+    &quot;fp_chr&quot;,&quot;fp_start&quot;,&quot;fp_end&quot;,&quot;fp_name&quot;,&quot;fp_pileup&quot;,&quot;fp_strand&quot;,
+    &quot;fp_foldenrichment&quot;,&quot;fp_log10pValue&quot;,&quot;fp_log10qValue&quot;,&quot;fp_peak&quot;
+  ))
+  
+  setDT(df_fp)
+  
+  ## choose FE cutoffs
+  fe_cutoffs &lt;- c(1, 2, 3, 4, 5, 10)
+  
+  res_list &lt;- vector(&quot;list&quot;, length(fe_cutoffs))
+  
+  for (i in seq_along(fe_cutoffs)) {
+    
+    fe_cut &lt;- fe_cutoffs[i]
+    
+    ## subset by fold enrichment cutoff
+    df_sub &lt;- df_fp[fp_foldenrichment &gt;= fe_cut]
+    
+    if (nrow(df_sub) == 0) {
+      res_list[[i]] &lt;- data.table(
+        fp_length = fp_length,
+        fp_foldenrichment_cutoff = fe_cut,
+        n_fp = 0,
+        n_dnase = n_dnase,
+        n_fp_overlap_dnase = 0,
+        n_dnase_overlap_fp = 0,
+        prop_fp_overlap_DNase = NA_real_,
+        prop_DNase_overlap_FP = 0
+      )
+      next
+    }
+    
+    ## footprints to GRanges
+    gr_fp &lt;- GRanges(
+      seqnames = df_sub$fp_chr,
+      ranges = IRanges(
+        start = df_sub$fp_start + 1,   ## 0-based -&gt; 1-based
+        end   = df_sub$fp_end
+      )
+    )
+    
+    n_fp &lt;- length(gr_fp)
+    
+    ## -----------------------------
+    ## peak-level overlap
+    ## any overlap &gt;= 1 bp counts
+    ## -----------------------------
+    hits &lt;- findOverlaps(
+      gr_fp,
+      gr_dnase,
+      ignore.strand = TRUE,
+      minoverlap = minoverlap
+    )
+    
+    ## unique FP peaks overlapping &gt;=1 DNase peak
+    n_fp_overlap_dnase &lt;- length(unique(queryHits(hits)))
+    
+    ## unique DNase peaks overlapping &gt;=1 FP peak
+    n_dnase_overlap_fp &lt;- length(unique(subjectHits(hits)))
+    
+    res_list[[i]] &lt;- data.table(
+      fp_length = fp_length,
+      fp_foldenrichment_cutoff = fe_cut,
+      n_fp = n_fp,
+      n_dnase = n_dnase,
+      n_fp_overlap_dnase = n_fp_overlap_dnase,
+      n_dnase_overlap_fp = n_dnase_overlap_fp,
+      prop_fp_overlap_DNase = n_fp_overlap_dnase / n_fp,
+      prop_DNase_overlap_FP = n_dnase_overlap_fp / n_dnase
+    )
+  }
+  
+  all_res[[k]] &lt;- rbindlist(res_list)
+  k &lt;- k + 1
+}
+
+overlap_res_all &lt;- rbindlist(all_res)
+
+DT::datatable(overlap_res_all,caption = htmltools::tags$caption( style = &#39;caption-side: left; text-align: left; color:black;  font-size:150% ;&#39;,&#39;overlap stats&#39;),options = list(pageLength = 20) )</code></pre>
+<div id="htmlwidget-1b1a8ec0941961691c13" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1b1a8ec0941961691c13">{"x":{"filter":"none","vertical":false,"caption":"<caption style=\"caption-side: left; text-align: left; color:black;  font-size:150% ;\">overlap stats<\/caption>","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18"],["10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","10-30bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","30-60bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp","60-80bp"],[1,2,3,4,5,10,1,2,3,4,5,10,1,2,3,4,5,10],[23280243,19231804,7486848,2947535,1239034,80170,5302704,5075564,1177211,351458,155782,33965,630078,628862,287969,54592,27285,7206],[920017,920017,920017,920017,920017,920017,920017,920017,920017,920017,920017,920017,920017,920017,920017,920017,920017,920017],[461264,438802,332454,250454,191643,61264,223032,219091,143139,99984,75548,29867,51919,51903,39261,22300,15966,5979],[632668,612022,507388,415279,342401,143827,420917,416855,319477,247278,199854,90329,102747,102726,86727,56517,41937,15704],[0.0198135388878888,0.0228164762910437,0.0444050687285223,0.0849706619259822,0.154671300384009,0.764176125732818,0.0420600508721588,0.0431658432442188,0.121591626309982,0.284483494471601,0.484959751447536,0.879346385985573,0.0824009090937947,0.0825348009579208,0.136337591893572,0.408484759671747,0.585156679494228,0.829725228975853],[0.687669901751815,0.665229012072603,0.551498504918931,0.451381876639236,0.372168122980336,0.156330806930742,0.457510024271291,0.453094888464018,0.347251192097537,0.26877546827939,0.217228594689011,0.0981818814217563,0.11167945809697,0.111656632431792,0.0942667363755235,0.0614303866124213,0.0455828533603183,0.0170692498073405]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>fp_length<\/th>\n      <th>fp_foldenrichment_cutoff<\/th>\n      <th>n_fp<\/th>\n      <th>n_dnase<\/th>\n      <th>n_fp_overlap_dnase<\/th>\n      <th>n_dnase_overlap_fp<\/th>\n      <th>prop_fp_overlap_DNase<\/th>\n      <th>prop_DNase_overlap_FP<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":20,"columnDefs":[{"className":"dt-right","targets":[2,3,4,5,6,7,8]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[10,20,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<pre class="r"><code>p_nfp &lt;- ggplot(
+  overlap_res_all,
+  aes(
+    x = fp_foldenrichment_cutoff,
+    y = n_fp,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_y_log10() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Fold enrichment cutoff&quot;,
+    y = &quot;Number of footprints (log10 scale)&quot;,
+    color = &quot;Footprint length&quot;
+  )
+
+p1 &lt;- ggplot(
+  overlap_res_all,
+  aes(
+    x = fp_foldenrichment_cutoff,
+    y = prop_fp_overlap_DNase,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Fold enrichment cutoff&quot;,
+    y = &quot;Fraction of FP peaks overlapping DNase&quot;,
+    color = &quot;Footprint length&quot;
+  )
+
+p2 &lt;- ggplot(
+  overlap_res_all,
+  aes(
+    x = fp_foldenrichment_cutoff,
+    y = prop_DNase_overlap_FP,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = &quot;Fold enrichment cutoff&quot;,
+    y = &quot;Fraction of DNase peaks overlapping FP&quot;,
+    color = &quot;Footprint length&quot;
+  )
+
+p_nfp + p1 + p2</code></pre>
+<p><img src="figure/validating_footprint_using_DNase_footprint.Rmd/unnamed-chunk-6-2.png" width="1248" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1026,18 +1394,20 @@ loaded via a namespace (and not attached):
 [16] glue_1.6.2             RColorBrewer_1.1-3     S7_0.2.0              
 [19] GenomeInfoDbData_1.2.8 lifecycle_1.0.4        stringr_1.5.1         
 [22] zlibbioc_1.42.0        gtable_0.3.6           workflowr_1.7.0       
-[25] R.methodsS3_1.8.1      evaluate_0.15          labeling_0.4.2        
-[28] knitr_1.39             fastmap_1.1.0          httpuv_1.6.5          
-[31] fansi_1.0.3            highr_0.9              Rcpp_1.0.12           
-[34] promises_1.2.0.1       scales_1.4.0           jsonlite_1.8.0        
-[37] XVector_0.36.0         farver_2.1.0           fs_1.5.2              
-[40] digest_0.6.29          stringi_1.7.6          dplyr_1.1.4           
-[43] rprojroot_2.0.3        grid_4.2.0             cli_3.6.1             
-[46] tools_4.2.0            bitops_1.0-7           magrittr_2.0.3        
-[49] sass_0.4.1             RCurl_1.98-1.7         tibble_3.2.1          
-[52] dichromat_2.0-0.1      pkgconfig_2.0.3        rmarkdown_2.25        
-[55] rstudioapi_0.13        R6_2.5.1               git2r_0.30.1          
-[58] compiler_4.2.0        </code></pre>
+[25] R.methodsS3_1.8.1      htmlwidgets_1.5.4      evaluate_0.15         
+[28] labeling_0.4.2         knitr_1.39             fastmap_1.1.0         
+[31] crosstalk_1.2.0        httpuv_1.6.5           fansi_1.0.3           
+[34] highr_0.9              Rcpp_1.0.12            DT_0.22               
+[37] promises_1.2.0.1       scales_1.4.0           jsonlite_1.8.0        
+[40] XVector_0.36.0         farver_2.1.0           fs_1.5.2              
+[43] digest_0.6.29          stringi_1.7.6          dplyr_1.1.4           
+[46] rprojroot_2.0.3        grid_4.2.0             cli_3.6.1             
+[49] tools_4.2.0            bitops_1.0-7           magrittr_2.0.3        
+[52] sass_0.4.1             RCurl_1.98-1.7         tibble_3.2.1          
+[55] dichromat_2.0-0.1      whisker_0.4            pkgconfig_2.0.3       
+[58] rmarkdown_2.25         rstudioapi_0.13        R6_2.5.1              
+[61] git2r_0.30.1           compiler_4.2.0        </code></pre>
+</div>
 </div>
 </div>
 </div>

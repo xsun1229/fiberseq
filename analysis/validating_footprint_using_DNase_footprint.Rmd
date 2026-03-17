@@ -33,7 +33,8 @@ Our footprint files are `/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM
 - 30–60 bp
 - 60–80 bp
 
-For each footprint set, we varied the footprint significance threshold (q value, fold enrichment, pileup) and measured how much footprint sequence overlaps DNase peaks on **base-pair level**.
+For each footprint set, we varied the footprint significance threshold (q value, fold enrichment, pileup) and measured how much footprint sequence overlaps DNase peaks on **base-pair level** and **footprint level**. 
+For **footprint level**, any peak pair overlap >= `1bp` is counted as an overlap.
 
 # Results
 
@@ -62,10 +63,14 @@ gr_dnase <- GRanges(
   #strand = DNase_peak$dnase_strand
 )
 
+n_dnase <- length(gr_dnase)
+
 dnase_total_bp <- sum(width(reduce(gr_dnase)))
 ```
 
-## q-values
+## Base pair level
+
+### q-values
 
 ```{r fig.width=13, fig.height=4}
 
@@ -160,6 +165,8 @@ for (fp_length in fp_lengths) {
 
 overlap_res_all <- rbindlist(all_res)
 
+DT::datatable(overlap_res_all,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','overlap stats'),options = list(pageLength = 20) )
+
 
 p_nfp <- ggplot(
   overlap_res_all,
@@ -223,7 +230,7 @@ p_nfp + p1 + p2
 
 
 
-## fold enrichment
+### fold enrichment
 
 ```{r fig.width=13, fig.height=4}
 
@@ -317,6 +324,8 @@ for (fp_length in fp_lengths) {
 
 overlap_res_all <- rbindlist(all_res)
 
+DT::datatable(overlap_res_all,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','overlap stats'),options = list(pageLength = 20) )
+
 
 p_nfp <- ggplot(
   overlap_res_all,
@@ -378,4 +387,329 @@ p_nfp + p1 + p2
 
 ```
 
+## Footprint level -- min overlap == 1
 
+### q-values
+
+```{r fig.width=13, fig.height=4}
+
+minoverlap <- 1
+
+all_res <- list()
+k <- 1
+
+for (fp_length in fp_lengths) {
+  
+  fp_file <- file.path(
+    folder_fp,
+    paste0("combined_all_chrs_", fp_length, "_macs3_q0.1_maxgap1_peaks.narrowPeak.gz")
+  )
+  
+  ## -----------------------------
+  ## read footprint file
+  ## -----------------------------
+  df_fp <- fread(fp_file, header = FALSE, showProgress = FALSE)
+  setnames(df_fp, c(
+    "fp_chr","fp_start","fp_end","fp_name","fp_pileup","fp_strand",
+    "fp_foldenrichment","fp_log10pValue","fp_log10qValue","fp_peak"
+  ))
+  setDT(df_fp)
+  
+  ## q cutoffs (original + transformed)
+  q_cutoffs <- c(0.1, 0.01, 0.001, 0.0001)
+  log10q_cutoffs <- -log10(q_cutoffs)
+  
+  res_list <- vector("list", length(log10q_cutoffs))
+  
+  for (i in seq_along(log10q_cutoffs)) {
+    
+    q_cut_log10 <- log10q_cutoffs[i]
+    
+    ## subset
+    df_sub <- df_fp[fp_log10qValue >= q_cut_log10]
+    
+    if (nrow(df_sub) == 0) {
+      res_list[[i]] <- data.table(
+        fp_length = fp_length,
+        fp_log10qValue_cutoff = q_cut_log10,
+        n_fp = 0,
+        n_dnase = n_dnase,
+        n_fp_overlap_dnase = 0,
+        n_dnase_overlap_fp = 0,
+        prop_fp_overlap_DNase = NA_real_,
+        prop_DNase_overlap_FP = 0
+      )
+      next
+    }
+    
+    ## GRanges
+    gr_fp <- GRanges(
+      seqnames = df_sub$fp_chr,
+      ranges = IRanges(
+        start = df_sub$fp_start + 1,
+        end   = df_sub$fp_end
+      )
+    )
+    
+    n_fp <- length(gr_fp)
+    
+    ## overlap (peak-level)
+    hits <- findOverlaps(
+      gr_fp,
+      gr_dnase,
+      ignore.strand = TRUE,
+      minoverlap = minoverlap
+    )
+    
+    n_fp_overlap_dnase <- length(unique(queryHits(hits)))
+    n_dnase_overlap_fp <- length(unique(subjectHits(hits)))
+    
+    res_list[[i]] <- data.table(
+      fp_length = fp_length,
+      fp_log10qValue_cutoff = q_cut_log10,
+      n_fp = n_fp,
+      n_dnase = n_dnase,
+      n_fp_overlap_dnase = n_fp_overlap_dnase,
+      n_dnase_overlap_fp = n_dnase_overlap_fp,
+      prop_fp_overlap_DNase = n_fp_overlap_dnase / n_fp,
+      prop_DNase_overlap_FP = n_dnase_overlap_fp / n_dnase
+    )
+  }
+  
+  all_res[[k]] <- rbindlist(res_list)
+  k <- k + 1
+}
+
+overlap_res_all <- rbindlist(all_res)
+
+DT::datatable(overlap_res_all,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','overlap stats'),options = list(pageLength = 20) )
+
+
+df_plot <- copy(overlap_res_all)
+
+## keep ordering clean (numeric order works fine here)
+df_plot[, fp_log10qValue_cutoff := factor(
+  fp_log10qValue_cutoff,
+  levels = sort(unique(fp_log10qValue_cutoff))
+)]
+
+p_nfp <- ggplot(
+  df_plot,
+  aes(
+    x = fp_log10qValue_cutoff,
+    y = n_fp,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  scale_y_log10() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "-log10(q-value cutoff)",
+    y = "Number of footprints (log10 scale)",
+    color = "Footprint length"
+  )
+
+p1 <- ggplot(
+  df_plot,
+  aes(
+    x = fp_log10qValue_cutoff,
+    y = prop_fp_overlap_DNase,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "-log10(q-value cutoff)",
+    y = "Fraction of FP peaks overlapping DNase",
+    color = "Footprint length"
+  )
+
+p2 <- ggplot(
+  df_plot,
+  aes(
+    x = fp_log10qValue_cutoff,
+    y = prop_DNase_overlap_FP,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2.5) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "-log10(q-value cutoff)",
+    y = "Fraction of DNase peaks overlapping FP",
+    color = "Footprint length"
+  )
+
+p_nfp + p1 + p2
+
+```
+
+
+### fold enrichment
+
+```{r fig.width=13, fig.height=4}
+
+all_res <- list()
+k <- 1
+
+for (fp_length in fp_lengths) {
+  
+  fp_file <- file.path(
+    folder_fp,
+    paste0("combined_all_chrs_", fp_length, "_macs3_q0.1_maxgap1_peaks.narrowPeak.gz")
+  )
+  
+  ## -----------------------------
+  ## read footprint file
+  ## -----------------------------
+  df_fp <- fread(fp_file, header = FALSE, showProgress = FALSE)
+  setnames(df_fp, c(
+    "fp_chr","fp_start","fp_end","fp_name","fp_pileup","fp_strand",
+    "fp_foldenrichment","fp_log10pValue","fp_log10qValue","fp_peak"
+  ))
+  
+  setDT(df_fp)
+  
+  ## choose FE cutoffs
+  fe_cutoffs <- c(1, 2, 3, 4, 5, 10)
+  
+  res_list <- vector("list", length(fe_cutoffs))
+  
+  for (i in seq_along(fe_cutoffs)) {
+    
+    fe_cut <- fe_cutoffs[i]
+    
+    ## subset by fold enrichment cutoff
+    df_sub <- df_fp[fp_foldenrichment >= fe_cut]
+    
+    if (nrow(df_sub) == 0) {
+      res_list[[i]] <- data.table(
+        fp_length = fp_length,
+        fp_foldenrichment_cutoff = fe_cut,
+        n_fp = 0,
+        n_dnase = n_dnase,
+        n_fp_overlap_dnase = 0,
+        n_dnase_overlap_fp = 0,
+        prop_fp_overlap_DNase = NA_real_,
+        prop_DNase_overlap_FP = 0
+      )
+      next
+    }
+    
+    ## footprints to GRanges
+    gr_fp <- GRanges(
+      seqnames = df_sub$fp_chr,
+      ranges = IRanges(
+        start = df_sub$fp_start + 1,   ## 0-based -> 1-based
+        end   = df_sub$fp_end
+      )
+    )
+    
+    n_fp <- length(gr_fp)
+    
+    ## -----------------------------
+    ## peak-level overlap
+    ## any overlap >= 1 bp counts
+    ## -----------------------------
+    hits <- findOverlaps(
+      gr_fp,
+      gr_dnase,
+      ignore.strand = TRUE,
+      minoverlap = minoverlap
+    )
+    
+    ## unique FP peaks overlapping >=1 DNase peak
+    n_fp_overlap_dnase <- length(unique(queryHits(hits)))
+    
+    ## unique DNase peaks overlapping >=1 FP peak
+    n_dnase_overlap_fp <- length(unique(subjectHits(hits)))
+    
+    res_list[[i]] <- data.table(
+      fp_length = fp_length,
+      fp_foldenrichment_cutoff = fe_cut,
+      n_fp = n_fp,
+      n_dnase = n_dnase,
+      n_fp_overlap_dnase = n_fp_overlap_dnase,
+      n_dnase_overlap_fp = n_dnase_overlap_fp,
+      prop_fp_overlap_DNase = n_fp_overlap_dnase / n_fp,
+      prop_DNase_overlap_FP = n_dnase_overlap_fp / n_dnase
+    )
+  }
+  
+  all_res[[k]] <- rbindlist(res_list)
+  k <- k + 1
+}
+
+overlap_res_all <- rbindlist(all_res)
+
+DT::datatable(overlap_res_all,caption = htmltools::tags$caption( style = 'caption-side: left; text-align: left; color:black;  font-size:150% ;','overlap stats'),options = list(pageLength = 20) )
+
+
+
+p_nfp <- ggplot(
+  overlap_res_all,
+  aes(
+    x = fp_foldenrichment_cutoff,
+    y = n_fp,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_y_log10() +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "Fold enrichment cutoff",
+    y = "Number of footprints (log10 scale)",
+    color = "Footprint length"
+  )
+
+p1 <- ggplot(
+  overlap_res_all,
+  aes(
+    x = fp_foldenrichment_cutoff,
+    y = prop_fp_overlap_DNase,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "Fold enrichment cutoff",
+    y = "Fraction of FP peaks overlapping DNase",
+    color = "Footprint length"
+  )
+
+p2 <- ggplot(
+  overlap_res_all,
+  aes(
+    x = fp_foldenrichment_cutoff,
+    y = prop_DNase_overlap_FP,
+    color = fp_length,
+    group = fp_length
+  )
+) +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  theme_classic(base_size = 14) +
+  labs(
+    x = "Fold enrichment cutoff",
+    y = "Fraction of DNase peaks overlapping FP",
+    color = "Footprint length"
+  )
+
+p_nfp + p1 + p2
+
+
+```
