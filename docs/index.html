@@ -310,7 +310,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2026-03-17
+<strong>Last updated:</strong> 2026-03-18
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -348,10 +348,10 @@ changes </a>
 <div id="strongRMarkdownfilestronguncommittedchanges"
 class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of
-the R Markdown file created these results, you’ll want to first commit
-it to the Git repo. If you’re still working on the analysis, you can
-ignore this warning. When you’re finished, you can run
+<p>The R Markdown file has staged changes. To know which version of the
+R Markdown file created these results, you’ll want to first commit it to
+the Git repo. If you’re still working on the analysis, you can ignore
+this warning. When you’re finished, you can run
 <code>wflow_publish</code> to commit the R Markdown file and build the
 HTML.</p>
 </div>
@@ -360,15 +360,15 @@ HTML.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreeef17c07243c241a97f062ed4a10a05f5215538e4targetblankef17c07a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreea078793687e1fc423218d4fbdc5c20b55a142372targetblanka078793a">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/xsun1229/fiberseq/tree/ef17c07243c241a97f062ed4a10a05f5215538e4" target="_blank">ef17c07</a>
+<a href="https://github.com/xsun1229/fiberseq/tree/a078793687e1fc423218d4fbdc5c20b55a142372" target="_blank">a078793</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreeef17c07243c241a97f062ed4a10a05f5215538e4targetblankef17c07a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomxsun1229fiberseqtreea078793687e1fc423218d4fbdc5c20b55a142372targetblanka078793a"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -378,7 +378,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/xsun1229/fiberseq/tree/ef17c07243c241a97f062ed4a10a05f5215538e4" target="_blank">ef17c07</a>.
+<a href="https://github.com/xsun1229/fiberseq/tree/a078793687e1fc423218d4fbdc5c20b55a142372" target="_blank">a078793</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -392,10 +392,9 @@ depends on. Below is the status of the Git repository when the results
 were generated:
 </p>
 <pre><code>
-Untracked files:
-    Untracked:  analysis/validating_footprint_using_DNase_footprint_fpinFIRE.Rmd
-
-Unstaged changes:
+Staged changes:
+    New:        analysis/fp_FIRE_qc_original_fp.Rmd
+    New:        analysis/fp_qc_original_fp.Rmd
     Modified:   analysis/index.Rmd
 
 </code></pre>
@@ -441,6 +440,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/xsun1229/fiberseq/blob/07191198b07811e22ade62edb4e82fb967b35cb1/analysis/index.Rmd" target="_blank">0719119</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-17
+</td>
+<td>
+update
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/xsun1229/fiberseq/07191198b07811e22ade62edb4e82fb967b35cb1/docs/index.html" target="_blank">0719119</a>
+</td>
+<td>
+XSun
+</td>
+<td>
+2026-03-17
+</td>
+<td>
+update
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1287,6 +1320,13 @@ cluster, refined footprint peaks</a></li>
 pileup)</p>
 <ul>
 <li><a href="determine_footprint_cutoffs.html">Link</a></li>
+</ul>
+<p>Checking footprint QC metrics (Adenines/ thymines)</p>
+<ul>
+<li><a href="fp_qc_original_fp.html">Original MACS footprint
+peaks</a></li>
+<li><a href="fp_FIRE_qc_original_fp.html">Original MACS footprint peaks
+in FIRE</a></li>
 </ul>
 <p>Validating the footprints using DGF DNase footprint</p>
 <ul>
