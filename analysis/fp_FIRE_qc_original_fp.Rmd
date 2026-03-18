@@ -1,0 +1,381 @@
+---
+title: "Checking footprint QC metrics: original MACS footprint peaks in FIRE"
+author: "XSun"
+date: "2026-03-17"
+output:
+  workflowr::wflow_html:
+    code_folding: hide
+    toc: true
+---
+
+
+```{r message=FALSE, warning=F}
+
+library(data.table)
+library(GenomicRanges)
+library(Rsamtools)
+library(Biostrings)
+library(ggplot2)
+library(patchwork)
+
+
+fp_lengths <- c("10-30bp", "30-60bp", "60-80bp")
+#fp_lengths <- c("60-80bp")
+folder_fp <- "/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM/merged/combined/joint_trained_peaks/fp_inFIRE_1bp/"
+
+fa <- FaFile("/project/xinhe/xsun/camseq/pipeline/reference/genome/GRCh38.release110.fa")
+open(fa)
+
+```
+
+
+# A/T Composition Analysis of Footprints
+
+We analyzed the nucleotide composition of footprint regions across different footprint length categories (10–30 bp, 30–60 bp, 60–80 bp) using the GRCh38 reference genome.
+
+Our footprint files are `/project/spott/1_Shared_projects/LCL_Fiber_seq/FiberHMM/merged/combined/joint_trained_peaks/fp_inFIRE_1bp/`
+
+These footprints overlap FIRE peaks (>1 bp)
+
+- 10–30 bp
+- 30–60 bp
+- 60–80 bp
+
+reference genome: `/project/xinhe/xsun/camseq/pipeline/reference/genome/GRCh38.release110.fa`
+
+Workflow: 
+
+1. We extracted genomic sequences corresponding to each footprint using the reference genome
+
+2. For each footprint, We computed:
+- Number of A (adenine) bases
+- Number of T (thymine) bases
+- Total footprint width
+
+3. Then derived:
+- AT fraction = (A + T) / footprint length
+- A fraction = A / footprint length
+- T fraction = T / footprint length
+
+4. Generated histograms for:
+- AT fraction
+- A fraction
+- T fraction
+
+5. For equally sized upstream and downstream bins, compute the fractions as before.
+
+
+<!-- ```{r fig.height=4, fig.width=12} -->
+
+<!-- for (fp_length in fp_lengths) { -->
+
+<!--   fp_file <- file.path( -->
+<!--     folder_fp, -->
+<!--     paste0("combined_all_chrs_", fp_length, "_macs3_q0.1_maxgap1_peaks_in_fire.bed") -->
+<!--   ) -->
+<!--   ## ----------------------------- -->
+<!--   ## read footprint file -->
+<!--   ## ----------------------------- -->
+<!--   df_fp <- fread(fp_file, header = FALSE, showProgress = FALSE) -->
+
+<!--   setnames(df_fp, c( -->
+<!--     "fp_chr","fp_start","fp_end","fp_name","fp_pileup","fp_strand", -->
+<!--     "fp_foldenrichment","fp_log10pValue","fp_log10qValue","fp_peak" -->
+<!--   )) -->
+
+<!--   setDT(df_fp) -->
+
+<!--   gr_fp <- GRanges( -->
+<!--     seqnames = df_fp$fp_chr, -->
+<!--     ranges = IRanges(start = df_fp$fp_start, end = df_fp$fp_end) -->
+<!--   ) -->
+
+<!--   seqlevels(gr_fp) <- sub("^chr", "", seqlevels(gr_fp)) -->
+<!--   seqnames(gr_fp) <- sub("^chr", "", as.character(seqnames(gr_fp))) -->
+
+<!--   seqs_fp <- getSeq(fa, gr_fp) -->
+
+<!--   base_counts <- letterFrequency(seqs_fp, letters = c("A", "T"), as.prob = FALSE) -->
+
+<!--   df_at <- data.table( -->
+<!--     A = base_counts[, "A"], -->
+<!--     T = base_counts[, "T"], -->
+<!--     width = width(gr_fp) -->
+<!--   ) -->
+
+<!--   df_at[, AT_fraction := (A + T) / width] -->
+<!--   df_at[, A_fraction := A / width] -->
+<!--   df_at[, T_fraction := T / width] -->
+
+<!--   p1 <- ggplot(df_at, aes(x = AT_fraction)) + -->
+<!--     geom_histogram(bins = 50) + -->
+<!--     theme_classic() + -->
+<!--     labs( -->
+<!--       x = "A/T fraction in footprint", -->
+<!--       y = "Number of footprints", -->
+<!--       title = fp_length -->
+<!--     ) -->
+
+<!--   p2 <- ggplot(df_at, aes(x = A_fraction)) + -->
+<!--     geom_histogram(bins = 50) + -->
+<!--     theme_classic() + -->
+<!--     labs( -->
+<!--       x = "A fraction in footprint", -->
+<!--       y = "Number of footprints", -->
+<!--       title = fp_length -->
+<!--     ) -->
+
+<!--   p3 <- ggplot(df_at, aes(x = T_fraction)) + -->
+<!--     geom_histogram(bins = 50) + -->
+<!--     theme_classic() + -->
+<!--     labs( -->
+<!--       x = "T fraction in footprint", -->
+<!--       y = "Number of footprints", -->
+<!--       title = fp_length -->
+<!--     ) -->
+
+
+<!--   print(p1 + p2 + p3) -->
+
+<!-- } -->
+
+
+<!-- ``` -->
+
+
+
+```{r fig.height=12, fig.width=16}
+
+
+res_all <- list()
+
+for (fp_length in fp_lengths) {
+  
+  fp_file <- file.path(
+    folder_fp,
+    paste0("combined_all_chrs_", fp_length, "_macs3_q0.1_maxgap1_peaks_in_fire.bed")
+  )
+  
+  ## -----------------------------
+  ## read footprint file
+  ## -----------------------------
+  df_fp <- fread(fp_file, header = FALSE, showProgress = FALSE)
+  
+  setnames(df_fp, c(
+    "fp_chr","fp_start","fp_end","fp_name","fp_pileup","fp_strand",
+    "fp_foldenrichment","fp_log10pValue","fp_log10qValue","fp_peak"
+  ))
+  
+  setDT(df_fp)
+  
+  ## -----------------------------
+  ## make GRanges for footprints
+  ## -----------------------------
+  gr_fp <- GRanges(
+    seqnames = df_fp$fp_chr,
+    ranges = IRanges(start = df_fp$fp_start, end = df_fp$fp_end)
+  )
+  
+  ## match chromosome naming to fasta
+  seqlevels(gr_fp) <- sub("^chr", "", seqlevels(gr_fp))
+  seqnames(gr_fp) <- sub("^chr", "", as.character(seqnames(gr_fp)))
+  
+  ## -----------------------------
+  ## make equally sized upstream/downstream regions
+  ## same size as each footprint
+  ## -----------------------------
+  fp_width <- width(gr_fp)
+  
+  gr_up <- GRanges(
+    seqnames = seqnames(gr_fp),
+    ranges = IRanges(
+      start = start(gr_fp) - fp_width,
+      end   = start(gr_fp) - 1
+    )
+  )
+  
+  gr_down <- GRanges(
+    seqnames = seqnames(gr_fp),
+    ranges = IRanges(
+      start = end(gr_fp) + 1,
+      end   = end(gr_fp) + fp_width
+    )
+  )
+  
+  ## -----------------------------
+  ## remove invalid regions
+  ## upstream start must be >= 1
+  ## -----------------------------
+  keep_valid <- start(gr_up) >= 1 & start(gr_fp) >= 1 & start(gr_down) >= 1
+  
+  gr_fp <- gr_fp[keep_valid]
+  gr_up <- gr_up[keep_valid]
+  gr_down <- gr_down[keep_valid]
+  df_fp <- df_fp[keep_valid]
+  
+  ## -----------------------------
+  ## extract sequences
+  ## -----------------------------
+  seqs_fp <- getSeq(fa, gr_fp)
+  seqs_up <- getSeq(fa, gr_up)
+  seqs_down <- getSeq(fa, gr_down)
+  
+  ## -----------------------------
+  ## count A and T
+  ## -----------------------------
+  counts_fp <- letterFrequency(seqs_fp, letters = c("A", "T"), as.prob = FALSE)
+  counts_up <- letterFrequency(seqs_up, letters = c("A", "T"), as.prob = FALSE)
+  counts_down <- letterFrequency(seqs_down, letters = c("A", "T"), as.prob = FALSE)
+  
+  ## -----------------------------
+  ## build result table
+  ## -----------------------------
+  dt_fp <- data.table(
+    fp_name = df_fp$fp_name,
+    fp_length = fp_length,
+    region = "Footprint",
+    width = width(gr_fp),
+    A = counts_fp[, "A"],
+    T = counts_fp[, "T"]
+  )
+  dt_fp[, A_fraction := A / width]
+  dt_fp[, T_fraction := T / width]
+  dt_fp[, AT_fraction := (A + T) / width]
+  
+  dt_up <- data.table(
+    fp_name = df_fp$fp_name,
+    fp_length = fp_length,
+    region = "Upstream",
+    width = width(gr_up),
+    A = counts_up[, "A"],
+    T = counts_up[, "T"]
+  )
+  dt_up[, A_fraction := A / width]
+  dt_up[, T_fraction := T / width]
+  dt_up[, AT_fraction := (A + T) / width]
+  
+  dt_down <- data.table(
+    fp_name = df_fp$fp_name,
+    fp_length = fp_length,
+    region = "Downstream",
+    width = width(gr_down),
+    A = counts_down[, "A"],
+    T = counts_down[, "T"]
+  )
+  dt_down[, A_fraction := A / width]
+  dt_down[, T_fraction := T / width]
+  dt_down[, AT_fraction := (A + T) / width]
+  
+  dt_all <- rbindlist(list(dt_up, dt_fp, dt_down), use.names = TRUE)
+  res_all[[fp_length]] <- dt_all
+  
+  ## -----------------------------
+  ## summary table
+  ## -----------------------------
+  dt_sum <- dt_all[, .(
+    n = .N,
+    mean_A_fraction = mean(A_fraction),
+    median_A_fraction = median(A_fraction),
+    mean_T_fraction = mean(T_fraction),
+    median_T_fraction = median(T_fraction),
+    mean_AT_fraction = mean(AT_fraction),
+    median_AT_fraction = median(AT_fraction)
+  ), by = .(fp_length, region)]
+  
+  ## -----------------------------
+  ## plots
+  ## -----------------------------
+  p1 <- ggplot(dt_all, aes(x = region, y = A_fraction, fill = region)) +
+    geom_boxplot(outlier.size = 0.3) +
+    theme_classic(base_size = 14) +
+    labs(
+      title = paste0(fp_length, ": A fraction"),
+      x = NULL,
+      y = "A fraction"
+    )
+  
+  p2 <- ggplot(dt_all, aes(x = region, y = T_fraction, fill = region)) +
+    geom_boxplot(outlier.size = 0.3) +
+    theme_classic(base_size = 14) +
+    labs(
+      title = paste0(fp_length, ": T fraction"),
+      x = NULL,
+      y = "T fraction"
+    )
+  
+  p3 <- ggplot(dt_all, aes(x = region, y = AT_fraction, fill = region)) +
+    geom_boxplot(outlier.size = 0.3) +
+    theme_classic(base_size = 14) +
+    labs(
+      title = paste0(fp_length, ": A+T fraction"),
+      x = NULL,
+      y = "AT fraction"
+    )
+  
+  p4 <- ggplot(dt_all, aes(x = A_fraction, fill = region)) +
+    geom_density(alpha = 0.35) +
+    theme_classic(base_size = 14) +
+    labs(
+      title = paste0(fp_length, ": A fraction"),
+      x = "A fraction",
+      y = "Density"
+    )
+  
+  p5 <- ggplot(dt_all, aes(x = T_fraction, fill = region)) +
+    geom_density(alpha = 0.35) +
+    theme_classic(base_size = 14) +
+    labs(
+      title = paste0(fp_length, ": T fraction"),
+      x = "T fraction",
+      y = "Density"
+    )
+  
+  p6 <- ggplot(dt_all, aes(x = AT_fraction, fill = region)) +
+    geom_density(alpha = 0.35) +
+    theme_classic(base_size = 14) +
+    labs(
+      title = paste0(fp_length, ": A+T fraction"),
+      x = "AT fraction",
+      y = "Density"
+    )
+  
+  p7 <- ggplot(dt_all, aes(x = A_fraction, fill = region)) +
+    geom_histogram(bins = 50, alpha = 0.5, position = "identity") +
+    theme_classic(base_size = 14) +
+    labs(
+      title = paste0(fp_length, ": A fraction"),
+      x = "A fraction",
+      y = "Count"
+    )
+  
+  p8 <- ggplot(dt_all, aes(x = T_fraction, fill = region)) +
+    geom_histogram(bins = 50, alpha = 0.5, position = "identity") +
+    theme_classic(base_size = 14) +
+    labs(
+      title = paste0(fp_length, ": T fraction"),
+      x = "T fraction",
+      y = "Count"
+    )
+  
+  p9 <- ggplot(dt_all, aes(x = AT_fraction, fill = region)) +
+    geom_histogram(bins = 50, alpha = 0.5, position = "identity") +
+    theme_classic(base_size = 14) +
+    labs(
+      title = paste0(fp_length, ": A+T fraction"),
+      x = "A+T fraction",
+      y = "Count"
+    )
+  
+  g <- (p1 | p2 | p3) / (p4 | p5 | p6) / (p7 | p8 | p9)
+  
+  
+  print(g)
+  
+  
+}
+
+
+close(fa)
+
+
+```

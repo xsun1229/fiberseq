@@ -41,6 +41,11 @@ Determining the footprint cutoffs (p-value, q-value, fold-enrichment, pileup)
 
 * [Link](determine_footprint_cutoffs.html)
 
+Checking footprint QC metrics (Adenines/ thymines)
+
+* [Original MACS footprint peaks](fp_qc_original_fp.html)
+* [Original MACS footprint peaks in FIRE](fp_FIRE_qc_original_fp.html)
+
 Validating the footprints using DGF DNase footprint
 
 * [Original MACS footprint peaks](validating_footprint_using_DNase_footprint.html)
